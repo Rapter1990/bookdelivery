@@ -1,4 +1,4 @@
-package com.example.demo.payload.payload;
+package com.example.demo.payload.request;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

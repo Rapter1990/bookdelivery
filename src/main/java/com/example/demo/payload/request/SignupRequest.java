@@ -1,4 +1,4 @@
-package com.example.demo.payload.payload;
+package com.example.demo.payload.request;
 
 import com.example.demo.model.enums.Role;
 import jakarta.persistence.Column;
