@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  database:
+    container_name: database
+    image: mysql:8.0
+    #    platform: linux/x86_64     # for Intel Chips with WSL2 Enabled
+    #    platform: linux/arm64/v8    # for Mac Silicon Chips
+    restart: always
+    environment:
+      MYSQL_DATABASE: bookdelivery
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ippavlova_1990
+      MYSQL_ROOT_PASSWORD: ippavlova_1990
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_PORT: 3307
+    volumes:
+      - ./db:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    networks:
+      - bookdeliveryNetwork
+
+  bookdelivery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bookdelivery
+    restart: on-failure
+    ports:
+      - "1221:1221"
+    environment:
+      - server.port=1221
+      - spring.datasource.username=root
+      - spring.datasource.password=ippavlova_1990
+      - AYS_DB_URL=jdbc:mysql://host.docker.internal:3307/bookdelivery
+    depends_on:
+      - database
+    networks:
+      - bookdeliveryNetwork
+
+
+networks:
+  bookdeliveryNetwork:
