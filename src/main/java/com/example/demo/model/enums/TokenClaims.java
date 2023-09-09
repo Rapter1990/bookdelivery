@@ -1,0 +1,23 @@
+package com.example.demo.model.enums;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public enum TokenClaims {
+
+    JWT_ID("jti"),
+    TYPE("typ"),
+    SUBJECT("sub"),
+    ROLES("roles"),
+    ID("id"),
+    USERNAME("username"),
+    USER_TYPE("userType"),
+    USER_FULL_NAME("userFullName"),
+    ISSUED_AT("iat"),
+    EXPIRES_AT("exp");
+
+    private final String value;
+
+}
