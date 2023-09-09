@@ -1,0 +1,22 @@
+spring:
+  sql:
+    init:
+      mode: always
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+book:
+  db:
+    name: mysql
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:password}
+    url: jdbc:mysql://localhost:3306/bookdelivery
+    maximum-pool-size: 5
+    connection-timeout: 180000
+    maximum-lifetime: 170000
