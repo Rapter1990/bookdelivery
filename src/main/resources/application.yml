@@ -1,0 +1,24 @@
+server:
+  port: 1221
+
+# MYSQL
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:mysql://localhost:3306/bookdelivery
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:password}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+      show-sql: true
+
+# JWT
+jwt:
+  secret: bookDeliverySecretKey
+  expireMs: 60000
+  refrEshexpireMs: 120000
