@@ -7,13 +7,10 @@ import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
@@ -27,13 +24,6 @@ public class JwtUtils {
     @Value("${jwt.secret.expireMs}")
     private int jwtExpirationMs;
 
-    private final UserDetailsService userDetailsService;
-
-    private JwtDecoder jwtDecoder;
-
-    public JwtUtils(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
-    }
 
     public String generateJwtToken(CustomUserDetails userDetails) {
         Map<String, Object> claims = userDetails.getClaims();
