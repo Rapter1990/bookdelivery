@@ -13,8 +13,8 @@ spring:
 
   datasource:
     name: mysql
-    username: root
-    password: ippavlova_1990
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASSWORD:password}
     url: jdbc:mysql://localhost:3306/test
     maximum-pool-size: 5
     connection-timeout: 180000
