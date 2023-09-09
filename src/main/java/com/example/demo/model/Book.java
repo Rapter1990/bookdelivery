@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -27,10 +29,10 @@ public class Book extends BaseEntity {
     private String authorFullName;
 
     @Column(name = "STOCK")
-    private int stock;
+    private Integer stock;
 
     @Column(name = "PRICE")
-    private double price;
+    private BigDecimal price;
 
     @Version // Optimistic Locking
     private Long version;
