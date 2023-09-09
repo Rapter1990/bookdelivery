@@ -1,0 +1,38 @@
+package com.example.demo.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+
+@Entity
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "BOOKS")
+public class Book extends BaseEntity {
+
+    @Id
+    @Column(name = "ID")
+    private String id;
+
+    @Column(name = "ISBN")
+    private String isbn;
+
+    @Column(name = "BOOK_NAME")
+    private String name;
+
+    @Column(name = "AUTHOER_FULL_NAME")
+    private String authorFullName;
+
+    @Column(name = "STOCK")
+    private int stock;
+
+    @Column(name = "PRICE")
+    private double price;
+
+    @Version // Optimistic Locking
+    private Long version;
+
+}
