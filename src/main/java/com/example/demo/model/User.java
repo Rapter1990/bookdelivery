@@ -1,9 +1,14 @@
 package com.example.demo.model;
 
 import com.example.demo.model.enums.Role;
+import com.example.demo.model.enums.TokenClaims;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Entity
@@ -19,6 +24,8 @@ public class User {
 
     private String fullName;
 
+    private String username;
+
     private String email;
 
     private String password;
@@ -27,4 +34,13 @@ public class User {
     @Column(name = "ROLE")
     private Role role;
 
+    public Map<String, Object> getClaims() {
+        final Map<String, Object> claims = new HashMap<>();
+        claims.put(TokenClaims.ID.getValue(), this.id);
+        claims.put(TokenClaims.USERNAME.getValue(), this.username);
+        claims.put(TokenClaims.ROLES.getValue(), List.of(this.role));
+        claims.put(TokenClaims.USER_FULL_NAME.getValue(), this.fullName);
+        claims.put(TokenClaims.EMAIL.getValue(), this.email);
+        return claims;
+    }
 }

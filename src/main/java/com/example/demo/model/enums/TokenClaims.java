@@ -13,7 +13,7 @@ public enum TokenClaims {
     ROLES("roles"),
     ID("id"),
     USERNAME("username"),
-    USER_TYPE("userType"),
+    EMAIL("email"),
     USER_FULL_NAME("userFullName"),
     ISSUED_AT("iat"),
     EXPIRES_AT("exp");
