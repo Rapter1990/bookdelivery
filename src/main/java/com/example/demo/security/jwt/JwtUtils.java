@@ -1,13 +1,17 @@
 package com.example.demo.security.jwt;
 
+import com.example.demo.security.CustomUserDetails;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,12 +29,14 @@ public class JwtUtils {
 
     private final UserDetailsService userDetailsService;
 
+    private JwtDecoder jwtDecoder;
+
     public JwtUtils(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
-    public String generateJwtToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
+    public String generateJwtToken(CustomUserDetails userDetails) {
+        Map<String, Object> claims = userDetails.getClaims();
         return createToken(claims, userDetails.getUsername());
     }
 
@@ -43,13 +49,19 @@ public class JwtUtils {
                 .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(getSignInKey(),SignatureAlgorithm.HS512)
                 .compact();
     }
 
+    private Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
     public Claims extractClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(jwtSecret)
+        return Jwts.parserBuilder()
+                .setSigningKey(getSignInKey())
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
     }
@@ -57,10 +69,8 @@ public class JwtUtils {
 
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(authToken);
             return true;
-        } catch (SignatureException e) {
-            LOGGER.error("JwtUtils | validateJwtToken | Invalid JWT signature: {}", e.getMessage());
         } catch (MalformedJwtException e) {
             LOGGER.error("JwtUtils | validateJwtToken | Invalid JWT token: {}", e.getMessage());
         } catch (ExpiredJwtException e) {
