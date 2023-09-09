@@ -1,13 +1,13 @@
 package com.example.demo.security.jwt;
 
 import com.example.demo.security.CustomUserDetails;
+import com.example.demo.util.Identity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -25,8 +25,15 @@ public class JwtUtils {
     @Value("${jwt.secret.expireMs}")
     private int jwtExpirationMs;
 
+    private final Identity identity;
 
-    public String generateJwtToken(CustomUserDetails userDetails) {
+    public JwtUtils(Identity identity) {
+        this.identity = identity;
+    }
+
+
+    public String generateJwtToken(Authentication auth) {
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
         Map<String, Object> claims = userDetails.getClaims();
         return createToken(claims, userDetails.getUsername());
     }
@@ -56,6 +63,15 @@ public class JwtUtils {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
+    public Long getIdFromToken(String token){
+        return Long.parseLong(extractClaims(token).getId());
+    }
+
+    public String getUserNameFromJwtToken(String token) {
+        return extractClaims(token).getSubject();
+    }
+
 
 
     public boolean validateJwtToken(String authToken) {

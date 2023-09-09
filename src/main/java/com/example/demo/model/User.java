@@ -3,6 +3,8 @@ package com.example.demo.model;
 import com.example.demo.model.enums.Role;
 import com.example.demo.model.enums.TokenClaims;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +16,9 @@ import java.util.Map;
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.JOINED)
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "USERS")
 public class User {
 

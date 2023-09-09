@@ -6,6 +6,7 @@ import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.LogoutRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.payload.request.TokenRefreshRequest;
+import com.example.demo.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
-
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody SignupRequest request) {

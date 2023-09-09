@@ -1,6 +1,7 @@
 package com.example.demo.security;
 
 import com.example.demo.model.User;
+import com.example.demo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,16 +12,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-
+    private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        // User user = userService.findByUsername(username)
-        //        .orElseThrow(() -> new UserNotFoundException("User Name " + username + " not found"));
+        User user = null;
+        try {
+            user = userService.findByUsername(username)
+                    .orElseThrow(() -> new Exception("User Name " + username + " not found"));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        // return new CustomUserDetails(user);
+        return new CustomUserDetails(user);
 
-        return null;
     }
 }
