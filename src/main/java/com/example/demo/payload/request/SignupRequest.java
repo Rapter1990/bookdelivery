@@ -1,7 +1,6 @@
 package com.example.demo.payload.request;
 
 import com.example.demo.model.enums.Role;
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
@@ -29,8 +28,6 @@ public class SignupRequest {
     @Email
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "ROLE")
     private Role role;
 
 }
