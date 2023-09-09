@@ -15,7 +15,7 @@ book:
   db:
     name: mysql
     username: ${DATABASE_USERNAME:root}
-    password: ${DATABASE_PASSWORD:password}
+    password: ${DATABASE_PASSWORD:ippavlova_1990}
     url: jdbc:mysql://localhost:3306/bookdelivery
     maximum-pool-size: 5
     connection-timeout: 180000

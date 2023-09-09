@@ -3,7 +3,7 @@ version: "3.9"
 services:
   database:
     container_name: database
-    image: mysql:8.0
+    image: mysql:8.0.33
     #    platform: linux/x86_64     # for Intel Chips with WSL2 Enabled
     #    platform: linux/arm64/v8    # for Mac Silicon Chips
     restart: always
@@ -19,7 +19,7 @@ services:
     ports:
       - "3307:3306"
     networks:
-      - bookdeliveryNetwork
+      - bookDeliveryNetwork
 
   bookdelivery:
     build:
@@ -33,12 +33,12 @@ services:
       - server.port=1221
       - spring.datasource.username=root
       - spring.datasource.password=ippavlova_1990
-      - AYS_DB_URL=jdbc:mysql://host.docker.internal:3307/bookdelivery
+      - spring.datasource.url=jdbc:mysql://database:3307/bookdelivery
     depends_on:
       - database
     networks:
-      - bookdeliveryNetwork
+      - bookDeliveryNetwork
 
 
 networks:
-  bookdeliveryNetwork:
+  bookDeliveryNetwork:
