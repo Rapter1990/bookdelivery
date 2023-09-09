@@ -2,9 +2,15 @@ package com.example.demo.model;
 
 import com.example.demo.model.enums.Role;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
-@MappedSuperclass
+@Entity
+@Data
+@Inheritance(strategy = InheritanceType.JOINED)
+@NoArgsConstructor
+@Table(name = "USERS")
 public class User {
 
     @Id
@@ -20,4 +26,5 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "ROLE")
     private Role role;
+
 }
