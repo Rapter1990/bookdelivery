@@ -19,9 +19,9 @@ public abstract class AbstractTestContainerConfiguration {
 
     @DynamicPropertySource
     private static void overrideProps(DynamicPropertyRegistry dynamicPropertyRegistry) {
-        dynamicPropertyRegistry.add("book.db.username", MYSQL_CONTAINER::getUsername);
-        dynamicPropertyRegistry.add("book.db.password", MYSQL_CONTAINER::getPassword);
-        dynamicPropertyRegistry.add("book.db.url", MYSQL_CONTAINER::getJdbcUrl);
+        dynamicPropertyRegistry.add("spring.datasource.username", MYSQL_CONTAINER::getUsername);
+        dynamicPropertyRegistry.add("spring.datasource.password", MYSQL_CONTAINER::getPassword);
+        dynamicPropertyRegistry.add("spring.datasource.url", MYSQL_CONTAINER::getJdbcUrl);
     }
 
 }

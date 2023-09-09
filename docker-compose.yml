@@ -4,12 +4,9 @@ services:
   database:
     container_name: database
     image: mysql:8.0.33
-    #    platform: linux/x86_64     # for Intel Chips with WSL2 Enabled
-    #    platform: linux/arm64/v8    # for Mac Silicon Chips
     restart: always
     environment:
       MYSQL_DATABASE: bookdelivery
-      MYSQL_USER: root
       MYSQL_PASSWORD: ippavlova_1990
       MYSQL_ROOT_PASSWORD: ippavlova_1990
       MYSQL_ROOT_HOST: '%'
@@ -33,7 +30,7 @@ services:
       - server.port=1221
       - spring.datasource.username=root
       - spring.datasource.password=ippavlova_1990
-      - spring.datasource.url=jdbc:mysql://database:3307/bookdelivery
+      - spring.datasource.url=jdbc:mysql://host.docker.internal:3307/bookdelivery
     depends_on:
       - database
     networks:
