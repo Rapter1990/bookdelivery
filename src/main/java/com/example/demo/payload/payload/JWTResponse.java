@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 public class JWTResponse {
 
     private String token;
+
+    @Builder.Default
     private String type = "Bearer";
     private String refreshToken;
     private String email;

@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtUtils.generateJwtToken(auth);
 
-        User user = userRepository.findByEmail(request.getEmail());
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User Not Found"));
 
         return JWTResponse.builder()
                 .email(request.getEmail())
@@ -82,8 +82,8 @@ public class AuthServiceImpl implements AuthService {
 
 
         if(!refreshTokenService.isRefreshExpired(refreshToken)) {
-            User userRefreshToken = refreshToken.getUser();
-            String newToken = jwtUtils.getUserNameFromJwtToken(userRefreshToken.getUsername());
+            User user = refreshToken.getUser();
+            String newToken = jwtUtils.getEmailFromToken(user.getEmail());
 
             return TokenRefreshResponse.builder()
                     .accessToken(newToken)

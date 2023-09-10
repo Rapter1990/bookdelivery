@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
 
         token.setToken(UUID.randomUUID().toString());
-        token.setExpiryDate(LocalDate.from(Instant.now().plusSeconds(expireSeconds)));
+        token.setExpiryDate(Instant.now().plusSeconds(expireSeconds).atZone(ZoneOffset.UTC).toLocalDate());
         refreshTokenRepository.save(token);
 
         return token.getToken();
