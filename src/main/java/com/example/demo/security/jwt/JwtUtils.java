@@ -72,7 +72,9 @@ public class JwtUtils {
     }
 
     public Long getIdFromToken(String token){
-        return Long.parseLong(extractClaims(token).getId());
+        String idValue = extractClaims(token).get(TokenClaims.ID.getValue()).toString();
+        Double doubleValue = Double.parseDouble(idValue);
+        return doubleValue.longValue();
     }
 
     public String getEmailFromToken(String token){
@@ -80,6 +82,9 @@ public class JwtUtils {
     }
 
     public boolean validateJwtToken(String authToken) {
+
+        log.info("JwtUtils | validateJwtToken | authToken: {}", authToken);
+
         try {
             Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(authToken);
             return true;
@@ -94,5 +99,13 @@ public class JwtUtils {
         }
 
         return false;
+    }
+
+    public String extractTokenFromHeader(String authorizationHeader) {
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return authorizationHeader.substring(7);
+        }
+        return null;
     }
 }

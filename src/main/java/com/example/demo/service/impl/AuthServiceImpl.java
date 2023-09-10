@@ -96,14 +96,18 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String logout(LogoutRequest request) {
+    public String logout(String token) {
 
-        String token = request.getToken();
+        String authToken = jwtUtils.extractTokenFromHeader(token);
 
-        Long id = jwtUtils.getIdFromToken(token);
+        if (jwtUtils.validateJwtToken(authToken)) {
+            Long id = jwtUtils.getIdFromToken(authToken);
 
-        refreshTokenService.deleteByUserId(id);
+            refreshTokenService.deleteByUserId(id);
 
-        return "success";
+            return "success";
+        }
+
+        return "failed";
     }
 }

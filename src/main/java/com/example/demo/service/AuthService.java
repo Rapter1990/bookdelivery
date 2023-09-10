@@ -19,5 +19,5 @@ public interface AuthService {
     TokenRefreshResponse refreshToken(TokenRefreshRequest request) throws Exception;
 
     // logout
-    String logout(LogoutRequest request);
+    String logout(String token);
 }

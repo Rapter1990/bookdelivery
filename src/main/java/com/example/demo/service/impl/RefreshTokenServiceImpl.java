@@ -60,6 +60,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
+    @Transactional
     public int deleteByUserId(Long userId) {
 
         User user = userService.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
