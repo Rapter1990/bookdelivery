@@ -8,7 +8,6 @@ import lombok.experimental.SuperBuilder;
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Builder
 @NoArgsConstructor
 @Table(name = "ADMINS")
 public class Admin extends User {

@@ -22,26 +22,26 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody SignupRequest request) {
+    public ResponseEntity<?> register(@RequestBody SignupRequest request) throws Exception {
 
-        return null;
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
     public ResponseEntity<JWTResponse> login(@RequestBody LoginRequest request) {
 
-        return null;
+        return ResponseEntity.ok(authService.login(request));
     }
 
     @PostMapping("/refreshtoken")
-    public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
+    public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) throws Exception {
 
-        return null;
+        return ResponseEntity.ok(authService.refreshToken(request));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<TokenRefreshResponse> logout(@RequestBody LogoutRequest request) {
+    public ResponseEntity<String> logout(@RequestBody LogoutRequest request) {
 
-        return null;
+        return ResponseEntity.ok(authService.logout(request));
     }
 }
