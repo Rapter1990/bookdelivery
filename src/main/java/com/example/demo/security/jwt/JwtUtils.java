@@ -75,6 +75,9 @@ public class JwtUtils {
         return Long.parseLong(extractClaims(token).getId());
     }
 
+    public String getEmailFromToken(String token){
+        return extractClaims(token).get(TokenClaims.EMAIL.getValue()).toString();
+    }
 
     public boolean validateJwtToken(String authToken) {
         try {
