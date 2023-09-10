@@ -5,7 +5,6 @@ import com.example.demo.model.User;
 import com.example.demo.payload.payload.JWTResponse;
 import com.example.demo.payload.payload.TokenRefreshResponse;
 import com.example.demo.payload.request.LoginRequest;
-import com.example.demo.payload.request.LogoutRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.payload.request.TokenRefreshRequest;
 import com.example.demo.repository.UserRepository;

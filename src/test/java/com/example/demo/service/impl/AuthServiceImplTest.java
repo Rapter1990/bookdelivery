@@ -102,7 +102,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     @Test
     void login_ReturnSuccess() {
 
-        // when
+        // given
         LoginRequest request = LoginRequest.builder()
                 .email("customer@bookdelivery.com")
                 .password("customer_password")

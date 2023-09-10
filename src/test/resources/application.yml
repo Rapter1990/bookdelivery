@@ -19,3 +19,9 @@ spring:
     maximum-pool-size: 5
     connection-timeout: 180000
     maximum-lifetime: 170000
+
+
+jwt:
+  secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+  expireMs: 60000
+  refrEshexpireMs: 120000
