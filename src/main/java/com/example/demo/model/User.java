@@ -15,7 +15,6 @@ import java.util.Map;
 
 @Entity
 @Data
-//@Inheritance(strategy = InheritanceType.JOINED)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

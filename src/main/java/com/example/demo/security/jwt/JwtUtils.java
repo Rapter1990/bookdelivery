@@ -8,6 +8,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -51,6 +52,12 @@ public class JwtUtils {
                 .compact();
     }
 
+    public String generateJwtToken(CustomUserDetails customUserDetails) {
+        Map<String, Object> claims = customUserDetails.getClaims();
+        claims.put(TokenClaims.ID.getValue(), customUserDetails.getId());
+        return createToken(claims, customUserDetails.getUsername());
+    }
+
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -66,14 +73,6 @@ public class JwtUtils {
 
     public Long getIdFromToken(String token){
         return Long.parseLong(extractClaims(token).getId());
-    }
-
-    public String getUserNameFromJwtToken(String token) {
-        return extractClaims(token).getSubject();
-    }
-
-    public String getEmailFromToken(String token){
-        return extractClaims(token).get(TokenClaims.EMAIL.getValue()).toString();
     }
 
 

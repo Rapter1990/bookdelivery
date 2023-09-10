@@ -9,6 +9,7 @@ import com.example.demo.payload.request.LogoutRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.payload.request.TokenRefreshRequest;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.security.CustomUserDetails;
 import com.example.demo.security.jwt.JwtUtils;
 import com.example.demo.service.AuthService;
 import com.example.demo.service.RefreshTokenService;
@@ -82,8 +83,8 @@ public class AuthServiceImpl implements AuthService {
 
 
         if(!refreshTokenService.isRefreshExpired(refreshToken)) {
-            User user = refreshToken.getUser();
-            String newToken = jwtUtils.getEmailFromToken(user.getEmail());
+            CustomUserDetails customUserDetails = new CustomUserDetails(refreshToken.getUser());
+            String newToken = jwtUtils.generateJwtToken(customUserDetails);
 
             return TokenRefreshResponse.builder()
                     .accessToken(newToken)
