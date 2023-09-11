@@ -3,11 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.model.User;
 import com.example.demo.model.mapper.customer.CustomerMapper;
 import com.example.demo.payload.request.CustomerCreateRequest;
+import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.customer.CustomerCreatedResponse;
 import com.example.demo.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,14 +30,14 @@ public class CustomerController {
      */
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    public ResponseEntity<CustomerCreatedResponse> createCustomer(
+    public CustomResponse<CustomerCreatedResponse> createCustomer(
             @RequestBody @Valid final CustomerCreateRequest customerCreateRequest
     ) {
 
         final User createdUser = customerService.createCustomer(customerCreateRequest);
         final CustomerCreatedResponse createdResponse = CustomerMapper.toCreatedResponse(createdUser);
 
-        return ResponseEntity.ok(createdResponse);
+        return CustomResponse.ok(createdResponse);
     }
 
 }

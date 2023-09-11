@@ -1,19 +1,28 @@
 package com.example.demo.payload.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Data
+@Getter
+@Setter
 @Builder
+@AllArgsConstructor
 public class CustomResponse<T> {
 
-    public CustomResponse(T response, HttpStatus status) {
+    public CustomResponse(@Nullable T response, @Nonnull HttpStatus status) {
         this.response = response;
         this.httpStatus = status;
         this.isSuccess = status.is2xxSuccessful();
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private T response;
 
     private Boolean isSuccess;
@@ -36,7 +45,7 @@ public class CustomResponse<T> {
      * @param <E>      The type of the response data.
      * @return A CustomResponse object containing the provided response data.
      */
-    public static <E> CustomResponse<E> ok(E response){
+    public static <E> CustomResponse<E> ok(E response) {
         return CustomResponse.<E>builder()
                 .response(response)
                 .isSuccess(true)
@@ -51,7 +60,8 @@ public class CustomResponse<T> {
      * @param <E>      The type of the response data.
      * @return A CustomResponse object containing the provided response data.
      */
-    public static <E> CustomResponse<E> created(E response){
+    @ResponseStatus(HttpStatus.CREATED)
+    public static <E> CustomResponse<E> created(E response) {
         return CustomResponse.<E>builder()
                 .response(response)
                 .isSuccess(true)

@@ -5,9 +5,9 @@ import com.example.demo.payload.payload.TokenRefreshResponse;
 import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.payload.request.TokenRefreshRequest;
+import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,26 +18,26 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody SignupRequest request) {
+    public CustomResponse<String> register(@RequestBody SignupRequest request) {
 
-        return ResponseEntity.ok(authService.register(request));
+        return CustomResponse.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JWTResponse> login(@RequestBody LoginRequest request) {
+    public CustomResponse<JWTResponse> login(@RequestBody LoginRequest request) {
 
-        return ResponseEntity.ok(authService.login(request));
+        return CustomResponse.ok(authService.login(request));
     }
 
     @PostMapping("/refreshtoken")
-    public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
+    public CustomResponse<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
 
-        return ResponseEntity.ok(authService.refreshToken(request));
+        return CustomResponse.ok(authService.refreshToken(request));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token) {
+    public CustomResponse<String> logout(@RequestHeader("Authorization") String token) {
 
-        return ResponseEntity.ok(authService.logout(token));
+        return CustomResponse.ok(authService.logout(token));
     }
 }

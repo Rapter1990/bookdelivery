@@ -4,13 +4,13 @@ import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.payload.request.BookCreateRequest;
 import com.example.demo.payload.request.BookUpdateStockRequest;
+import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.book.BookCreatedResponse;
 import com.example.demo.payload.response.book.BookGetResponse;
 import com.example.demo.payload.response.book.BookUpdatedResponse;
 import com.example.demo.service.BookService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +29,13 @@ public class BookController {
      */
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<BookCreatedResponse> createBook(
+    public CustomResponse<BookCreatedResponse> createBook(
             @RequestBody @Valid final BookCreateRequest request
     ) {
         final Book createdBookEntity = bookService.createBook(request);
         final BookCreatedResponse response = BookMapper.toCreatedResponse(createdBookEntity);
 
-        return ResponseEntity.ok(response);
+        return CustomResponse.created(response);
     }
 
     /**
@@ -47,14 +47,14 @@ public class BookController {
      */
     @PutMapping("/{bookId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<BookUpdatedResponse> updateStock(
+    public CustomResponse<BookUpdatedResponse> updateStock(
             @PathVariable String bookId,
             @RequestBody @Valid final BookUpdateStockRequest request
     ) {
         final Book updatedBookEntity = bookService.updateBookStockById(bookId, request);
         final BookUpdatedResponse response = BookMapper.toUpdatedResponse(updatedBookEntity);
 
-        return ResponseEntity.ok(response);
+        return CustomResponse.ok(response);
     }
 
     /**
@@ -65,13 +65,13 @@ public class BookController {
      */
     @GetMapping("/{bookId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
-    public ResponseEntity<BookGetResponse> getBookById(
+    public CustomResponse<BookGetResponse> getBookById(
             @PathVariable("bookId") final String bookId
     ) {
         final Book bookEntityFromDb = bookService.getBookById(bookId);
         final BookGetResponse response = BookMapper.toGetResponse(bookEntityFromDb);
 
-        return ResponseEntity.ok(response);
+        return CustomResponse.ok(response);
     }
 
 }
