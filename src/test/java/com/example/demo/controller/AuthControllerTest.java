@@ -12,14 +12,11 @@ import com.example.demo.security.CustomUserDetails;
 import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.jwt.JwtUtils;
 import com.example.demo.service.AuthService;
-import com.example.demo.utils.MockJwtTokenProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
