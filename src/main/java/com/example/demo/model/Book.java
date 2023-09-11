@@ -16,13 +16,14 @@ import java.math.BigDecimal;
 public class Book extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "ID")
     private String id;
 
     @Column(name = "ISBN")
     private String isbn;
 
-    @Column(name = "BOOK_NAME")
+    @Column(name = "NAME")
     private String name;
 
     @Column(name = "AUTHOER_FULL_NAME")
