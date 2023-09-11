@@ -1,5 +1,6 @@
 package com.example.demo.security.jwt;
 
+import com.example.demo.model.enums.TokenClaims;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.util.Identity;
 import io.jsonwebtoken.*;
@@ -48,7 +49,7 @@ public class JwtUtils {
                 .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
-                .signWith(getSignInKey(),SignatureAlgorithm.HS512)
+                .signWith(getSignInKey(),SignatureAlgorithm.HS256)
                 .compact();
     }
 
