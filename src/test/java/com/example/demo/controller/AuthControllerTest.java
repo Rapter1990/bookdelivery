@@ -9,11 +9,14 @@ import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.payload.request.TokenRefreshRequest;
 import com.example.demo.security.CustomUserDetails;
+import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.jwt.JwtUtils;
 import com.example.demo.service.AuthService;
 import com.example.demo.utils.MockJwtTokenProvider;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,6 +32,11 @@ class AuthControllerTest extends BaseControllerTest {
     @MockBean
     private AuthService authService;
 
+    @MockBean
+    private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private JwtUtils jwtUtils;
 
     @Test
     void register_ReturnSuccess() throws Exception {
@@ -92,14 +100,10 @@ class AuthControllerTest extends BaseControllerTest {
 
         CustomUserDetails userDetails = new CustomUserDetails(mockUser);
 
-        Authentication mockAuth = new UsernamePasswordAuthenticationToken(
-                userDetails, // Replace userDetails with your CustomUserDetails mock
-                null,
-                userDetails.getAuthorities()
-        );
 
-        // Generate a JWT token for the Authentication object
-        String mockBearerToken = MockJwtTokenProvider.generateJwtToken(mockAuth);
+        String accessToken = jwtUtils.generateJwtToken(userDetails);
+
+        String mockBearerToken = "Bearer " + accessToken;
 
         TokenRefreshRequest request = TokenRefreshRequest.builder()
                 .refreshToken("validRefreshToken")
@@ -112,10 +116,11 @@ class AuthControllerTest extends BaseControllerTest {
 
         // when
         when(authService.refreshToken(request)).thenReturn(mockResponse);
+        when(customUserDetailsService.loadUserByUsername("customer@bookdelivery.com")).thenReturn(userDetails);
 
         // then
         mockMvc.perform(post("/api/v1/auth/refreshtoken")
-                        .header("Authorization", mockBearerToken)
+                        .header(HttpHeaders.AUTHORIZATION, mockBearerToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -137,17 +142,18 @@ class AuthControllerTest extends BaseControllerTest {
 
         CustomUserDetails userDetails = new CustomUserDetails(mockUser);
 
-        // Generate a JWT token for the user
-        String mockToken = MockJwtTokenProvider.generateJwtToken((Authentication) userDetails);
 
-        String mockBearerToken = "Bearer " + mockToken;
+        String accessToken = jwtUtils.generateJwtToken(userDetails);
+
+        String mockBearerToken = "Bearer " + accessToken;
 
         // When
+        when(customUserDetailsService.loadUserByUsername("customer@bookdelivery.com")).thenReturn(userDetails);
         when(authService.logout(mockBearerToken)).thenReturn("success");
 
         // Then
         mockMvc.perform(post("/api/v1/auth/logout")
-                        .header("Authorization", mockBearerToken))
+                        .header(HttpHeaders.AUTHORIZATION, mockBearerToken))
                 .andExpect(status().isOk());
 
         verify(authService).logout(mockBearerToken);
