@@ -1,17 +1,20 @@
 package com.example.demo.controller;
 
 import com.example.demo.base.BaseControllerTest;
+import com.example.demo.model.User;
 import com.example.demo.model.enums.Role;
 import com.example.demo.payload.payload.JWTResponse;
 import com.example.demo.payload.payload.TokenRefreshResponse;
 import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.payload.request.TokenRefreshRequest;
+import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.AuthService;
 import com.example.demo.utils.MockJwtTokenProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -77,6 +80,21 @@ class AuthControllerTest extends BaseControllerTest {
     void refreshToken_ReturnSuccess() throws Exception {
 
         // given
+        User mockUser = User.builder()
+                .id(1L)
+                .username("customer_1")
+                .email("customer@bookdelivery.com")
+                .role(Role.ROLE_CUSTOMER)
+                .fullName("customer_fullname")
+                .build();
+
+        CustomUserDetails userDetails = new CustomUserDetails(mockUser);
+
+        // Generate a JWT token for the user
+        String mockToken = MockJwtTokenProvider.generateJwtToken((Authentication) userDetails);
+
+        String mockBearerToken = "Bearer " + mockToken;
+
         TokenRefreshRequest request = TokenRefreshRequest.builder()
                 .refreshToken("validRefreshToken")
                 .build();
@@ -85,9 +103,6 @@ class AuthControllerTest extends BaseControllerTest {
                 .accessToken("newMockedToken")
                 .refreshToken("validRefreshToken")
                 .build();
-
-
-        String mockBearerToken = new MockJwtTokenProvider().createMockJwtTokenForCustomer();
 
         // when
         when(authService.refreshToken(request)).thenReturn(mockResponse);
@@ -106,7 +121,20 @@ class AuthControllerTest extends BaseControllerTest {
     void logout_ReturnSuccess() throws Exception {
 
         // Given
-        String mockBearerToken = new MockJwtTokenProvider().createMockJwtTokenForCustomer();
+        User mockUser = User.builder()
+                .id(1L)
+                .username("customer_1")
+                .email("customer@bookdelivery.com")
+                .role(Role.ROLE_CUSTOMER)
+                .fullName("customer_fullname")
+                .build();
+
+        CustomUserDetails userDetails = new CustomUserDetails(mockUser);
+
+        // Generate a JWT token for the user
+        String mockToken = MockJwtTokenProvider.generateJwtToken((Authentication) userDetails);
+
+        String mockBearerToken = "Bearer " + mockToken;
 
         // When
         when(authService.logout(mockBearerToken)).thenReturn("success");

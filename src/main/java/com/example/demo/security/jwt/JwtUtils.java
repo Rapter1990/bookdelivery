@@ -27,12 +27,6 @@ public class JwtUtils {
     @Value("${jwt.expireMs}")
     private int jwtExpirationMs;
 
-    private final Identity identity;
-
-    public JwtUtils(Identity identity) {
-        this.identity = identity;
-    }
-
 
     public String generateJwtToken(Authentication auth) {
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();

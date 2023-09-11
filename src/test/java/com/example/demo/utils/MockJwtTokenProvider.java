@@ -1,55 +1,53 @@
 package com.example.demo.utils;
 
+import com.example.demo.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
 
 @Component
 public class MockJwtTokenProvider {
 
 
     //@Value("${jwt.secret}")
-    private final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+    private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
     //@Value("${jwt.expireMs}")
-    private final int EXPIRATION_TIME_MS = 60000;
+    private static final int EXPIRATION_TIME_MS = 60000;
 
-    public String createMockJwtTokenForCustomer() {
+    public static String generateJwtToken(Authentication auth) {
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+        Map<String, Object> claims = userDetails.getClaims();
+        return createToken(claims, userDetails.getUsername());
+    }
 
-        Claims claims = Jwts.claims();
-                //.setSubject("customer_1"); // Set the username as the subject
-                //.setIssuedAt(new Date())
-                //.setExpiration(new Date(System.currentTimeMillis() + MockJwtTokenProvider.EXPIRATION_TIME_MS));
+    public static String createToken(Map<String, Object> claims, String subject) {
+        Date now = new Date();
+        Date expirationDate = new Date(now.getTime() + EXPIRATION_TIME_MS);
 
-        claims.put("id", 1);
-        claims.put("username", "customer_1");
-        claims.put("roles", Collections.singletonList("ROLE_CUSTOMER"));
-        claims.put("userFullName", "customer_fullname");
-        claims.put("email", "customer@bookdelivery.com");
-
-        Date expirationDate = new Date(new Date().getTime() + EXPIRATION_TIME_MS);
-
-        SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
-
-        // Build the JWT token with the provided claims
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setClaims(claims)
-                .setSubject("customer_1")
-                .setIssuedAt(new Date())
+                .setSubject(subject)
+                .setIssuedAt(now)
                 .setExpiration(expirationDate)
-                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .signWith(getSignInKey(),SignatureAlgorithm.HS256)
                 .compact();
+    }
 
-        return "Bearer " + token;
+    private static Key getSignInKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
 }
