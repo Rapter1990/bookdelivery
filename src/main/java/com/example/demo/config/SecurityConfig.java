@@ -29,7 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomUserDetailsService customUserDetailsService;;
+    private final CustomUserDetailsService customUserDetailsService;
 
     private final AuthEntryPointJwt authEntryPointJwt;
 
@@ -42,7 +42,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthTokenFilter jwtAuthenticationFilter() {
-        return new AuthTokenFilter(jwtUtils,customUserDetailsService);
+        return new AuthTokenFilter(jwtUtils, customUserDetailsService);
     }
 
     @Bean
@@ -68,7 +68,7 @@ public class SecurityConfig {
                 .cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(customizer -> customizer
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register","/api/v1/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register", "/api/v1/auth/login").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

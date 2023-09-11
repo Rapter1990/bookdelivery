@@ -5,9 +5,11 @@ import com.example.demo.model.Book;
 import com.example.demo.payload.request.BookCreateRequest;
 import com.example.demo.payload.response.book.BookCreatedResponse;
 import com.example.demo.payload.response.book.BookGetResponse;
+import com.example.demo.payload.response.book.BookUpdatedResponse;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class BookMapper {
-
 
     public static Book mapForSaving(
             BookCreateRequest request
@@ -38,7 +40,7 @@ public class BookMapper {
     public static BookGetResponse toGetResponse(
             Book book
     ) {
-        if (book == null){
+        if (book == null) {
             return null;
         }
 
@@ -53,7 +55,21 @@ public class BookMapper {
 
     }
 
+    public static BookUpdatedResponse toUpdatedResponse(
+            Book book
+    ) {
+        if (book == null) {
+            return null;
+        }
 
-
+        return BookUpdatedResponse.builder()
+                .id(book.getId())
+                .isbn(book.getIsbn())
+                .name(book.getName())
+                .authorFullName(book.getAuthorFullName())
+                .stock(book.getStock())
+                .price(book.getPrice())
+                .build();
+    }
 
 }

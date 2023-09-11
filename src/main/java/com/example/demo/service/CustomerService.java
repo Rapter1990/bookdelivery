@@ -1,8 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.model.User;
+import com.example.demo.payload.request.CustomerCreateRequest;
+
 public interface CustomerService {
 
-    // create a new customer
+    User createCustomer(CustomerCreateRequest customerCreateRequest);
 
     // get by customer id
 

@@ -1,13 +1,14 @@
 package com.example.demo.security;
 
 import com.example.demo.model.User;
-import com.example.demo.model.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {

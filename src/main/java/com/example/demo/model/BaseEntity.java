@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import com.example.demo.model.enums.TokenClaims;
+import com.example.demo.security.CustomUserDetails;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
@@ -11,10 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Data
 @SuperBuilder
@@ -29,32 +27,29 @@ public abstract class BaseEntity {
     @Column(name = "CREATED_AT")
     protected LocalDateTime createdAt;
 
-    @PrePersist
-    public void prePersist() {
-        this.createdUser = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-                .map(Authentication::getPrincipal)
-                .filter(user -> !"anonymousUser".equals(user))
-                .map(Jwt.class::cast)
-                .map(jwt -> jwt.getClaim(TokenClaims.USERNAME.getValue()).toString())
-                .orElse("anonymousUser");
-        this.createdAt = LocalDateTime.now();
-    }
-
-
     @Column(name = "UPDATED_USER")
     protected String updatedUser;
 
     @Column(name = "UPDATED_AT")
     protected LocalDateTime updatedAt;
 
+    @PrePersist
+    public void prePersist() {
+        this.createdUser = getUsernameFromAuthentication();
+        this.createdAt = LocalDateTime.now();
+    }
+
     @PreUpdate
     public void preUpdate() {
-        this.updatedUser = Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-                .map(Authentication::getPrincipal)
-                .filter(user -> !"anonymousUser".equals(user))
-                .map(Jwt.class::cast)
-                .map(jwt -> jwt.getClaim(TokenClaims.USERNAME.getValue()).toString())
-                .orElse("anonymousUser");
+        this.updatedUser = getUsernameFromAuthentication();
         this.updatedAt = LocalDateTime.now();
+    }
+
+    private String getUsernameFromAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.getPrincipal() instanceof CustomUserDetails userDetails) {
+            return userDetails.getUsername();
+        }
+        return "anonymousUser";
     }
 }

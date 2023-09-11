@@ -33,8 +33,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         RefreshToken token = getByUser(user.getId());
 
-        if(token == null) {
-            token =	new RefreshToken();
+        if (token == null) {
+            token = new RefreshToken();
             token.setUser(user);
         }
 

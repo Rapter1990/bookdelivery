@@ -2,14 +2,12 @@ package com.example.demo.security.jwt;
 
 import com.example.demo.model.enums.TokenClaims;
 import com.example.demo.security.CustomUserDetails;
-import com.example.demo.util.Identity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -43,7 +41,7 @@ public class JwtUtils {
                 .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expirationDate)
-                .signWith(getSignInKey(),SignatureAlgorithm.HS256)
+                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -66,13 +64,13 @@ public class JwtUtils {
                 .getBody();
     }
 
-    public Long getIdFromToken(String token){
+    public Long getIdFromToken(String token) {
         String idValue = extractClaims(token).get(TokenClaims.ID.getValue()).toString();
         Double doubleValue = Double.parseDouble(idValue);
         return doubleValue.longValue();
     }
 
-    public String getEmailFromToken(String token){
+    public String getEmailFromToken(String token) {
         return extractClaims(token).get(TokenClaims.EMAIL.getValue()).toString();
     }
 

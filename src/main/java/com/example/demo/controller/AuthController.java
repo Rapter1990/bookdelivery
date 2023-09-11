@@ -3,13 +3,11 @@ package com.example.demo.controller;
 import com.example.demo.payload.payload.JWTResponse;
 import com.example.demo.payload.payload.TokenRefreshResponse;
 import com.example.demo.payload.request.LoginRequest;
-import com.example.demo.payload.request.LogoutRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.payload.request.TokenRefreshRequest;
 import com.example.demo.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +18,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody SignupRequest request) throws Exception {
+    public ResponseEntity<String> register(@RequestBody SignupRequest request) {
 
         return ResponseEntity.ok(authService.register(request));
     }
@@ -32,7 +30,7 @@ public class AuthController {
     }
 
     @PostMapping("/refreshtoken")
-    public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) throws Exception {
+    public ResponseEntity<TokenRefreshResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
 
         return ResponseEntity.ok(authService.refreshToken(request));
     }

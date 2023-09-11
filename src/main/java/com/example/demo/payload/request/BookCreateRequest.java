@@ -1,9 +1,10 @@
 package com.example.demo.payload.request;
 
 
-
 import com.example.demo.model.Book;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +23,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class BookCreateRequest {
     @NotBlank
-    @Size(min = 10,max = 13)
+    @Size(min = 10, max = 13)
     private String isbn;
 
     @NotBlank
@@ -31,11 +32,10 @@ public class BookCreateRequest {
     @NotBlank
     private String authorFullName;
 
-    @NotBlank
-    @Size(min = 0, max = Integer.MAX_VALUE)
+    @Min(value = 0)
     private Integer stock;
 
-    @NotBlank
+    @NotNull
     private BigDecimal price;
 
 }

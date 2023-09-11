@@ -36,10 +36,10 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public String register(SignupRequest request) throws Exception {
+    public String register(SignupRequest request) {
 
-        if(userRepository.existsByEmail(request.getEmail())){
-            throw new Exception("Email is already registered");
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email is already registered");
         }
 
         User user = User.builder()
@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
     public JWTResponse login(LoginRequest request) {
 
         UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword());
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword());
 
         Authentication auth = authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(auth);
@@ -75,13 +75,13 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenRefreshResponse refreshToken(TokenRefreshRequest request) throws Exception {
+    public TokenRefreshResponse refreshToken(TokenRefreshRequest request) {
 
         RefreshToken refreshToken = refreshTokenService.findByToken(request.getRefreshToken())
-                .orElseThrow(() -> new Exception("Refresh token not found"));
+                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
 
 
-        if(!refreshTokenService.isRefreshExpired(refreshToken)) {
+        if (!refreshTokenService.isRefreshExpired(refreshToken)) {
             CustomUserDetails customUserDetails = new CustomUserDetails(refreshToken.getUser());
             String newToken = jwtUtils.generateJwtToken(customUserDetails);
 
