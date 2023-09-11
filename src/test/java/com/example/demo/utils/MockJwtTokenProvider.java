@@ -5,44 +5,51 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
 
+@Component
 public class MockJwtTokenProvider {
 
 
-    private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
-    public static final long EXPIRATION_TIME_MS = 60000;
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;
 
-    public static String createMockJwtTokenForCustomer() {
+    @Value("${jwt.expireMs}")
+    private int EXPIRATION_TIME_MS;
 
-        Claims claims = Jwts.claims()
-                .setSubject("customer_1") // Set the username as the subject
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + MockJwtTokenProvider.EXPIRATION_TIME_MS));
+    public String createMockJwtTokenForCustomer() {
 
+        Claims claims = Jwts.claims();
+                //.setSubject("customer_1"); // Set the username as the subject
+                //.setIssuedAt(new Date())
+                //.setExpiration(new Date(System.currentTimeMillis() + MockJwtTokenProvider.EXPIRATION_TIME_MS));
+
+        claims.put("id", 1);
+        claims.put("username", "customer_1");
         claims.put("roles", Collections.singletonList("ROLE_CUSTOMER"));
         claims.put("userFullName", "customer_fullname");
-        claims.put("id", 1);
         claims.put("email", "customer@bookdelivery.com");
 
+        Date expirationDate = new Date(new Date().getTime() + EXPIRATION_TIME_MS);
+
+        SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
 
         // Build the JWT token with the provided claims
         String token = Jwts.builder()
                 .setClaims(claims)
+                .setSubject("customer_1")
                 .setIssuedAt(new Date())
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                .setExpiration(expirationDate)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
 
         return "Bearer " + token;
     }
 
-
-    private static Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
 }

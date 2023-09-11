@@ -87,7 +87,7 @@ class AuthControllerTest extends BaseControllerTest {
                 .build();
 
 
-        String mockBearerToken = MockJwtTokenProvider.createMockJwtTokenForCustomer();
+        String mockBearerToken = new MockJwtTokenProvider().createMockJwtTokenForCustomer();
 
         // when
         when(authService.refreshToken(request)).thenReturn(mockResponse);
@@ -106,7 +106,7 @@ class AuthControllerTest extends BaseControllerTest {
     void logout_ReturnSuccess() throws Exception {
 
         // Given
-        String mockBearerToken = MockJwtTokenProvider.createMockJwtTokenForCustomer();
+        String mockBearerToken = new MockJwtTokenProvider().createMockJwtTokenForCustomer();
 
         // When
         when(authService.logout(mockBearerToken)).thenReturn("success");
