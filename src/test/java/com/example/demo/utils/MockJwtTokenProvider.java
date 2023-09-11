@@ -17,11 +17,11 @@ import java.util.Date;
 public class MockJwtTokenProvider {
 
 
-    @Value("${jwt.secret}")
-    private String SECRET_KEY;
+    //@Value("${jwt.secret}")
+    private final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
 
-    @Value("${jwt.expireMs}")
-    private int EXPIRATION_TIME_MS;
+    //@Value("${jwt.expireMs}")
+    private final int EXPIRATION_TIME_MS = 60000;
 
     public String createMockJwtTokenForCustomer() {
 
