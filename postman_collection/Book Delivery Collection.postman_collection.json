@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "6cd43c9c-7822-4c5d-9878-cf15d6402ce2",
+		"_postman_id": "cea5a58d-ca7a-4010-a2e5-8abca67b6563",
 		"name": "Book Delivery Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "5570426"
+		"_exporter_id": "29394300"
 	},
 	"item": [
 		{
@@ -119,7 +119,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTQzNjY0MzksImV4cCI6MTY5NDM2NjQ5OX0.NvhDY4m0Ay9o-in-j33Zz-KSVYiqvToQ_EjRlLxwY9s",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTQ0NjMyMzMsImV4cCI6MTY5NDQ2MzI5M30.KI_mAzfACnsxSYnga4IVACD9Zir6V94hhiJPXiEpD8c",
 											"type": "string"
 										}
 									]
@@ -147,6 +147,159 @@
 										"v1",
 										"auth",
 										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Book",
+					"item": [
+						{
+							"name": "Create Book",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"isbn\":\"1234567890\",\n    \"name\":\"Test Book\",\n    \"authorFullName\":\"Noyan\",\n    \"stock\":23,\n    \"price\":99\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/books",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"books"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Book",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTQ0NjQzMjQsImV4cCI6MTY5NDQ2NDM4NH0.4U16JVrxdfoPhd2mPXYXEZe0mnJ4abUcK-gN2nih9Ss",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"stock\":123\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/books/12951e7c-1825-4ee7-a0b2-11ae54c35124",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"12951e7c-1825-4ee7-a0b2-11ae54c35124"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Book By Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTQ0NjQ0MTgsImV4cCI6MTY5NDQ2NDQ3OH0.3I26QpiNgmxA0pT0lDY8rSF1TOqwJXEJRmDvGMnFrjo",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:1221/api/v1/books/12951e7c-1825-4ee7-a0b2-11ae54c35124",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"12951e7c-1825-4ee7-a0b2-11ae54c35124"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Customer",
+					"item": [
+						{
+							"name": "Create Customer",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTQ0NjY0ODksImV4cCI6MTY5NDQ2NjU0OX0.f4KhbnlJL7UahqN9exPLRJ4Wli0EU-ha8Cz8TjYgFtU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"fullName\": \"John Doe\",\n  \"password\": \"secretpassword\",\n  \"username\": \"johndoe123\",\n  \"email\": \"johndoe@example.com\"\n}\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/customers",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"customers"
 									]
 								}
 							},
