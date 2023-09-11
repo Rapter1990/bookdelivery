@@ -21,8 +21,8 @@ public class Order extends BaseEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customerId", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "userId", nullable = false)
+    private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<OrderItem> orderItems;
