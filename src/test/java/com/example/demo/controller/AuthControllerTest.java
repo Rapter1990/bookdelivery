@@ -9,11 +9,13 @@ import com.example.demo.payload.request.LoginRequest;
 import com.example.demo.payload.request.SignupRequest;
 import com.example.demo.payload.request.TokenRefreshRequest;
 import com.example.demo.security.CustomUserDetails;
+import com.example.demo.security.jwt.JwtUtils;
 import com.example.demo.service.AuthService;
 import com.example.demo.utils.MockJwtTokenProvider;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
 import static org.mockito.Mockito.verify;
@@ -90,10 +92,14 @@ class AuthControllerTest extends BaseControllerTest {
 
         CustomUserDetails userDetails = new CustomUserDetails(mockUser);
 
-        // Generate a JWT token for the user
-        String mockToken = MockJwtTokenProvider.generateJwtToken((Authentication) userDetails);
+        Authentication mockAuth = new UsernamePasswordAuthenticationToken(
+                userDetails, // Replace userDetails with your CustomUserDetails mock
+                null,
+                userDetails.getAuthorities()
+        );
 
-        String mockBearerToken = "Bearer " + mockToken;
+        // Generate a JWT token for the Authentication object
+        String mockBearerToken = MockJwtTokenProvider.generateJwtToken(mockAuth);
 
         TokenRefreshRequest request = TokenRefreshRequest.builder()
                 .refreshToken("validRefreshToken")
