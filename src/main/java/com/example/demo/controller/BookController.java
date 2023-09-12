@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
@@ -72,6 +74,22 @@ public class BookController {
         final BookGetResponse response = BookMapper.toGetResponse(bookEntityFromDb);
 
         return CustomResponse.ok(response);
+    }
+
+    /**
+     * Returns all {@link Book} entities.
+     *
+     * @return list of Book entities
+     */
+    @GetMapping()
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
+    public CustomResponse<List<BookGetResponse>> getBooks(
+    ) {
+        final List<Book> bookEntitiesFromDb = bookService.getBooks();
+        final List<BookGetResponse> responses = BookMapper
+                .toGetReponse(bookEntitiesFromDb);
+
+        return CustomResponse.ok(responses);
     }
 
 }
