@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.payload.request.BookCreateRequest;
@@ -8,6 +9,8 @@ import com.example.demo.repository.BookRepository;
 import com.example.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -59,5 +62,16 @@ public class BookServiceImpl implements BookService {
         book.setStock(request.getStock());
 
         return bookRepository.save(book);
+    }
+
+    /**
+     * Returns all {@link Book} entities.
+     * @return Book entities in a list.
+     */
+    @Override
+    public List<Book> getBooks() {
+        return bookRepository
+                .findAllBooks()
+                .orElseThrow(BookNotFoundException::new);
     }
 }
