@@ -10,6 +10,8 @@ import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Builder
@@ -30,7 +32,7 @@ public class CustomResponse<T> {
     private HttpStatus httpStatus;
 
     @Builder.Default
-    private Long time = System.currentTimeMillis();
+    private LocalDateTime time = LocalDateTime.now();
 
     public static final CustomResponse<Void> SUCCESS = CustomResponse.<Void>builder()
             .isSuccess(true)
