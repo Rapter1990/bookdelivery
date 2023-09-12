@@ -8,6 +8,8 @@ import com.example.demo.payload.response.book.BookGetResponse;
 import com.example.demo.payload.response.book.BookUpdatedResponse;
 import lombok.experimental.UtilityClass;
 
+import java.util.List;
+
 @UtilityClass
 public class BookMapper {
 
@@ -53,6 +55,19 @@ public class BookMapper {
                 .price(book.getPrice())
                 .build();
 
+    }
+
+
+    public static List<BookGetResponse> toGetReponse(
+            List<Book> bookEntities
+    ) {
+        if (bookEntities == null){
+            return null;
+        }
+
+        return bookEntities.stream()
+                .map(BookMapper::toGetResponse)
+                .toList();
     }
 
     public static BookUpdatedResponse toUpdatedResponse(
