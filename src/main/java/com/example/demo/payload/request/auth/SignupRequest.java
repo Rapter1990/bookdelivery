@@ -1,5 +1,6 @@
-package com.example.demo.payload.request;
+package com.example.demo.payload.request.auth;
 
+import com.example.demo.model.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CustomerCreateRequest {
+public class SignupRequest {
 
     @NotBlank
     @Size(min = 3, max = 50)
@@ -30,5 +31,7 @@ public class CustomerCreateRequest {
     @Size(max = 50)
     @Email
     private String email;
+
+    private Role role;
 
 }

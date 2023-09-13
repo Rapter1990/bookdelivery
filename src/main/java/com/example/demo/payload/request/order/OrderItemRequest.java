@@ -1,4 +1,4 @@
-package com.example.demo.payload.request;
+package com.example.demo.payload.request.order;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

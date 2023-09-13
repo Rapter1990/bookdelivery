@@ -1,4 +1,4 @@
-package com.example.demo.payload.request;
+package com.example.demo.payload.request.pagination;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
