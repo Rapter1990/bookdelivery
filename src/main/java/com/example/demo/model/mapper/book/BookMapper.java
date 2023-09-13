@@ -1,6 +1,7 @@
 package com.example.demo.model.mapper.book;
 
 
+import com.example.demo.dto.BookDTO;
 import com.example.demo.model.Book;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
@@ -101,4 +102,13 @@ public class BookMapper {
                 .build();
     }
 
+    public static BookDTO toDTO(Book book) {
+        return BookDTO.builder()
+                .id(book.getId())
+                .name(book.getName())
+                .authorFullName(book.getAuthorFullName())
+                .isbn(book.getIsbn())
+                .price(book.getPrice())
+                .build();
+    }
 }

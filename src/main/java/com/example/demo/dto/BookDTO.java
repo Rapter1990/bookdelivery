@@ -13,9 +13,7 @@ public class BookDTO {
     private String id;
     private String isbn;
     private String name;
-    private Integer stock;
+    private String authorFullName;
     private BigDecimal price;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
 }
