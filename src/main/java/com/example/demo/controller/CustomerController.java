@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.User;
 import com.example.demo.model.mapper.customer.CustomerMapper;
-import com.example.demo.payload.request.CustomerCreateRequest;
+import com.example.demo.payload.request.customer.CustomerCreateRequest;
 import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.customer.CustomerCreatedResponse;
 import com.example.demo.service.CustomerService;

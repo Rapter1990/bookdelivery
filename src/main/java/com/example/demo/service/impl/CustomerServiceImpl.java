@@ -2,7 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.User;
 import com.example.demo.model.enums.Role;
-import com.example.demo.payload.request.CustomerCreateRequest;
+import com.example.demo.payload.request.customer.CustomerCreateRequest;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CustomerService;
 import lombok.RequiredArgsConstructor;

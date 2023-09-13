@@ -3,7 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
-import com.example.demo.payload.request.PaginatedFindAllRequest;
+import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
