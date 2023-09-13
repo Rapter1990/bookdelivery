@@ -12,7 +12,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderGetByCustomerResponse {
+public class OrderGetBetweenDatesResponse {
 
     private Long id;
     private UserDTO user;

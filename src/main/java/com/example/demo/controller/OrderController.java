@@ -2,8 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.model.mapper.order.OrderMapper;
+import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.payload.response.CustomResponse;
+import com.example.demo.payload.response.order.OrderGetBetweenDatesResponse;
 import com.example.demo.payload.response.order.OrderGetByCustomerResponse;
 import com.example.demo.payload.response.order.OrderGetResponse;
 import com.example.demo.service.OrderService;
@@ -37,6 +39,16 @@ public class OrderController {
 
         return CustomResponse.ok(response);
     }
+
+    @GetMapping("/between-dates")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    public CustomResponse<Page<OrderGetBetweenDatesResponse>> getOrdersBetweenTwoDates(@RequestBody PaginatedFindAllRequest paginatedFindAllRequest) {
+        final Page<OrderDTO> pageOfOrderDTOs = orderService.findAllOrdersBetweenTwoDatesAndPagination(paginatedFindAllRequest);
+        final Page<OrderGetBetweenDatesResponse> response = OrderMapper.toGetBetweenDatesResponses(pageOfOrderDTOs);
+
+        return CustomResponse.ok(response);
+    }
+
 
     // Implement OrderService
     // Can Create OrderSaveService for Create Order
