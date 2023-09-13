@@ -36,7 +36,7 @@ class AuthControllerTest extends BaseControllerTest {
     private JwtUtils jwtUtils;
 
     @Test
-    void register_ReturnSuccess() throws Exception {
+    void givenSignupRequest_WhenCustomerRole_ReturnSuccess() throws Exception {
 
         // given
         SignupRequest request = SignupRequest.builder()
@@ -57,7 +57,7 @@ class AuthControllerTest extends BaseControllerTest {
     }
 
     @Test
-    void login_ReturnSuccess() throws Exception {
+    void givenLoginRequest_WhenCustomerRole_ReturnSuccess() throws Exception {
 
         // given
         LoginRequest request = LoginRequest.builder()
@@ -84,7 +84,7 @@ class AuthControllerTest extends BaseControllerTest {
     }
 
     @Test
-    void refreshToken_ReturnSuccess() throws Exception {
+    void givenRefreshTokenRequestandAccessToken_WhenCustomerRole_Token_ReturnRefreshTokenSuccess() throws Exception {
 
         // given
         User mockUser = User.builder()
@@ -126,7 +126,7 @@ class AuthControllerTest extends BaseControllerTest {
     }
 
     @Test
-    void logout_ReturnSuccess() throws Exception {
+    void givenAccessToken_WhenCustomerRole_ReturnLogoutSuccess() throws Exception {
 
         // Given
         User mockUser = User.builder()
@@ -146,6 +146,128 @@ class AuthControllerTest extends BaseControllerTest {
 
         // When
         when(customUserDetailsService.loadUserByUsername("customer@bookdelivery.com")).thenReturn(userDetails);
+        when(authService.logout(mockBearerToken)).thenReturn("success");
+
+        // Then
+        mockMvc.perform(post("/api/v1/auth/logout")
+                        .header(HttpHeaders.AUTHORIZATION, mockBearerToken))
+                .andExpect(status().isOk());
+
+        verify(authService).logout(mockBearerToken);
+
+    }
+
+    @Test
+    void givenSignupRequest_WhenAdminRole_ReturnSuccess() throws Exception {
+
+        // given
+        SignupRequest request = SignupRequest.builder()
+                .fullName("admin_fullname")
+                .password("admin_password")
+                .username("admin_1")
+                .email("admin@bookdelivery.com")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        when(authService.register(request)).thenReturn("success");
+
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void givenLoginRequest_WhenAdminRole_ReturnSuccess() throws Exception {
+
+        // given
+        LoginRequest request = LoginRequest.builder()
+                .email("admin@bookdelivery.com")
+                .password("admin_password")
+                .build();
+
+        JWTResponse mockResponse = JWTResponse.builder()
+                .email(request.getEmail())
+                .token("mockedToken")
+                .refreshToken("mockedRefreshToken")
+                .build();
+
+        // when
+        when(authService.login(request)).thenReturn(mockResponse);
+
+        // then
+        mockMvc.perform(post("/api/v1/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+    }
+
+    @Test
+    void givenRefreshTokenRequestandAccessToken_WhenAdminRole_Token_ReturnRefreshTokenSuccess() throws Exception {
+
+        // given
+        User mockUser = User.builder()
+                .id(2L)
+                .username("admin_1")
+                .email("admin@bookdelivery.com")
+                .role(Role.ROLE_ADMIN)
+                .fullName("admin_fullname")
+                .build();
+
+        CustomUserDetails userDetails = new CustomUserDetails(mockUser);
+
+
+        String accessToken = jwtUtils.generateJwtToken(userDetails);
+
+        String mockBearerToken = "Bearer " + accessToken;
+
+        TokenRefreshRequest request = TokenRefreshRequest.builder()
+                .refreshToken("validRefreshToken")
+                .build();
+
+        TokenRefreshResponse mockResponse = TokenRefreshResponse.builder()
+                .accessToken("newMockedToken")
+                .refreshToken("validRefreshToken")
+                .build();
+
+        // when
+        when(authService.refreshToken(request)).thenReturn(mockResponse);
+        when(customUserDetailsService.loadUserByUsername("admin@bookdelivery.com")).thenReturn(userDetails);
+
+        // then
+        mockMvc.perform(post("/api/v1/auth/refreshtoken")
+                        .header(HttpHeaders.AUTHORIZATION, mockBearerToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+    }
+
+    @Test
+    void givenAccessToken_WhenAdminRole_ReturnLogoutSuccess() throws Exception {
+
+        // Given
+        User mockUser = User.builder()
+                .id(2L)
+                .username("admin_1")
+                .email("admin@bookdelivery.com")
+                .role(Role.ROLE_ADMIN)
+                .fullName("admin_fullname")
+                .build();
+
+        CustomUserDetails userDetails = new CustomUserDetails(mockUser);
+
+
+        String accessToken = jwtUtils.generateJwtToken(userDetails);
+
+        String mockBearerToken = "Bearer " + accessToken;
+
+        // When
+        when(customUserDetailsService.loadUserByUsername("admin@bookdelivery.com")).thenReturn(userDetails);
         when(authService.logout(mockBearerToken)).thenReturn("success");
 
         // Then
