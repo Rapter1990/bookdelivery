@@ -29,11 +29,6 @@ class AuthControllerTest extends BaseControllerTest {
     @MockBean
     private AuthService authService;
 
-    @MockBean
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    private JwtUtils jwtUtils;
 
     @Test
     void givenSignupRequest_WhenCustomerRole_ReturnSuccess() throws Exception {
