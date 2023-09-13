@@ -138,4 +138,27 @@ class BookServiceImplTest extends BaseServiceTest {
         Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
         Mockito.verify(bookRepository, Mockito.times(1)).save(Mockito.any(Book.class));
     }
+
+    @Test
+    void givenValidBookIdAndBookUpdateStockRequest_whenBookNotFound_throwBookNotFoundException() {
+
+        // Given
+        String mockBookId = RandomUtil.generateUUID();
+
+        BookUpdateStockRequest mockRequest = BookUpdateStockRequest.builder()
+                .stock(123)
+                .build();
+
+        // When
+        Mockito.when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+
+        // Then
+        Assertions.assertThrows(
+                BookNotFoundException.class,
+                () -> bookService.updateBookStockById(mockBookId, mockRequest)
+        );
+
+        Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
+        Mockito.verify(bookRepository, Mockito.never()).save(Mockito.any(Book.class));
+    }
 }
