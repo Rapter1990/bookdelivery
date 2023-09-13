@@ -14,8 +14,11 @@ public class BookNotFoundException extends RuntimeException{
     private static final String DEFAULT_MESSAGE =
             "The specified Book is not found!";
 
-    public BookNotFoundException(String message){
-        super(DEFAULT_MESSAGE+" "+message);
+    private static final String MESSAGE_TEMPLATE =
+            "No book found with ID: ";
+
+    public BookNotFoundException(String id){
+        super(MESSAGE_TEMPLATE.concat(id));
     }
 
     public BookNotFoundException(){
