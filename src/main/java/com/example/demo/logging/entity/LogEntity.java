@@ -2,6 +2,7 @@ package com.example.demo.logging.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +25,8 @@ public class LogEntity {
 
     private String method;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private HttpStatus status;
 
     private String userInfo;
 
