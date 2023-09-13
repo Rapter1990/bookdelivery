@@ -21,8 +21,10 @@ import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -147,7 +149,7 @@ class OrderServiceImplTest extends BaseServiceTest {
         Long customerId = 1L;
         Long orderId = 1L;
         PaginationRequest paginationRequest = new PaginationRequest(0, 10);
-        PageRequest pageRequest = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize());
+        Pageable pageRequest = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize());
 
         User mockUser = User.builder()
                 .email("mock@bookdelivery.com")
@@ -192,7 +194,7 @@ class OrderServiceImplTest extends BaseServiceTest {
                 .build();
 
         // When
-        when(orderRepository.findAllByUserId(eq(customerId), eq(pageRequest)))
+        when(orderRepository.findAllByUserId(customerId, pageRequest))
                 .thenReturn(new PageImpl<>(Collections.singletonList(mockOrder)));
 
         // Then
@@ -201,7 +203,7 @@ class OrderServiceImplTest extends BaseServiceTest {
         assertEquals(1, result.getTotalElements());
 
         // verify
-        verify(orderRepository, times(1)).findAllByUserId(eq(customerId), eq(pageRequest));
+        verify(orderRepository, times(1)).findAllByUserId(customerId, pageRequest);
     }
 
     @Test
@@ -218,11 +220,12 @@ class OrderServiceImplTest extends BaseServiceTest {
         calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
         calendar1.set(Calendar.DAY_OF_MONTH, 13);
 
-        Date startDate = calendar1.getTime();
-        Date endDate = calendar2.getTime();
+        LocalDateTime startDate = calendar1.getTime().toInstant().atZone(calendar1.getTimeZone().toZoneId()).toLocalDateTime();
+        LocalDateTime endDate = calendar2.getTime().toInstant().atZone(calendar2.getTimeZone().toZoneId()).toLocalDateTime();
+
         DateIntervalRequest dateIntervalRequest = new DateIntervalRequest(startDate, endDate);
         PaginationRequest paginationRequest = new PaginationRequest(0, 10);
-        PageRequest pageRequest = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize());
+        Pageable pageRequest = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize());
 
         Long orderId = 1L;
 
@@ -269,7 +272,7 @@ class OrderServiceImplTest extends BaseServiceTest {
                 .build();
 
         // When
-        when(orderRepository.findAllByCreatedAtBetween(eq(dateIntervalRequest), eq(pageRequest)))
+        when(orderRepository.findAllByCreatedAtBetween(dateIntervalRequest.getStartDate(),dateIntervalRequest.getEndDate(), pageRequest))
                 .thenReturn(new PageImpl<>(Collections.singletonList(mockOrder)));
 
         // Then
@@ -279,6 +282,6 @@ class OrderServiceImplTest extends BaseServiceTest {
         assertEquals(1, result.getTotalElements());
 
         // verify
-        verify(orderRepository, times(1)).findAllByCreatedAtBetween(eq(dateIntervalRequest), eq(pageRequest));
+        verify(orderRepository, times(1)).findAllByCreatedAtBetween(dateIntervalRequest.getStartDate(),dateIntervalRequest.getEndDate(), pageRequest);
     }
 }

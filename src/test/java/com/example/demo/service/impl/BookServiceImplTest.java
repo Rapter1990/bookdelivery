@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -187,11 +188,11 @@ class BookServiceImplTest extends BaseServiceTest {
         calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
         calendar1.set(Calendar.DAY_OF_MONTH, 13);
 
-        Date date1 = calendar1.getTime();
-        Date date2 = calendar2.getTime();
+        LocalDateTime startDate = calendar1.getTime().toInstant().atZone(calendar1.getTimeZone().toZoneId()).toLocalDateTime();
+        LocalDateTime endDate = calendar2.getTime().toInstant().atZone(calendar2.getTimeZone().toZoneId()).toLocalDateTime();
 
         PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
-                .dateIntervalRequest(new DateIntervalRequest(date1, date2))
+                .dateIntervalRequest(new DateIntervalRequest(startDate, endDate))
                 .paginationRequest(new PaginationRequest(1, 10))
                 .build();
 
@@ -225,11 +226,11 @@ class BookServiceImplTest extends BaseServiceTest {
         calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
         calendar1.set(Calendar.DAY_OF_MONTH, 13);
 
-        Date date1 = calendar1.getTime();
-        Date date2 = calendar2.getTime();
+        LocalDateTime startDate = calendar1.getTime().toInstant().atZone(calendar1.getTimeZone().toZoneId()).toLocalDateTime();
+        LocalDateTime endDate = calendar2.getTime().toInstant().atZone(calendar2.getTimeZone().toZoneId()).toLocalDateTime();
 
         PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
-                .dateIntervalRequest(new DateIntervalRequest(date1, date2))
+                .dateIntervalRequest(new DateIntervalRequest(startDate, endDate))
                 .paginationRequest(new PaginationRequest(1, 10))
                 .build();
 

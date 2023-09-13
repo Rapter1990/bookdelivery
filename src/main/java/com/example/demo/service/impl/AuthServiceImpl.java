@@ -2,8 +2,8 @@ package com.example.demo.service.impl;
 
 import com.example.demo.model.RefreshToken;
 import com.example.demo.model.User;
-import com.example.demo.payload.payload.JWTResponse;
-import com.example.demo.payload.payload.TokenRefreshResponse;
+import com.example.demo.payload.response.auth.JWTResponse;
+import com.example.demo.payload.response.auth.TokenRefreshResponse;
 import com.example.demo.payload.request.auth.LoginRequest;
 import com.example.demo.payload.request.auth.SignupRequest;
 import com.example.demo.payload.request.auth.TokenRefreshRequest;

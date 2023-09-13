@@ -1,9 +1,11 @@
-package com.example.demo.payload.payload;
+package com.example.demo.payload.response.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 
 @Getter
 @AllArgsConstructor
@@ -15,6 +17,6 @@ public class OrderReportResponse {
     private Integer year;
     private Integer totalOrderCount;
     private Integer totalBookCount;
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 
 }
