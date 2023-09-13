@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.base.BaseServiceTest;
+import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.model.Book;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.repository.BookRepository;
@@ -50,9 +51,9 @@ class BookServiceImplTest extends BaseServiceTest {
         // Then
         Book response = bookService.createBook(mockCreateRequest);
 
-        Assertions.assertEquals(mockBook,response);
+        Assertions.assertEquals(mockBook, response);
 
-        Mockito.verify(bookRepository,Mockito.times(1)).save(Mockito.any(Book.class));
+        Mockito.verify(bookRepository, Mockito.times(1)).save(Mockito.any(Book.class));
     }
 
     @Test
@@ -79,6 +80,24 @@ class BookServiceImplTest extends BaseServiceTest {
 
         Assertions.assertEquals(mockBook, response);
 
-        Mockito.verify(bookRepository,Mockito.times(1)).findById(Mockito.anyString());
+        Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
+    }
+
+    @Test
+    void givenValidBookId_whenBookNotFound_throwBookNotFoundException() {
+
+        // Given
+        String mockBookId = RandomUtil.generateUUID();
+
+        // When
+        Mockito.when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+
+        // Then
+        Assertions.assertThrows(
+                BookNotFoundException.class,
+                () -> bookService.getBookById(mockBookId)
+        );
+
+        Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
     }
 }
