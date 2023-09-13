@@ -136,6 +136,7 @@ class OrderServiceImplTest extends BaseServiceTest {
         assertEquals(expected.getOrderItems().size(), actual.getOrderItems().size());
         assertEquals(expected.getOrderItems().size(), actual.getOrderItems().size());
 
+        // verify
         verify(orderRepository, times(1)).findById(orderId);
     }
 
@@ -191,7 +192,7 @@ class OrderServiceImplTest extends BaseServiceTest {
                 .build();
 
         // When
-        when(orderRepository.findAllByUser(eq(customerId), eq(pageRequest)))
+        when(orderRepository.findAllByUserId(eq(customerId), eq(pageRequest)))
                 .thenReturn(new PageImpl<>(Collections.singletonList(mockOrder)));
 
         // Then
@@ -199,8 +200,8 @@ class OrderServiceImplTest extends BaseServiceTest {
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
 
-        // Verify that the repository's findAllByUser method was called with the correct arguments
-        verify(orderRepository, times(1)).findAllByUser(eq(customerId), eq(pageRequest));
+        // verify
+        verify(orderRepository, times(1)).findAllByUserId(eq(customerId), eq(pageRequest));
     }
 
     @Test
@@ -277,7 +278,7 @@ class OrderServiceImplTest extends BaseServiceTest {
         assertNotNull(result);
         assertEquals(1, result.getTotalElements());
 
-        // Verify that the repository's findAllByCreatedAtBetween method was called with the correct arguments
+        // verify
         verify(orderRepository, times(1)).findAllByCreatedAtBetween(eq(dateIntervalRequest), eq(pageRequest));
     }
 }

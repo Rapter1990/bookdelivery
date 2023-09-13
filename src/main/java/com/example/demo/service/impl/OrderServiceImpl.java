@@ -37,7 +37,7 @@ public class OrderServiceImpl implements OrderService {
 
         PageRequest orderPageRequest = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize());
 
-        return orderRepository.findAllByUser(customerId, orderPageRequest)
+        return orderRepository.findAllByUserId(customerId, orderPageRequest)
                 .map(OrderMapper::toOrderDTO);
     }
 

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecificationExecutor<Order> {
 
-    Page<Order> findAllByUser(Long userId, PageRequest of);
+    Page<Order> findAllByUserId(Long userId, PageRequest of);
 
     Page<Order> findAllByCreatedAtBetween(DateIntervalRequest request, PageRequest of);
 }

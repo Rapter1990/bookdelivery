@@ -9,7 +9,6 @@ import com.example.demo.payload.request.auth.LoginRequest;
 import com.example.demo.payload.request.auth.SignupRequest;
 import com.example.demo.payload.request.auth.TokenRefreshRequest;
 import com.example.demo.security.CustomUserDetails;
-import com.example.demo.service.AuthService;
 import com.example.demo.service.impl.AuthServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
