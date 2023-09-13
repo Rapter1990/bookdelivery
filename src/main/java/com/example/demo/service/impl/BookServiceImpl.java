@@ -49,7 +49,7 @@ public class BookServiceImpl implements BookService {
 
         return bookRepository.findById(bookId)
                 .orElseThrow(
-                        () -> new RuntimeException("Book can not be found with given id: " + bookId));
+                        () -> new BookNotFoundException(bookId));
     }
 
     @Override
@@ -59,7 +59,7 @@ public class BookServiceImpl implements BookService {
     ) {
 
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("BOOK DOES NOT EXIST BY ID"));
+                .orElseThrow(() -> new BookNotFoundException(bookId));
         book.setStock(request.getStock());
 
         return bookRepository.save(book);
@@ -90,7 +90,7 @@ public class BookServiceImpl implements BookService {
     ) {
         final Book bookEntityToBeUpdate = bookRepository
                 .findById(bookId)
-                .orElseThrow(() -> new BookNotFoundException("Book can not be found with given id: " + bookId));
+                .orElseThrow(() -> new BookNotFoundException(bookId));
 
         BookMapper.mapForUpdating(bookEntityToBeUpdate, request);
 

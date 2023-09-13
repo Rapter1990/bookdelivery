@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 class BookServiceImplTest extends BaseServiceTest {
 
@@ -49,13 +50,35 @@ class BookServiceImplTest extends BaseServiceTest {
         // Then
         Book response = bookService.createBook(mockCreateRequest);
 
-        Assertions.assertEquals(response.getId(), mockBook.getId());
-        Assertions.assertEquals(response.getName(), mockBook.getName());
-        Assertions.assertEquals(response.getIsbn(), mockBook.getIsbn());
-        Assertions.assertEquals(response.getPrice(), mockBook.getPrice());
-        Assertions.assertEquals(response.getAuthorFullName(), mockBook.getAuthorFullName());
-        Assertions.assertEquals(response.getVersion(), mockBook.getVersion());
+        Assertions.assertEquals(mockBook,response);
 
         Mockito.verify(bookRepository,Mockito.times(1)).save(Mockito.any(Book.class));
+    }
+
+    @Test
+    void givenValidBookId_whenBookFound_returnBook() {
+
+        // Given
+        String mockBookId = RandomUtil.generateUUID();
+
+        Book mockBook = Book.builder()
+                .id(mockBookId)
+                .name("Name")
+                .authorFullName("Author Full Name")
+                .isbn("1234567890")
+                .stock(123)
+                .price(BigDecimal.TEN)
+                .version(0L)
+                .build();
+
+        // When
+        Mockito.when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.of(mockBook));
+
+        // Then
+        Book response = bookService.getBookById(mockBookId);
+
+        Assertions.assertEquals(mockBook, response);
+
+        Mockito.verify(bookRepository,Mockito.times(1)).findById(Mockito.anyString());
     }
 }
