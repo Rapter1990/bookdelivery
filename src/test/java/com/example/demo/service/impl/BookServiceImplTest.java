@@ -7,6 +7,7 @@ import com.example.demo.payload.request.DateIntervalRequest;
 import com.example.demo.payload.request.PaginatedFindAllRequest;
 import com.example.demo.payload.request.PaginationRequest;
 import com.example.demo.payload.request.book.BookCreateRequest;
+import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.util.RandomUtil;
@@ -22,8 +23,9 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class BookServiceImplTest extends BaseServiceTest {
 
@@ -56,14 +58,14 @@ class BookServiceImplTest extends BaseServiceTest {
                 .build();
 
         // When
-        Mockito.when(bookRepository.save(Mockito.any(Book.class))).thenReturn(mockBook);
+        when(bookRepository.save(any(Book.class))).thenReturn(mockBook);
 
         // Then
         Book response = bookService.createBook(mockCreateRequest);
 
         assertEquals(mockBook, response);
 
-        Mockito.verify(bookRepository, Mockito.times(1)).save(Mockito.any(Book.class));
+        verify(bookRepository, times(1)).save(any(Book.class));
     }
 
     @Test
@@ -83,14 +85,14 @@ class BookServiceImplTest extends BaseServiceTest {
                 .build();
 
         // When
-        Mockito.when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.of(mockBook));
+        when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.of(mockBook));
 
         // Then
         Book response = bookService.getBookById(mockBookId);
 
         assertEquals(mockBook, response);
 
-        Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
+        verify(bookRepository, times(1)).findById(Mockito.anyString());
     }
 
     @Test
@@ -100,15 +102,15 @@ class BookServiceImplTest extends BaseServiceTest {
         String mockBookId = RandomUtil.generateUUID();
 
         // When
-        Mockito.when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
 
         // Then
-        Assertions.assertThrows(
+        assertThrows(
                 BookNotFoundException.class,
                 () -> bookService.getBookById(mockBookId)
         );
 
-        Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
+        verify(bookRepository, times(1)).findById(Mockito.anyString());
     }
 
     @Test
@@ -133,8 +135,8 @@ class BookServiceImplTest extends BaseServiceTest {
 
 
         // When
-        Mockito.when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.of(mockBook));
-        Mockito.when(bookRepository.save(Mockito.any(Book.class))).thenAnswer(invocation -> {
+        when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.of(mockBook));
+        when(bookRepository.save(any(Book.class))).thenAnswer(invocation -> {
             Book updatedBook = invocation.getArgument(0);
             updatedBook.setStock(mockRequest.getStock());
             return updatedBook;
@@ -144,8 +146,8 @@ class BookServiceImplTest extends BaseServiceTest {
         Book response = bookService.updateBookStockById(mockBookId, mockRequest);
 
         assertEquals(mockRequest.getStock(), response.getStock());
-        Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
-        Mockito.verify(bookRepository, Mockito.times(1)).save(Mockito.any(Book.class));
+        verify(bookRepository, times(1)).findById(Mockito.anyString());
+        verify(bookRepository, times(1)).save(any(Book.class));
     }
 
     @Test
@@ -159,16 +161,16 @@ class BookServiceImplTest extends BaseServiceTest {
                 .build();
 
         // When
-        Mockito.when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
+        when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.empty());
 
         // Then
-        Assertions.assertThrows(
+        assertThrows(
                 BookNotFoundException.class,
                 () -> bookService.updateBookStockById(mockBookId, mockRequest)
         );
 
-        Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
-        Mockito.verify(bookRepository, Mockito.never()).save(Mockito.any(Book.class));
+        verify(bookRepository, times(1)).findById(Mockito.anyString());
+        verify(bookRepository, Mockito.never()).save(any(Book.class));
     }
 
 
@@ -196,7 +198,7 @@ class BookServiceImplTest extends BaseServiceTest {
 
         Page<Book> emptyPage = new PageImpl<>(Collections.emptyList());
 
-        Mockito.when(bookRepository.findAll(Mockito.any(Pageable.class))).thenReturn(emptyPage);
+        when(bookRepository.findAll(any(Pageable.class))).thenReturn(emptyPage);
 
         // When and Then
         try {
@@ -207,7 +209,7 @@ class BookServiceImplTest extends BaseServiceTest {
             assertEquals("No book found with ID: No books found", e.getMessage());
         }
 
-        Mockito.verify(bookRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
+        verify(bookRepository, times(1)).findAll(any(Pageable.class));
 
     }
 
@@ -253,12 +255,87 @@ class BookServiceImplTest extends BaseServiceTest {
         Page<Book> pageWithBooks = new PageImpl<>(books);
 
         // when
-        Mockito.when(bookRepository.findAll(Mockito.any(Pageable.class))).thenReturn(pageWithBooks);
+        when(bookRepository.findAll(any(Pageable.class))).thenReturn(pageWithBooks);
 
         // then
         Page<Book> result = bookService.getAllBooks(request);
 
         assertEquals(books.size(), result.getContent().size());
+
+        verify(bookRepository, times(1)).findAll(any(Pageable.class));
+
+    }
+
+    @Test
+    void givenBookUpdateRequest_WhenBookFound_throwReturnUpdatedBook() {
+        // Given
+        String bookId = "123";
+        BookUpdateRequest updateRequest = BookUpdateRequest.builder()
+                .isbn("ISBN1234567")
+                .name("Updated Author")
+                .authorFullName("Updated Author")
+                .stock(10)
+                .price(BigDecimal.valueOf(19.99))
+                .build();
+
+        Book existingBook = Book.builder()
+                .id(bookId)
+                .isbn("ISBN1234567890")
+                .name("Test Book")
+                .authorFullName("Test Author")
+                .stock(5)
+                .price(BigDecimal.valueOf(9.99))
+                .build();
+
+        Book updatedBook = Book.builder()
+                .id(bookId)
+                .isbn(updateRequest.getIsbn())
+                .name(updateRequest.getName())
+                .authorFullName(updateRequest.getAuthorFullName())
+                .stock(updateRequest.getStock())
+                .price(updateRequest.getPrice())
+                .build();
+
+        // When
+        when(bookRepository.findById(bookId)).thenReturn(Optional.of(existingBook));
+        when(bookRepository.save(any(Book.class))).thenReturn(updatedBook);
+
+        // Then
+        Book book = bookService.updateBookById(bookId, updateRequest);
+
+        assertEquals(updateRequest.getIsbn(), book.getIsbn());
+        assertEquals(updateRequest.getName(), book.getName());
+        assertEquals(updateRequest.getAuthorFullName(), book.getAuthorFullName());
+        assertEquals(updateRequest.getStock(), book.getStock());
+        assertEquals(updateRequest.getPrice(), book.getPrice());
+
+        // verify
+        verify(bookRepository, times(1)).findById(bookId);
+        verify(bookRepository, times(1)).save(existingBook);
+
+    }
+
+    @Test
+    void givenBookUpdateRequest_WhenBookNotFound_throwReturnBookNotFoundException() {
+        // Given
+        String bookId = "123";
+        BookUpdateRequest updateRequest = BookUpdateRequest.builder()
+                .isbn("ISBN1234567")
+                .name("Updated Author")
+                .authorFullName("Updated Author")
+                .stock(10)
+                .price(BigDecimal.valueOf(19.99))
+                .build();
+
+        // when
+        when(bookRepository.findById(bookId)).thenReturn(Optional.empty());
+
+        // then
+        assertThrows(BookNotFoundException.class, () -> bookService.updateBookById(bookId, updateRequest));
+
+        // verify
+        verify(bookRepository, times(1)).findById(bookId);
+        verify(bookRepository, never()).save(any());
 
     }
 
