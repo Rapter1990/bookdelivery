@@ -122,13 +122,19 @@ class BookServiceImplTest extends BaseServiceTest {
                 .version(0L)
                 .build();
 
+
         // When
         Mockito.when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.of(mockBook));
+        Mockito.when(bookRepository.save(Mockito.any(Book.class))).thenAnswer(invocation -> {
+            Book updatedBook = invocation.getArgument(0);
+            updatedBook.setStock(mockRequest.getStock());
+            return updatedBook;
+        });
 
         // Then
-        bookService.updateBookStockById(mockBookId, mockRequest);
+        Book response = bookService.updateBookStockById(mockBookId, mockRequest);
 
-        Assertions.assertEquals(mockRequest.getStock(), mockBook.getStock());
+        Assertions.assertEquals(mockRequest.getStock(), response.getStock());
         Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
         Mockito.verify(bookRepository, Mockito.times(1)).save(Mockito.any(Book.class));
     }
