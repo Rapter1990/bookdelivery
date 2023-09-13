@@ -32,8 +32,6 @@ public class BookServiceImpl implements BookService {
 
         final Book bookEntityToBeSave = BookMapper.mapForSaving(request);
 
-        bookEntityToBeSave.setVersion(0L);
-
         return bookRepository.save(bookEntityToBeSave);
     }
 
