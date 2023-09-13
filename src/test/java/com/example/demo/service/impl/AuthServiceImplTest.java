@@ -80,7 +80,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    public void givenSignUpRequest_WhenCustomerRoleAndEmailAlreadyExists_ReturnException() {
+    void givenSignUpRequest_WhenCustomerRoleAndEmailAlreadyExists_ReturnException() {
 
         // given
         SignupRequest request = SignupRequest.builder()

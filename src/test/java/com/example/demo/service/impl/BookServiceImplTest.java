@@ -3,12 +3,12 @@ package com.example.demo.service.impl;
 import com.example.demo.base.BaseServiceTest;
 import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.model.Book;
-import com.example.demo.payload.request.pagination.DateIntervalRequest;
-import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
-import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
+import com.example.demo.payload.request.pagination.DateIntervalRequest;
+import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
+import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.util.RandomUtil;
 import org.junit.jupiter.api.Test;
@@ -191,8 +191,8 @@ class BookServiceImplTest extends BaseServiceTest {
         Date date2 = calendar2.getTime();
 
         PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
-                .dateIntervalRequest(new DateIntervalRequest(date1,date2))
-                .paginationRequest(new PaginationRequest(1,10))
+                .dateIntervalRequest(new DateIntervalRequest(date1, date2))
+                .paginationRequest(new PaginationRequest(1, 10))
                 .build();
 
         Page<Book> emptyPage = new PageImpl<>(Collections.emptyList());
@@ -213,7 +213,7 @@ class BookServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void givenPaginatedFindAllRequest_WhenBooksFound_throwReturnPageBookList() {
+    void givenPaginatedFindAllRequest_WhenBooksFound_ReturnPageBookList() {
 
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.YEAR, 2000);
@@ -229,8 +229,8 @@ class BookServiceImplTest extends BaseServiceTest {
         Date date2 = calendar2.getTime();
 
         PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
-                .dateIntervalRequest(new DateIntervalRequest(date1,date2))
-                .paginationRequest(new PaginationRequest(1,10))
+                .dateIntervalRequest(new DateIntervalRequest(date1, date2))
+                .paginationRequest(new PaginationRequest(1, 10))
                 .build();
 
         List<Book> books = Arrays.asList(
@@ -266,7 +266,7 @@ class BookServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void givenBookUpdateRequest_WhenBookFound_throwReturnUpdatedBook() {
+    void givenBookUpdateRequest_WhenBookFound_ReturnUpdatedBook() {
         // Given
         String bookId = "123";
         BookUpdateRequest updateRequest = BookUpdateRequest.builder()
@@ -315,7 +315,7 @@ class BookServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void givenBookUpdateRequest_WhenBookNotFound_throwReturnBookNotFoundException() {
+    void givenBookUpdateRequest_WhenBookNotFound_ThrowBookNotFoundException() {
         // Given
         String bookId = "123";
         BookUpdateRequest updateRequest = BookUpdateRequest.builder()
