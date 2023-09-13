@@ -3,15 +3,17 @@ package com.example.demo.service.impl;
 import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
+import com.example.demo.payload.request.PaginatedFindAllRequest;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,9 +28,7 @@ public class BookServiceImpl implements BookService {
      * @param request
      * @return
      */
-    public Book createBook(
-            BookCreateRequest request
-    ) {
+    public Book createBook(BookCreateRequest request) {
 
         final Book bookEntityToBeSave = BookMapper.mapForSaving(request);
 
@@ -43,9 +43,7 @@ public class BookServiceImpl implements BookService {
      * @param bookId
      * @return
      */
-    public Book getBookById(
-            final String bookId
-    ) {
+    public Book getBookById(final String bookId) {
 
         return bookRepository.findById(bookId)
                 .orElseThrow(
@@ -53,10 +51,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book updateBookStockById(
-            String bookId,
-            BookUpdateStockRequest request
-    ) {
+    public Book updateBookStockById(String bookId, BookUpdateStockRequest request) {
 
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new BookNotFoundException(bookId));
@@ -70,10 +65,16 @@ public class BookServiceImpl implements BookService {
      * @return Book entities in a list.
      */
     @Override
-    public List<Book> getBooks() {
-        return bookRepository
-                .findAllBooks()
-                .orElseThrow(BookNotFoundException::new);
+    public Page<Book> getAllBooks(PaginatedFindAllRequest paginatedFindAllRequest) {
+        Page<Book> page = bookRepository
+                .findAll(PageRequest.of(paginatedFindAllRequest.getPaginationRequest().getPage(),
+                         paginatedFindAllRequest.getPaginationRequest().getSize()));
+
+        if (page.stream().noneMatch(book -> true)) {
+            throw new BookNotFoundException("No books found");
+        }
+
+        return page;
     }
 
     /**
@@ -84,10 +85,7 @@ public class BookServiceImpl implements BookService {
      * @return {@link Book} entity that is updated.
      */
     @Override
-    public Book updateBookById(
-            final String bookId,
-            final BookUpdateRequest request
-    ) {
+    public Book updateBookById(final String bookId, final BookUpdateRequest request) {
         final Book bookEntityToBeUpdate = bookRepository
                 .findById(bookId)
                 .orElseThrow(() -> new BookNotFoundException(bookId));

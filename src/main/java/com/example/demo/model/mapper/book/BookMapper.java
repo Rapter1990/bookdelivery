@@ -8,15 +8,17 @@ import com.example.demo.payload.response.book.BookCreatedResponse;
 import com.example.demo.payload.response.book.BookGetResponse;
 import com.example.demo.payload.response.book.BookUpdatedResponse;
 import lombok.experimental.UtilityClass;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class BookMapper {
 
-    public static Book mapForSaving(
-            BookCreateRequest request
-    ) {
+    public static Book mapForSaving(BookCreateRequest request) {
         return Book.builder()
                 .isbn(request.getIsbn())
                 .name(request.getName())
@@ -35,10 +37,7 @@ public class BookMapper {
      * @param bookEntityToBeUpdate {@link Book} entity to be updated
      * @param request {@link BookUpdateRequest} request DTO object containing update details
      */
-    public static void mapForUpdating(
-            Book bookEntityToBeUpdate,
-            BookUpdateRequest request
-    ) {
+    public static void mapForUpdating(Book bookEntityToBeUpdate, BookUpdateRequest request) {
         bookEntityToBeUpdate.setIsbn(request.getIsbn());
         bookEntityToBeUpdate.setName(request.getName());
         bookEntityToBeUpdate.setAuthorFullName(request.getAuthorFullName());
@@ -46,9 +45,7 @@ public class BookMapper {
         bookEntityToBeUpdate.setPrice(request.getPrice());
     }
 
-    public static BookCreatedResponse toCreatedResponse(
-            Book book
-    ) {
+    public static BookCreatedResponse toCreatedResponse(Book book) {
         return BookCreatedResponse.builder()
                 .id(book.getId())
                 .isbn(book.getIsbn())
@@ -60,9 +57,7 @@ public class BookMapper {
     }
 
 
-    public static BookGetResponse toGetResponse(
-            Book book
-    ) {
+    public static BookGetResponse toGetResponse(Book book) {
         if (book == null) {
             return null;
         }
@@ -79,21 +74,19 @@ public class BookMapper {
     }
 
 
-    public static List<BookGetResponse> toGetReponse(
-            List<Book> bookEntities
-    ) {
-        if (bookEntities == null){
-            return null;
-        }
-
-        return bookEntities.stream()
+    public static Page<BookGetResponse> toGetResponse(Page<Book> bookEntities) {
+        List<BookGetResponse> bookGetResponses = bookEntities.getContent()
+                .stream()
                 .map(BookMapper::toGetResponse)
-                .toList();
+                .collect(Collectors.toList());
+
+        Pageable pageable = bookEntities.getPageable();
+        long totalElements = bookEntities.getTotalElements();
+
+        return new PageImpl<>(bookGetResponses, pageable, totalElements);
     }
 
-    public static BookUpdatedResponse toUpdatedResponse(
-            Book book
-    ) {
+    public static BookUpdatedResponse toUpdatedResponse(Book book) {
         if (book == null) {
             return null;
         }
