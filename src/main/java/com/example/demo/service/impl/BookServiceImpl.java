@@ -68,7 +68,7 @@ public class BookServiceImpl implements BookService {
                 .findAll(PageRequest.of(paginatedFindAllRequest.getPaginationRequest().getPage(),
                          paginatedFindAllRequest.getPaginationRequest().getSize()));
 
-        if (page.stream().noneMatch(book -> true)) {
+        if (page.isEmpty()) {
             throw new BookNotFoundException("No books found");
         }
 

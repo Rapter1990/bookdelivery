@@ -3,6 +3,9 @@ package com.example.demo.service.impl;
 import com.example.demo.base.BaseServiceTest;
 import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.model.Book;
+import com.example.demo.payload.request.DateIntervalRequest;
+import com.example.demo.payload.request.PaginatedFindAllRequest;
+import com.example.demo.payload.request.PaginationRequest;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
 import com.example.demo.repository.BookRepository;
@@ -12,9 +15,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
-import java.util.Optional;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class BookServiceImplTest extends BaseServiceTest {
 
@@ -52,7 +61,7 @@ class BookServiceImplTest extends BaseServiceTest {
         // Then
         Book response = bookService.createBook(mockCreateRequest);
 
-        Assertions.assertEquals(mockBook, response);
+        assertEquals(mockBook, response);
 
         Mockito.verify(bookRepository, Mockito.times(1)).save(Mockito.any(Book.class));
     }
@@ -79,7 +88,7 @@ class BookServiceImplTest extends BaseServiceTest {
         // Then
         Book response = bookService.getBookById(mockBookId);
 
-        Assertions.assertEquals(mockBook, response);
+        assertEquals(mockBook, response);
 
         Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
     }
@@ -134,7 +143,7 @@ class BookServiceImplTest extends BaseServiceTest {
         // Then
         Book response = bookService.updateBookStockById(mockBookId, mockRequest);
 
-        Assertions.assertEquals(mockRequest.getStock(), response.getStock());
+        assertEquals(mockRequest.getStock(), response.getStock());
         Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
         Mockito.verify(bookRepository, Mockito.times(1)).save(Mockito.any(Book.class));
     }
@@ -161,4 +170,96 @@ class BookServiceImplTest extends BaseServiceTest {
         Mockito.verify(bookRepository, Mockito.times(1)).findById(Mockito.anyString());
         Mockito.verify(bookRepository, Mockito.never()).save(Mockito.any(Book.class));
     }
+
+
+    @Test
+    void givenPaginatedFindAllRequest_WhenNoBooksFound_throwBookNotFoundException() {
+        // Given
+
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR, 2000);
+        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar1.set(Calendar.DAY_OF_MONTH, 10);
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR, 2000);
+        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar1.set(Calendar.DAY_OF_MONTH, 13);
+
+        Date date1 = calendar1.getTime();
+        Date date2 = calendar2.getTime();
+
+        PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
+                .dateIntervalRequest(new DateIntervalRequest(date1,date2))
+                .paginationRequest(new PaginationRequest(1,10))
+                .build();
+
+        Page<Book> emptyPage = new PageImpl<>(Collections.emptyList());
+
+        Mockito.when(bookRepository.findAll(Mockito.any(Pageable.class))).thenReturn(emptyPage);
+
+        // When and Then
+        try {
+            bookService.getAllBooks(request);
+            fail("BookNotFoundException should have been thrown.");
+        } catch (BookNotFoundException e) {
+            // Expected exception
+            assertEquals("No book found with ID: No books found", e.getMessage());
+        }
+
+        Mockito.verify(bookRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
+
+    }
+
+    @Test
+    void givenPaginatedFindAllRequest_WhenBooksFound_throwReturnPageBookList() {
+
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR, 2000);
+        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar1.set(Calendar.DAY_OF_MONTH, 10);
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR, 2000);
+        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar1.set(Calendar.DAY_OF_MONTH, 13);
+
+        Date date1 = calendar1.getTime();
+        Date date2 = calendar2.getTime();
+
+        PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
+                .dateIntervalRequest(new DateIntervalRequest(date1,date2))
+                .paginationRequest(new PaginationRequest(1,10))
+                .build();
+
+        List<Book> books = Arrays.asList(
+                Book.builder()
+                        .id("1")
+                        .isbn("ISBN-12345")
+                        .name("Book 1")
+                        .authorFullName("Author 1")
+                        .stock(10)
+                        .price(BigDecimal.valueOf(29.99))
+                        .build(),
+                Book.builder()
+                        .id("2")
+                        .isbn("ISBN-67890")
+                        .name("Book 2")
+                        .authorFullName("Author 2")
+                        .stock(5)
+                        .price(BigDecimal.valueOf(19.99))
+                        .build()
+        );
+        Page<Book> pageWithBooks = new PageImpl<>(books);
+
+        // when
+        Mockito.when(bookRepository.findAll(Mockito.any(Pageable.class))).thenReturn(pageWithBooks);
+
+        // then
+        Page<Book> result = bookService.getAllBooks(request);
+
+        assertEquals(books.size(), result.getContent().size());
+
+    }
+
 }
