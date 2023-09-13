@@ -10,6 +10,7 @@ import com.example.demo.payload.request.auth.SignupRequest;
 import com.example.demo.payload.request.auth.TokenRefreshRequest;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.AuthService;
+import com.example.demo.service.impl.AuthServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthControllerTest extends BaseControllerTest {
 
     @MockBean
-    private AuthService authService;
+    private AuthServiceImpl authService;
 
 
     @Test
