@@ -49,7 +49,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    void register_ReturnSuccess() throws Exception {
+    void givenSignUpRequest_WhenCustomerRole_ReturnSuccess() throws Exception {
 
         // given
         SignupRequest request = SignupRequest.builder()
@@ -80,7 +80,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    public void register_EmailAlreadyExists_ReturnException() throws Exception {
+    public void givenSignUpRequest_WhenCustomerRoleAndEmailAlreadyExists_ReturnException() throws Exception {
 
         // given
         SignupRequest request = SignupRequest.builder()
@@ -100,7 +100,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void login_ReturnSuccess() {
+    void givenLoginRequest_WhenCustomerRole_ReturnSuccess() {
 
         // given
         LoginRequest request = LoginRequest.builder()
@@ -138,7 +138,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void login_ReturnRuntimeException() {
+    void givenLoginRequest_WhenCustomerRole_ReturnRuntimeException() {
 
         // given
         LoginRequest request = LoginRequest.builder()
@@ -156,7 +156,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void refreshToken_ReturnSuccess() throws Exception {
+    void givenTokenRefreshRequest_WhenCustomerRole_ReturnSuccess() throws Exception {
 
         // given
         TokenRefreshRequest request = TokenRefreshRequest.builder()
@@ -183,7 +183,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void refreshToken_RefreshTokenNotFound() {
+    void givenTokenRefreshRequest_WhenCustomerRole_ReturnRefreshTokenNotFound() {
 
         // given
         TokenRefreshRequest request = TokenRefreshRequest.builder()
@@ -199,7 +199,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void refreshToken_RefreshTokenExpired() throws Exception {
+    void givenTokenRefreshRequest_WhenCustomerRole_ReturnRefreshTokenExpired() throws Exception {
 
         // given
         TokenRefreshRequest request = TokenRefreshRequest.builder()
@@ -223,7 +223,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void logout_ReturnSucess() {
+    void givenValidAccessToken_WhenCustomerRole_ReturnLogoutSuccess() {
 
         // Given
         String token = "validAuthToken";
@@ -242,7 +242,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void logout_NoToken() {
+    void givenInvalidAccessToken_WhenCustomerRole_ReturnLogoutFailed() {
         // Given
         String token = "invalidAuthToken";
 
@@ -257,7 +257,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    void logout_InvalidJwtToken() {
+    void givenInvalidAccessToken_WhenCustomerRole_ReturnLogoutInvalidJwtToken() {
         // Given
         String token = "invalidAuthToken";
 
