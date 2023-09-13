@@ -305,7 +305,7 @@ class AuthServiceImplTest extends BaseServiceTest {
     }
 
     @Test
-    public void givenSignUpRequest_WhenAdminRoleAndEmailAlreadyExists_ReturnException() {
+    void givenSignUpRequest_WhenAdminRoleAndEmailAlreadyExists_ReturnException() {
 
         // given
         SignupRequest request = SignupRequest.builder()
