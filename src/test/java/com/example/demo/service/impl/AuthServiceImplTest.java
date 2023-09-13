@@ -12,6 +12,7 @@ import com.example.demo.payload.request.auth.TokenRefreshRequest;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.security.jwt.JwtUtils;
+import com.example.demo.service.AuthService;
 import com.example.demo.service.RefreshTokenService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,7 +32,7 @@ class AuthServiceImplTest extends BaseServiceTest {
 
 
     @InjectMocks
-    private AuthServiceImpl authService;
+    private AuthService authService;
 
     @Mock
     private UserRepository userRepository;

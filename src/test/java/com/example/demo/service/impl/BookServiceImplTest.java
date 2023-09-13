@@ -10,6 +10,7 @@ import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
 import com.example.demo.repository.BookRepository;
+import com.example.demo.service.BookService;
 import com.example.demo.util.RandomUtil;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.*;
 class BookServiceImplTest extends BaseServiceTest {
 
     @InjectMocks
-    private BookServiceImpl bookService;
+    private BookService bookService;
 
     @Mock
     private BookRepository bookRepository;
