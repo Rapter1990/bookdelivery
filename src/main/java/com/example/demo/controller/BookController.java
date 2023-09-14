@@ -98,7 +98,7 @@ public class BookController {
      *
      * @return list of Book entities
      */
-    @GetMapping()
+    @PostMapping("/all")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<CustomPageResponse<BookGetResponse>> getBooks(@RequestBody @Valid PaginatedFindAllRequest paginatedFindAllRequest) {
         final Page<BookDTO> bookEntitiesFromDb = bookService.getAllBooks(paginatedFindAllRequest);
