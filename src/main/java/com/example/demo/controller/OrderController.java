@@ -26,13 +26,13 @@ public class OrderController {
     private final OrderSaveService orderSaveService;
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
+    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public CustomResponse<?> createOrder(CreateOrderRequest createOrderRequest) {
         return null;
     }
 
     @GetMapping("/{orderId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<OrderGetResponse> getOrderById(
             @PathVariable Long orderId
     ) {
@@ -43,7 +43,7 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<CustomPageResponse<OrderGetByCustomerResponse>> getOrdersByCustomerId(
             @PathVariable Long customerId,
             @RequestBody PaginationRequest paginationRequest
@@ -57,7 +57,7 @@ public class OrderController {
     }
 
     @GetMapping("/between-dates")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CustomResponse<CustomPageResponse<OrderGetBetweenDatesResponse>> getOrdersBetweenTwoDates(
             @RequestBody
             PaginatedFindAllRequest paginatedFindAllRequest
