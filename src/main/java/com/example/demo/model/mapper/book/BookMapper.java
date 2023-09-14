@@ -101,4 +101,16 @@ public class BookMapper {
                 .stock(book.getStock())
                 .build();
     }
+
+    public static Book toBook(BookDTO bookDTO) {
+        return Book.builder()
+                .id(bookDTO.getId())
+                .name(bookDTO.getName())
+                .authorFullName(bookDTO.getAuthorFullName())
+                .isbn(bookDTO.getIsbn())
+                .price(bookDTO.getPrice())
+                .stock(bookDTO.getStock())
+                .build();
+    }
+
 }

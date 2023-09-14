@@ -3,6 +3,7 @@ package com.example.demo.model.mapper.order;
 
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.model.Order;
+import com.example.demo.model.User;
 import com.example.demo.model.mapper.user.UserMapper;
 import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.order.OrderGetBetweenDatesResponse;
@@ -58,4 +59,13 @@ public class OrderMapper {
         return CustomPageResponse.of(sources.map(OrderMapper::toGetBetweenDatesResponse));
     }
 
+    public static Order toOrder(OrderDTO orderDTO) {
+        return Order.builder()
+                .id(orderDTO.getId())
+                .user(UserMapper.toUser(orderDTO.getUser()))
+                .orderItems(OrderItemMapper.toOrderItemSetList(orderDTO.getOrderItems()))
+                .build();
+
+        // TODO : ADD createdAt to Order
+    }
 }

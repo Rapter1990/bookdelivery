@@ -3,6 +3,7 @@ package com.example.demo.model.mapper.order;
 import com.example.demo.dto.OrderItemDTO;
 import com.example.demo.model.Book;
 import com.example.demo.model.OrderItem;
+import com.example.demo.model.mapper.book.BookMapper;
 import lombok.experimental.UtilityClass;
 
 import java.util.LinkedHashSet;
@@ -37,5 +38,34 @@ public class OrderItemMapper {
                 .isbn(source.getIsbn())
                 .price(source.getPrice())
                 .build();
+    }
+
+    public OrderItem toOrderItem(OrderItemDTO orderItemDTO) {
+
+        return OrderItem.builder()
+                .id(orderItemDTO.getId())
+                .book(toOrderItemBook(orderItemDTO.getBook()))
+                .build();
+    }
+
+    private static Book toOrderItemBook(OrderItemDTO.OrderItemBook orderItemBook) {
+
+        return Book.builder()
+                .id(orderItemBook.getId())
+                .isbn(orderItemBook.getIsbn())
+                .name(orderItemBook.getName())
+                .authorFullName(orderItemBook.getAuthorFullName())
+                .price(orderItemBook.getPrice())
+                .build();
+
+    }
+
+    public Set<OrderItem> toOrderItemSetList(Set<OrderItemDTO> orderItemDTOS) {
+
+        List<OrderItem> orderItems = orderItemDTOS.stream()
+                .map(OrderItemMapper::toOrderItem)
+                .toList();
+
+        return new LinkedHashSet<>(orderItems);
     }
 }

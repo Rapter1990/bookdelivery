@@ -11,4 +11,11 @@ public class UserMapper {
                 .fullName(user.getFullName())
                 .build();
     }
+
+    public static User toUser(UserDTO userDTO) {
+        return User.builder()
+                .id(userDTO.getId())
+                .fullName(userDTO.getFullName())
+                .build();
+    }
 }
