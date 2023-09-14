@@ -5,15 +5,12 @@ import com.example.demo.dto.BookDTO;
 import com.example.demo.model.Book;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
+import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.book.BookCreatedResponse;
 import com.example.demo.payload.response.book.BookGetResponse;
 import com.example.demo.payload.response.book.BookUpdatedResponse;
 import lombok.experimental.UtilityClass;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 @UtilityClass
 public class BookMapper {
@@ -45,59 +42,52 @@ public class BookMapper {
         bookEntityToBeUpdate.setPrice(request.getPrice());
     }
 
-    public static BookCreatedResponse toCreatedResponse(Book book) {
+    public static BookCreatedResponse toCreatedResponse(BookDTO source) {
         return BookCreatedResponse.builder()
-                .id(book.getId())
-                .isbn(book.getIsbn())
-                .name(book.getName())
-                .authorFullName(book.getAuthorFullName())
-                .stock(book.getStock())
-                .price(book.getPrice())
+                .id(source.getId())
+                .isbn(source.getIsbn())
+                .name(source.getName())
+                .authorFullName(source.getAuthorFullName())
+                .stock(source.getStock())
+                .price(source.getPrice())
                 .build();
     }
 
 
-    public static BookGetResponse toGetResponse(Book book) {
-        if (book == null) {
+    public static BookGetResponse toGetResponse(BookDTO source) {
+        if (source == null) {
             return null;
         }
 
         return BookGetResponse.builder()
-                .id(book.getId())
-                .isbn(book.getIsbn())
-                .name(book.getName())
-                .authorFullName(book.getAuthorFullName())
-                .stock(book.getStock())
-                .price(book.getPrice())
+                .id(source.getId())
+                .isbn(source.getIsbn())
+                .name(source.getName())
+                .authorFullName(source.getAuthorFullName())
+                .stock(source.getStock())
+                .price(source.getPrice())
                 .build();
 
     }
 
 
-    public static Page<BookGetResponse> toGetResponse(Page<Book> bookEntities) {
-        List<BookGetResponse> bookGetResponses = bookEntities.getContent()
-                .stream()
-                .map(BookMapper::toGetResponse)
-                .toList();
+    public static CustomPageResponse<BookGetResponse> toGetResponse(Page<BookDTO> sources) {
 
-        Pageable pageable = bookEntities.getPageable();
-        long totalElements = bookEntities.getTotalElements();
-
-        return new PageImpl<>(bookGetResponses, pageable, totalElements);
+        return CustomPageResponse.of(sources.map(BookMapper::toGetResponse));
     }
 
-    public static BookUpdatedResponse toUpdatedResponse(Book book) {
-        if (book == null) {
+    public static BookUpdatedResponse toUpdatedResponse(BookDTO source) {
+        if (source == null) {
             return null;
         }
 
         return BookUpdatedResponse.builder()
-                .id(book.getId())
-                .isbn(book.getIsbn())
-                .name(book.getName())
-                .authorFullName(book.getAuthorFullName())
-                .stock(book.getStock())
-                .price(book.getPrice())
+                .id(source.getId())
+                .isbn(source.getIsbn())
+                .name(source.getName())
+                .authorFullName(source.getAuthorFullName())
+                .stock(source.getStock())
+                .price(source.getPrice())
                 .build();
     }
 

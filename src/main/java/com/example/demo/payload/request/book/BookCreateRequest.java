@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class BookCreateRequest {
     @NotBlank
     @Size(min = 10, max = 13)

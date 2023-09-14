@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.BookDTO;
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
+import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.book.BookCreatedResponse;
 import com.example.demo.payload.response.book.BookGetResponse;
@@ -35,7 +37,7 @@ public class BookController {
     public CustomResponse<BookCreatedResponse> createBook(
             @RequestBody @Valid final BookCreateRequest request
     ) {
-        final Book createdBookEntity = bookService.createBook(request);
+        final BookDTO createdBookEntity = bookService.createBook(request);
         final BookCreatedResponse response = BookMapper.toCreatedResponse(createdBookEntity);
 
         return CustomResponse.created(response);
@@ -51,7 +53,7 @@ public class BookController {
     @PutMapping("/stock-amount/{bookId}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CustomResponse<BookUpdatedResponse> updateStock(@PathVariable String bookId, @RequestBody @Valid final BookUpdateStockRequest request) {
-        final Book updatedBookEntity = bookService.updateBookStockById(bookId, request);
+        final BookDTO updatedBookEntity = bookService.updateBookStockById(bookId, request);
         final BookUpdatedResponse response = BookMapper.toUpdatedResponse(updatedBookEntity);
 
         return CustomResponse.ok(response);
@@ -68,7 +70,7 @@ public class BookController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CustomResponse<BookUpdatedResponse> updateBookByBookId(@PathVariable("bookId") final String bookId,
                                                                   @RequestBody @Valid final BookUpdateRequest request) {
-        final Book updatedBookEntity = bookService
+        final BookDTO updatedBookEntity = bookService
                 .updateBookById(bookId, request);
         final BookUpdatedResponse response = BookMapper
                 .toUpdatedResponse(updatedBookEntity);
@@ -85,7 +87,7 @@ public class BookController {
     @GetMapping("/{bookId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<BookGetResponse> getBookById(@PathVariable("bookId") final String bookId) {
-        final Book bookEntityFromDb = bookService.getBookById(bookId);
+        final BookDTO bookEntityFromDb = bookService.getBookById(bookId);
         final BookGetResponse response = BookMapper.toGetResponse(bookEntityFromDb);
 
         return CustomResponse.ok(response);
@@ -98,9 +100,9 @@ public class BookController {
      */
     @GetMapping()
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
-    public CustomResponse<Page<BookGetResponse>> getBooks(@RequestBody @Valid PaginatedFindAllRequest paginatedFindAllRequest) {
-        final Page<Book> bookEntitiesFromDb = bookService.getAllBooks(paginatedFindAllRequest);
-        final Page<BookGetResponse> responses = BookMapper
+    public CustomResponse<CustomPageResponse<BookGetResponse>> getBooks(@RequestBody @Valid PaginatedFindAllRequest paginatedFindAllRequest) {
+        final Page<BookDTO> bookEntitiesFromDb = bookService.getAllBooks(paginatedFindAllRequest);
+        final CustomPageResponse<BookGetResponse> responses = BookMapper
                 .toGetResponse(bookEntitiesFromDb);
 
         return CustomResponse.ok(responses);

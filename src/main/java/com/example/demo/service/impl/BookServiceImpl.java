@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.BookDTO;
 import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
@@ -11,7 +12,6 @@ import com.example.demo.repository.BookRepository;
 import com.example.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 
@@ -28,11 +28,11 @@ public class BookServiceImpl implements BookService {
      * @param request
      * @return
      */
-    public Book createBook(BookCreateRequest request) {
+    public BookDTO createBook(BookCreateRequest request) {
 
-        final Book bookEntityToBeSave = BookMapper.mapForSaving(request);
+        final Book bookEntityToBeSaved = BookMapper.mapForSaving(request);
 
-        return bookRepository.save(bookEntityToBeSave);
+        return BookMapper.toDTO(bookRepository.save(bookEntityToBeSaved));
     }
 
     /**
@@ -41,21 +41,24 @@ public class BookServiceImpl implements BookService {
      * @param bookId
      * @return
      */
-    public Book getBookById(final String bookId) {
+    public BookDTO getBookById(final String bookId) {
 
-        return bookRepository.findById(bookId)
+        Book book = bookRepository.findById(bookId)
                 .orElseThrow(
-                        () -> new BookNotFoundException(bookId));
+                        () -> new BookNotFoundException(bookId)
+                );
+
+        return BookMapper.toDTO(book);
     }
 
     @Override
-    public Book updateBookStockById(String bookId, BookUpdateStockRequest request) {
+    public BookDTO updateBookStockById(String bookId, BookUpdateStockRequest request) {
 
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new BookNotFoundException(bookId));
         book.setStock(request.getStock());
 
-        return bookRepository.save(book);
+        return BookMapper.toDTO(bookRepository.save(book));
     }
 
     /**
@@ -64,16 +67,11 @@ public class BookServiceImpl implements BookService {
      * @return Book entities in a list.
      */
     @Override
-    public Page<Book> getAllBooks(PaginatedFindAllRequest paginatedFindAllRequest) {
-        Page<Book> page = bookRepository
-                .findAll(PageRequest.of(paginatedFindAllRequest.getPaginationRequest().getPage(),
-                        paginatedFindAllRequest.getPaginationRequest().getSize()));
+    public Page<BookDTO> getAllBooks(PaginatedFindAllRequest paginatedFindAllRequest) {
 
-        if (page.isEmpty()) {
-            throw new BookNotFoundException("No books found");
-        }
-
-        return page;
+        return bookRepository
+                .findAll(paginatedFindAllRequest.getPaginationRequest().toPageable())
+                .map(BookMapper::toDTO);
     }
 
     /**
@@ -84,13 +82,13 @@ public class BookServiceImpl implements BookService {
      * @return {@link Book} entity that is updated.
      */
     @Override
-    public Book updateBookById(final String bookId, final BookUpdateRequest request) {
+    public BookDTO updateBookById(final String bookId, final BookUpdateRequest request) {
         final Book bookEntityToBeUpdate = bookRepository
                 .findById(bookId)
                 .orElseThrow(() -> new BookNotFoundException(bookId));
 
         BookMapper.mapForUpdating(bookEntityToBeUpdate, request);
 
-        return bookRepository.save(bookEntityToBeUpdate);
+        return BookMapper.toDTO(bookRepository.save(bookEntityToBeUpdate));
     }
 }
