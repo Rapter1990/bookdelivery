@@ -7,6 +7,7 @@ import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.CustomResponse;
+import com.example.demo.payload.response.order.OrderCreatedResponse;
 import com.example.demo.payload.response.order.OrderGetBetweenDatesResponse;
 import com.example.demo.payload.response.order.OrderGetByCustomerResponse;
 import com.example.demo.payload.response.order.OrderGetResponse;
@@ -27,8 +28,11 @@ public class OrderController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-    public CustomResponse<?> createOrder(CreateOrderRequest createOrderRequest) {
-        return null;
+    public CustomResponse<OrderCreatedResponse> createOrder(CreateOrderRequest createOrderRequest) {
+
+        final OrderDTO orderDTO = orderSaveService.createOrder(createOrderRequest);
+        final OrderCreatedResponse response = OrderMapper.toCreatedResponse(orderDTO);
+        return CustomResponse.ok(response);
     }
 
     @GetMapping("/{orderId}")
