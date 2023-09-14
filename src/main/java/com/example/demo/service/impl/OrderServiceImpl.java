@@ -10,8 +10,6 @@ import com.example.demo.repository.OrderRepository;
 import com.example.demo.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,9 +34,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Page<OrderDTO> findAllOrdersByCustomerId(Long customerId, PaginationRequest paginationRequest) {
 
-        Pageable orderPageRequest = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize());
-
-        return orderRepository.findAllByUserId(customerId, orderPageRequest)
+        return orderRepository.findAllByUserId(customerId, paginationRequest.toPageable())
                 .map(OrderMapper::toOrderDTO);
     }
 
@@ -47,12 +43,11 @@ public class OrderServiceImpl implements OrderService {
 
         DateIntervalRequest dateIntervalRequest = paginatedFindAllRequest.getDateIntervalRequest();
         PaginationRequest paginationRequest = paginatedFindAllRequest.getPaginationRequest();
-        Pageable orderPageable = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize());
 
         return orderRepository.findAllByCreatedAtBetween(
                         dateIntervalRequest.getStartDate(),
                         dateIntervalRequest.getEndDate(),
-                        orderPageable)
+                        paginationRequest.toPageable())
                 .map(OrderMapper::toOrderDTO);
 
     }
