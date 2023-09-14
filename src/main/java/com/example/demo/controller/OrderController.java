@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.model.mapper.order.OrderMapper;
+import com.example.demo.payload.request.order.CreateOrderRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.payload.response.CustomPageResponse;
@@ -9,6 +10,7 @@ import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.order.OrderGetBetweenDatesResponse;
 import com.example.demo.payload.response.order.OrderGetByCustomerResponse;
 import com.example.demo.payload.response.order.OrderGetResponse;
+import com.example.demo.service.OrderSaveService;
 import com.example.demo.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,13 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderSaveService orderSaveService;
+
+    @PostMapping
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
+    public CustomResponse<?> createOrder(CreateOrderRequest createOrderRequest) {
+        return null;
+    }
 
     @GetMapping("/{orderId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
@@ -60,9 +69,5 @@ public class OrderController {
 
         return CustomResponse.ok(response);
     }
-
-
-    // Implement OrderService
-    // Can Create OrderSaveService for Create Order
 
 }
