@@ -1,14 +1,13 @@
 package com.example.demo.base;
 
-import com.example.demo.base.pool.AdminTokenPool;
-import com.example.demo.base.pool.UserTokenPool;
+import com.example.demo.builder.UserBuilder;
 import com.example.demo.logging.entity.LogEntity;
 import com.example.demo.logging.service.impl.LogServiceImpl;
 import com.example.demo.model.User;
+import com.example.demo.security.CustomUserDetails;
 import com.example.demo.security.CustomUserDetailsService;
 import com.example.demo.security.jwt.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,12 +37,6 @@ public abstract class BaseControllerTest extends AbstractTestContainerConfigurat
     @Autowired
     protected JwtUtils jwtUtils;
 
-    @Autowired
-    protected UserTokenPool userTokenPool;
-
-    @Autowired
-    protected AdminTokenPool adminTokenPool;
-
     protected User mockUser;
 
     protected String mockUserToken;
@@ -55,19 +48,22 @@ public abstract class BaseControllerTest extends AbstractTestContainerConfigurat
 
     @BeforeEach
     protected void initializeAuth() {
-        this.mockUser = userTokenPool.getMockUser();
-        this.mockUserToken = "Bearer ".concat(userTokenPool.checkOut());
-        this.mockAdmin = adminTokenPool.getMockAdmin();
-        this.mockAdminToken = "Bearer ".concat(adminTokenPool.checkOut());
-        Mockito.when(customUserDetailsService.loadUserByUsername(mockUser.getEmail())).thenReturn(userTokenPool.getCustomUserDetails());
-        Mockito.when(customUserDetailsService.loadUserByUsername(mockAdmin.getEmail())).thenReturn(adminTokenPool.getCustomUserDetails());
+
+        this.mockUser = new UserBuilder().customer().build();
+        this.mockAdmin = new UserBuilder().admin().build();
+
+        final CustomUserDetails mockUserDetails = new CustomUserDetails(mockUser);
+        final CustomUserDetails mockAdminDetails = new CustomUserDetails(mockAdmin);
+
+        this.mockUserToken = generateMockToken(mockUserDetails);
+        this.mockAdminToken = generateMockToken(mockAdminDetails);
+        Mockito.when(customUserDetailsService.loadUserByUsername(mockUser.getEmail())).thenReturn(mockUserDetails);
+        Mockito.when(customUserDetailsService.loadUserByUsername(mockAdmin.getEmail())).thenReturn(mockAdminDetails);
         Mockito.doNothing().when(logService).saveLogToDatabase(any(LogEntity.class));
     }
 
-    @AfterEach
-    protected void checkInPools() {
-        userTokenPool.checkIn(mockUserToken);
-        adminTokenPool.checkIn(mockAdminToken);
+    private String generateMockToken(CustomUserDetails details) {
+        return "Bearer ".concat(jwtUtils.generateJwtToken(details));
     }
 
 }
