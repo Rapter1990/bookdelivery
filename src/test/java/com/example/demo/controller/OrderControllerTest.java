@@ -8,6 +8,7 @@ import com.example.demo.dto.UserDTO;
 import com.example.demo.model.Book;
 import com.example.demo.model.User;
 import com.example.demo.model.mapper.order.OrderMapper;
+import com.example.demo.payload.request.pagination.DateIntervalRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.payload.response.CustomPageResponse;
@@ -26,6 +27,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -125,8 +127,7 @@ class OrderControllerTest extends BaseControllerTest {
         // then
         mockMvc.perform(get("/api/v1/orders/{orderId}", orderId)
                         .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(expectedCustomResponse)))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.id").value(orderId))
                 .andExpect(jsonPath("$.response.user.id").value(userId))
@@ -214,8 +215,7 @@ class OrderControllerTest extends BaseControllerTest {
         // then
         mockMvc.perform(get("/api/v1/orders/{orderId}", orderId)
                         .header(HttpHeaders.AUTHORIZATION, mockUserToken)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(expectedCustomResponse)))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.id").value(orderId))
                 .andExpect(jsonPath("$.response.user.id").value(userId))
@@ -424,6 +424,24 @@ class OrderControllerTest extends BaseControllerTest {
                 .fullName("User FullName")
                 .build();
 
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR, 2000);
+        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar1.set(Calendar.DAY_OF_MONTH, 10);
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar1.set(Calendar.YEAR, 2000);
+        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar1.set(Calendar.DAY_OF_MONTH, 13);
+
+        LocalDateTime startDate = calendar1.getTime().toInstant().atZone(calendar1.getTimeZone().toZoneId()).toLocalDateTime();
+        LocalDateTime endDate = calendar2.getTime().toInstant().atZone(calendar2.getTimeZone().toZoneId()).toLocalDateTime();
+
+        PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
+                .dateIntervalRequest(new DateIntervalRequest(startDate, endDate))
+                .paginationRequest(new PaginationRequest(1, 10))
+                .build();
+
         String mockBookId1 = RandomUtil.generateUUID();
         String mockBookId2 = RandomUtil.generateUUID();
 
@@ -494,7 +512,7 @@ class OrderControllerTest extends BaseControllerTest {
         mockMvc.perform(post("/api/v1/orders/between-dates")
                         .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(expectedCustomResponse)))
+                        .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.content[0].id").value(orderId))
                 .andExpect(jsonPath("$.response.content[0].user.id").value(userId))
