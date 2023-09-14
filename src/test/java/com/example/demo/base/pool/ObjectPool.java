@@ -24,6 +24,9 @@ public abstract class ObjectPool<T> {
     public void checkIn(T object) {
         available.add(object);
         inUse.remove(object);
+
+        inUse.clear();
+        available.clear();
     }
 
 }
