@@ -98,6 +98,7 @@ public class BookMapper {
                 .authorFullName(book.getAuthorFullName())
                 .isbn(book.getIsbn())
                 .price(book.getPrice())
+                .stock(book.getStock())
                 .build();
     }
 }
