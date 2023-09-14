@@ -1,20 +1,18 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.base.BaseServiceTest;
-import com.example.demo.dto.BookDTO;
+import com.example.demo.builder.BookBuilder;
+import com.example.demo.builder.UserBuilder;
 import com.example.demo.dto.OrderDTO;
-import com.example.demo.dto.OrderItemDTO;
-import com.example.demo.dto.UserDTO;
 import com.example.demo.model.Book;
 import com.example.demo.model.Order;
 import com.example.demo.model.OrderItem;
 import com.example.demo.model.User;
+import com.example.demo.model.mapper.order.OrderMapper;
 import com.example.demo.payload.request.pagination.DateIntervalRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.repository.OrderRepository;
-import com.example.demo.service.OrderService;
-import com.example.demo.util.RandomUtil;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -23,11 +21,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 class OrderServiceImplTest extends BaseServiceTest {
@@ -45,49 +46,11 @@ class OrderServiceImplTest extends BaseServiceTest {
         // given
         Long orderId = 1L;
 
-        User mockUser = User.builder()
-                .email("mock@bookdelivery.com")
-                .fullName("User FullName")
-                .build();
+        User mockUser = new UserBuilder().customer().build();
 
-        String mockBookId1 = RandomUtil.generateUUID();
-        String mockBookId2 = RandomUtil.generateUUID();
+        Book mockBook1 = new BookBuilder().withValidFields().build();
 
-        Book mockBook1 = Book.builder()
-                .id(mockBookId1)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
-
-        Book mockBook2 = Book.builder()
-                .id(mockBookId2)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
-
-        BookDTO bookDTO1 = BookDTO.builder()
-                .id(mockBookId1)
-                .name(mockBook1.getName())
-                .authorFullName(mockBook1.getAuthorFullName())
-                .price(mockBook1.getPrice())
-                .isbn(mockBook1.getIsbn())
-                .build();
-
-        BookDTO bookDTO2 = BookDTO.builder()
-                .id(mockBookId2)
-                .name(mockBook2.getName())
-                .authorFullName(mockBook2.getAuthorFullName())
-                .price(mockBook2.getPrice())
-                .isbn(mockBook2.getIsbn())
-                .build();
+        Book mockBook2 = new BookBuilder().withValidFields().build();
 
         OrderItem orderItem1 = OrderItem.builder()
                 .book(mockBook1)
@@ -97,30 +60,13 @@ class OrderServiceImplTest extends BaseServiceTest {
                 .book(mockBook2)
                 .build();
 
-
         Order mockOrder = Order.builder()
                 .id(orderId)
                 .user(mockUser)
-                .orderItems(Set.of(orderItem1,orderItem2))
+                .orderItems(Set.of(orderItem1, orderItem2))
                 .build();
 
-        UserDTO userDTO = UserDTO.builder()
-                .fullName(mockUser.getFullName())
-                .build();
-
-        OrderItemDTO orderItemDTO1 = OrderItemDTO.builder()
-                .book(bookDTO1)
-                .build();
-
-        OrderItemDTO orderItemDTO2 = OrderItemDTO.builder()
-                .book(bookDTO2)
-                .build();
-
-        OrderDTO expected = OrderDTO.builder()
-                .id(orderId)
-                .user(userDTO)
-                .orderItems(Set.of(orderItemDTO1,orderItemDTO2))
-                .build();
+        OrderDTO expected = OrderMapper.toOrderDTO(mockOrder);
 
         // when
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(mockOrder));
@@ -147,33 +93,10 @@ class OrderServiceImplTest extends BaseServiceTest {
         PaginationRequest paginationRequest = new PaginationRequest(0, 10);
         Pageable pageRequest = PageRequest.of(paginationRequest.getPage(), paginationRequest.getSize());
 
-        User mockUser = User.builder()
-                .email("mock@bookdelivery.com")
-                .fullName("User FullName")
-                .build();
+        User mockUser = new UserBuilder().customer().withId(customerId).build();
 
-        String mockBookId1 = RandomUtil.generateUUID();
-        String mockBookId2 = RandomUtil.generateUUID();
-
-        Book mockBook1 = Book.builder()
-                .id(mockBookId1)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
-
-        Book mockBook2 = Book.builder()
-                .id(mockBookId2)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
+        Book mockBook1 = new BookBuilder().withValidFields().build();
+        Book mockBook2 = new BookBuilder().withValidFields().build();
 
         OrderItem orderItem1 = OrderItem.builder()
                 .book(mockBook1)
@@ -186,7 +109,7 @@ class OrderServiceImplTest extends BaseServiceTest {
         Order mockOrder = Order.builder()
                 .id(orderId)
                 .user(mockUser)
-                .orderItems(Set.of(orderItem1,orderItem2))
+                .orderItems(Set.of(orderItem1, orderItem2))
                 .build();
 
         // When
@@ -225,33 +148,11 @@ class OrderServiceImplTest extends BaseServiceTest {
 
         Long orderId = 1L;
 
-        User mockUser = User.builder()
-                .email("mock@bookdelivery.com")
-                .fullName("User FullName")
-                .build();
+        User mockUser = new UserBuilder().customer().build();
 
-        String mockBookId1 = RandomUtil.generateUUID();
-        String mockBookId2 = RandomUtil.generateUUID();
 
-        Book mockBook1 = Book.builder()
-                .id(mockBookId1)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
-
-        Book mockBook2 = Book.builder()
-                .id(mockBookId2)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
+        Book mockBook1 = new BookBuilder().withValidFields().build();
+        Book mockBook2 = new BookBuilder().withValidFields().build();
 
         OrderItem orderItem1 = OrderItem.builder()
                 .book(mockBook1)
@@ -264,11 +165,11 @@ class OrderServiceImplTest extends BaseServiceTest {
         Order mockOrder = Order.builder()
                 .id(orderId)
                 .user(mockUser)
-                .orderItems(Set.of(orderItem1,orderItem2))
+                .orderItems(Set.of(orderItem1, orderItem2))
                 .build();
 
         // When
-        when(orderRepository.findAllByCreatedAtBetween(dateIntervalRequest.getStartDate(),dateIntervalRequest.getEndDate(), pageRequest))
+        when(orderRepository.findAllByCreatedAtBetween(dateIntervalRequest.getStartDate(), dateIntervalRequest.getEndDate(), pageRequest))
                 .thenReturn(new PageImpl<>(Collections.singletonList(mockOrder)));
 
         // Then
@@ -278,6 +179,6 @@ class OrderServiceImplTest extends BaseServiceTest {
         assertEquals(1, result.getTotalElements());
 
         // verify
-        verify(orderRepository, times(1)).findAllByCreatedAtBetween(dateIntervalRequest.getStartDate(),dateIntervalRequest.getEndDate(), pageRequest);
+        verify(orderRepository, times(1)).findAllByCreatedAtBetween(dateIntervalRequest.getStartDate(), dateIntervalRequest.getEndDate(), pageRequest);
     }
 }
