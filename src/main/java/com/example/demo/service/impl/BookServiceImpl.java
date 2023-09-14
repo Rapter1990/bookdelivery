@@ -3,10 +3,10 @@ package com.example.demo.service.impl;
 import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
-import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
+import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -60,13 +60,14 @@ public class BookServiceImpl implements BookService {
 
     /**
      * Returns all {@link Book} entities.
+     *
      * @return Book entities in a list.
      */
     @Override
     public Page<Book> getAllBooks(PaginatedFindAllRequest paginatedFindAllRequest) {
         Page<Book> page = bookRepository
                 .findAll(PageRequest.of(paginatedFindAllRequest.getPaginationRequest().getPage(),
-                         paginatedFindAllRequest.getPaginationRequest().getSize()));
+                        paginatedFindAllRequest.getPaginationRequest().getSize()));
 
         if (page.isEmpty()) {
             throw new BookNotFoundException("No books found");
@@ -78,7 +79,7 @@ public class BookServiceImpl implements BookService {
     /**
      * The method that updates the {@link Book} entity.
      *
-     * @param bookId Represents the id of the {@link Book} entity to be updated.
+     * @param bookId  Represents the id of the {@link Book} entity to be updated.
      * @param request {@link BookUpdateRequest} represents the request body of the Book entity to be updated.
      * @return {@link Book} entity that is updated.
      */

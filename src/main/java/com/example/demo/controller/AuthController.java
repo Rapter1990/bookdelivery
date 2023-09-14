@@ -1,11 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.payload.response.auth.JWTResponse;
-import com.example.demo.payload.response.auth.TokenRefreshResponse;
 import com.example.demo.payload.request.auth.LoginRequest;
 import com.example.demo.payload.request.auth.SignupRequest;
 import com.example.demo.payload.request.auth.TokenRefreshRequest;
 import com.example.demo.payload.response.CustomResponse;
+import com.example.demo.payload.response.auth.JWTResponse;
+import com.example.demo.payload.response.auth.TokenRefreshResponse;
 import com.example.demo.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

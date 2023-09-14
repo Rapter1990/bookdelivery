@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @UtilityClass
 public class BookMapper {
@@ -36,7 +35,7 @@ public class BookMapper {
      * the reference of the object.
      *
      * @param bookEntityToBeUpdate {@link Book} entity to be updated
-     * @param request {@link BookUpdateRequest} request DTO object containing update details
+     * @param request              {@link BookUpdateRequest} request DTO object containing update details
      */
     public static void mapForUpdating(Book bookEntityToBeUpdate, BookUpdateRequest request) {
         bookEntityToBeUpdate.setIsbn(request.getIsbn());
@@ -79,7 +78,7 @@ public class BookMapper {
         List<BookGetResponse> bookGetResponses = bookEntities.getContent()
                 .stream()
                 .map(BookMapper::toGetResponse)
-                .collect(Collectors.toList());
+                .toList();
 
         Pageable pageable = bookEntities.getPageable();
         long totalElements = bookEntities.getTotalElements();

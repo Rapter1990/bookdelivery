@@ -8,7 +8,6 @@ import lombok.experimental.UtilityClass;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @UtilityClass
 public class OrderItemMapper {
@@ -26,7 +25,7 @@ public class OrderItemMapper {
         List<OrderItemDTO> orderItemDtos = orderItems.stream()
                 .map(OrderItemMapper::toDTO).toList();
 
-        return new HashSet<OrderItemDTO>(orderItemDtos);
+        return new HashSet<>(orderItemDtos);
     }
 
 }

@@ -2,10 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
-import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
+import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.book.BookCreatedResponse;
 import com.example.demo.payload.response.book.BookGetResponse;
@@ -60,7 +60,7 @@ public class BookController {
     /**
      * The endpoint that updates the {@link Book} entity.
      *
-     * @param bookId Represents the id of the {@link Book} entity to be updated.
+     * @param bookId  Represents the id of the {@link Book} entity to be updated.
      * @param request Represents the request body of the Book entity to be updated.
      * @return BookUpdatedResponse -> Represents the response body of the Book entity to be updated.
      */

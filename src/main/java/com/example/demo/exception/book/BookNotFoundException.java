@@ -1,9 +1,9 @@
 package com.example.demo.exception.book;
 
-import java.io.Serial;
-
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.Book;
+
+import java.io.Serial;
 
 /**
  * Thrown when the specified {@link Book} is not found.
@@ -19,11 +19,11 @@ public class BookNotFoundException extends NotFoundException {
     private static final String MESSAGE_TEMPLATE =
             "No book found with ID: ";
 
-    public BookNotFoundException(String id){
+    public BookNotFoundException(String id) {
         super(MESSAGE_TEMPLATE.concat(id));
     }
 
-    public BookNotFoundException(){
+    public BookNotFoundException() {
         super(DEFAULT_MESSAGE);
     }
 
