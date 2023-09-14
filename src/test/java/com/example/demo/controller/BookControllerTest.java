@@ -1,10 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.base.BaseControllerTest;
+import com.example.demo.builder.BookBuilder;
 import com.example.demo.dto.BookDTO;
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.payload.request.book.BookCreateRequest;
+import com.example.demo.payload.request.book.BookUpdateRequest;
+import com.example.demo.payload.request.book.BookUpdateStockRequest;
 import com.example.demo.payload.request.pagination.DateIntervalRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
@@ -27,8 +30,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class BookControllerTest extends BaseControllerTest {
@@ -256,6 +258,68 @@ class BookControllerTest extends BaseControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void givenBookIdAndBookUpdateStockRequest_whenAdminRoleAndBookFound_ReturnBookUpdatedResponse() throws Exception {
+
+        // given
+        Book book = new BookBuilder().withValidFields().build();
+        String bookId = book.getId();
+
+        BookUpdateStockRequest bookUpdateStockRequest = BookUpdateStockRequest.builder()
+                .stock(5)
+                .build();
+
+        BookDTO updatedBookEntity = BookDTO.builder()
+                .stock(bookUpdateStockRequest.getStock())
+                .build();
+
+        // when
+        Mockito.when(bookService.updateBookStockById(bookId, bookUpdateStockRequest)).thenReturn(updatedBookEntity);
+
+
+        // then
+        mockMvc.perform(put("/api/v1/books/stock-amount/{bookId}", bookId)
+                        .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(bookUpdateStockRequest)))
+                .andExpect(status().isOk());
+
+    }
+
+    @Test
+    void givenBookIdAndBookUpdateRequest_whenAdminRoleAndBookFound_ReturnPageBookUpdatedResponse() throws Exception {
+
+        // given
+        Book book = new BookBuilder().withValidFields().build();
+        String bookId = book.getId();
+
+        BookUpdateRequest updateRequest = BookUpdateRequest.builder()
+                .name("Update Book Name")
+                .authorFullName("Update Book Author Full Name")
+                .isbn("Update ISBN")
+                .price(BigDecimal.valueOf(69.99))
+                .build();
+
+        BookDTO updatedBookEntity = BookDTO.builder()
+                .id(bookId)
+                .name(updateRequest.getName())
+                .isbn(updateRequest.getIsbn())
+                .authorFullName(updateRequest.getAuthorFullName())
+                .price(updateRequest.getPrice())
+                .build();
+
+        // when
+        Mockito.when(bookService.updateBookById(bookId, updateRequest)).thenReturn(updatedBookEntity);
+
+        // then
+        mockMvc.perform(put("/api/v1/books/{bookId}", bookId)
+                        .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequest)))
                 .andExpect(status().isOk());
 
     }
