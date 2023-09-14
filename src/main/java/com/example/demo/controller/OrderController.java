@@ -4,6 +4,7 @@ import com.example.demo.dto.OrderDTO;
 import com.example.demo.model.mapper.order.OrderMapper;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
+import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.order.OrderGetBetweenDatesResponse;
 import com.example.demo.payload.response.order.OrderGetByCustomerResponse;
@@ -23,7 +24,9 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    public CustomResponse<OrderGetResponse> getOrderById(@PathVariable Long orderId) {
+    public CustomResponse<OrderGetResponse> getOrderById(
+            @PathVariable Long orderId
+    ) {
         final OrderDTO orderDTO = orderService.findOrderById(orderId);
         final OrderGetResponse response = OrderMapper.toGetResponse(orderDTO);
 
@@ -32,19 +35,28 @@ public class OrderController {
 
     @GetMapping("/customer/{customerId}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    public CustomResponse<Page<OrderGetByCustomerResponse>> getOrdersByCustomerId(@PathVariable Long customerId,
-                                                                                  @RequestBody PaginationRequest paginationRequest) {
-        final Page<OrderDTO> pageOfOrderDTOs = orderService.findAllOrdersByCustomerId(customerId, paginationRequest);
-        final Page<OrderGetByCustomerResponse> response = OrderMapper.toGetByCustomerResponse(pageOfOrderDTOs);
+    public CustomResponse<CustomPageResponse<OrderGetByCustomerResponse>> getOrdersByCustomerId(
+            @PathVariable Long customerId,
+            @RequestBody PaginationRequest paginationRequest
+    ) {
+        final Page<OrderDTO> pageOfOrderDTOs = orderService
+                .findAllOrdersByCustomerId(customerId, paginationRequest);
+        final CustomPageResponse<OrderGetByCustomerResponse> response = OrderMapper
+                .toGetByCustomerResponse(pageOfOrderDTOs);
 
         return CustomResponse.ok(response);
     }
 
     @GetMapping("/between-dates")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
-    public CustomResponse<Page<OrderGetBetweenDatesResponse>> getOrdersBetweenTwoDates(@RequestBody PaginatedFindAllRequest paginatedFindAllRequest) {
-        final Page<OrderDTO> pageOfOrderDTOs = orderService.findAllOrdersBetweenTwoDatesAndPagination(paginatedFindAllRequest);
-        final Page<OrderGetBetweenDatesResponse> response = OrderMapper.toGetBetweenDatesResponses(pageOfOrderDTOs);
+    public CustomResponse<CustomPageResponse<OrderGetBetweenDatesResponse>> getOrdersBetweenTwoDates(
+            @RequestBody
+            PaginatedFindAllRequest paginatedFindAllRequest
+    ) {
+        final Page<OrderDTO> pageOfOrderDTOs = orderService
+                .findAllOrdersBetweenTwoDatesAndPagination(paginatedFindAllRequest);
+        final CustomPageResponse<OrderGetBetweenDatesResponse> response = OrderMapper
+                .toGetBetweenDatesResponses(pageOfOrderDTOs);
 
         return CustomResponse.ok(response);
     }

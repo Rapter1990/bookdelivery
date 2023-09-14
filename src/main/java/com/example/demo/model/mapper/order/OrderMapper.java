@@ -4,6 +4,7 @@ package com.example.demo.model.mapper.order;
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.model.Order;
 import com.example.demo.model.mapper.user.UserMapper;
+import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.order.OrderGetBetweenDatesResponse;
 import com.example.demo.payload.response.order.OrderGetByCustomerResponse;
 import com.example.demo.payload.response.order.OrderGetResponse;
@@ -40,8 +41,8 @@ public class OrderMapper {
                 .build();
     }
 
-    public static Page<OrderGetByCustomerResponse> toGetByCustomerResponse(Page<OrderDTO> sources) {
-        return sources.map(OrderMapper::toGetByCustomerResponse);
+    public static CustomPageResponse<OrderGetByCustomerResponse> toGetByCustomerResponse(Page<OrderDTO> sources) {
+        return CustomPageResponse.of(sources.map(OrderMapper::toGetByCustomerResponse));
     }
 
     public static OrderGetBetweenDatesResponse toGetBetweenDatesResponse(OrderDTO source) {
@@ -53,8 +54,8 @@ public class OrderMapper {
                 .build();
     }
 
-    public static Page<OrderGetBetweenDatesResponse> toGetBetweenDatesResponses(Page<OrderDTO> sources) {
-        return sources.map(OrderMapper::toGetBetweenDatesResponse);
+    public static CustomPageResponse<OrderGetBetweenDatesResponse> toGetBetweenDatesResponses(Page<OrderDTO> sources) {
+        return CustomPageResponse.of(sources.map(OrderMapper::toGetBetweenDatesResponse));
     }
 
 }
