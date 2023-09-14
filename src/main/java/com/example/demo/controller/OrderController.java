@@ -56,7 +56,7 @@ public class OrderController {
         return CustomResponse.ok(response);
     }
 
-    @GetMapping("/between-dates")
+    @PostMapping("/between-dates")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CustomResponse<CustomPageResponse<OrderGetBetweenDatesResponse>> getOrdersBetweenTwoDates(
             @RequestBody
