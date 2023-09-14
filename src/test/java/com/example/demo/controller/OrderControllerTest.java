@@ -1,13 +1,19 @@
 package com.example.demo.controller;
 
 import com.example.demo.base.BaseControllerTest;
+import com.example.demo.builder.BookBuilder;
+import com.example.demo.builder.UserBuilder;
 import com.example.demo.dto.BookDTO;
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.dto.OrderItemDTO;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.Book;
+import com.example.demo.model.Order;
+import com.example.demo.model.OrderItem;
 import com.example.demo.model.User;
+import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.model.mapper.order.OrderMapper;
+import com.example.demo.model.mapper.user.UserMapper;
 import com.example.demo.payload.request.pagination.DateIntervalRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
@@ -54,69 +60,28 @@ class OrderControllerTest extends BaseControllerTest {
         Long orderId = 1L;
         Long userId = 1L;
 
-        User mockUser = User.builder()
-                .id(userId)
-                .email("mock@bookdelivery.com")
-                .fullName("User FullName")
+        User mockUser = new UserBuilder()
+                .customer()
+                .withId(userId)
                 .build();
 
-        String mockBookId1 = RandomUtil.generateUUID();
-        String mockBookId2 = RandomUtil.generateUUID();
+        Book mockBook1 = new BookBuilder().withValidFields().build();
+        Book mockBook2 = new BookBuilder().withValidFields().build();
 
-        Book mockBook1 = Book.builder()
-                .id(mockBookId1)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
+        OrderItem mockOrderItem1 = OrderItem.builder()
+                .book(mockBook1)
+                .build();
+        OrderItem mockOrderItem2 = OrderItem.builder()
+                .book(mockBook2)
                 .build();
 
-        Book mockBook2 = Book.builder()
-                .id(mockBookId2)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
-
-        BookDTO bookDTO1 = BookDTO.builder()
-                .id(mockBookId1)
-                .name(mockBook1.getName())
-                .authorFullName(mockBook1.getAuthorFullName())
-                .price(mockBook1.getPrice())
-                .isbn(mockBook1.getIsbn())
-                .build();
-
-        BookDTO bookDTO2 = BookDTO.builder()
-                .id(mockBookId2)
-                .name(mockBook2.getName())
-                .authorFullName(mockBook2.getAuthorFullName())
-                .price(mockBook2.getPrice())
-                .isbn(mockBook2.getIsbn())
-                .build();
-
-        UserDTO userDTO = UserDTO.builder()
-                .id(mockUser.getId())
-                .fullName(mockUser.getFullName())
-                .build();
-
-        OrderItemDTO orderItemDTO1 = OrderItemDTO.builder()
-                .book(bookDTO1)
-                .build();
-
-        OrderItemDTO orderItemDTO2 = OrderItemDTO.builder()
-                .book(bookDTO2)
-                .build();
-
-        OrderDTO mockOrderDTO = OrderDTO.builder()
+        Order mockOrder = Order.builder()
                 .id(orderId)
-                .user(userDTO)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(orderItemDTO1, orderItemDTO2)))
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .user(mockUser)
                 .build();
+
+        OrderDTO mockOrderDTO = OrderMapper.toOrderDTO(mockOrder);
 
         OrderGetResponse expectedResponse = OrderMapper.toGetResponse(mockOrderDTO);
         CustomResponse<OrderGetResponse> expectedCustomResponse = CustomResponse.ok(expectedResponse);
@@ -131,80 +96,42 @@ class OrderControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.id").value(orderId))
                 .andExpect(jsonPath("$.response.user.id").value(userId))
-                .andExpect(jsonPath("$.response.orderItems[0].book.id").value(mockBookId1))
-                .andExpect(jsonPath("$.response.orderItems[1].book.id").value(mockBookId2));
+                .andExpect(jsonPath("$.response.orderItems[0].book.id").value(mockBook1.getId()))
+                .andExpect(jsonPath("$.response.orderItems[1].book.id").value(mockBook2.getId()))
+                .andExpect(jsonPath("$.isSuccess").value(expectedCustomResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(expectedCustomResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
     }
 
     @Test
     void givenOrderId_WhenCustomerRoleAndOrderFound_ReturnOrderGetResponse() throws Exception {
 
-        // given
+// given
         Long orderId = 1L;
         Long userId = 1L;
 
-        User mockUser = User.builder()
-                .id(userId)
-                .email("mock@bookdelivery.com")
-                .fullName("User FullName")
+        User mockUser = new UserBuilder()
+                .customer()
+                .withId(userId)
                 .build();
 
-        String mockBookId1 = RandomUtil.generateUUID();
-        String mockBookId2 = RandomUtil.generateUUID();
+        Book mockBook1 = new BookBuilder().withValidFields().build();
+        Book mockBook2 = new BookBuilder().withValidFields().build();
 
-        Book mockBook1 = Book.builder()
-                .id(mockBookId1)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
+        OrderItem mockOrderItem1 = OrderItem.builder()
+                .book(mockBook1)
+                .build();
+        OrderItem mockOrderItem2 = OrderItem.builder()
+                .book(mockBook2)
                 .build();
 
-        Book mockBook2 = Book.builder()
-                .id(mockBookId2)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
+        Order mockOrder = Order.builder()
+                .id(1L)
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .user(mockUser)
                 .build();
 
-        BookDTO bookDTO1 = BookDTO.builder()
-                .id(mockBookId1)
-                .name(mockBook1.getName())
-                .authorFullName(mockBook1.getAuthorFullName())
-                .price(mockBook1.getPrice())
-                .isbn(mockBook1.getIsbn())
-                .build();
-
-        BookDTO bookDTO2 = BookDTO.builder()
-                .id(mockBookId2)
-                .name(mockBook2.getName())
-                .authorFullName(mockBook2.getAuthorFullName())
-                .price(mockBook2.getPrice())
-                .isbn(mockBook2.getIsbn())
-                .build();
-
-        UserDTO userDTO = UserDTO.builder()
-                .id(mockUser.getId())
-                .fullName(mockUser.getFullName())
-                .build();
-
-        OrderItemDTO orderItemDTO1 = OrderItemDTO.builder()
-                .book(bookDTO1)
-                .build();
-
-        OrderItemDTO orderItemDTO2 = OrderItemDTO.builder()
-                .book(bookDTO2)
-                .build();
-
-        OrderDTO mockOrderDTO = OrderDTO.builder()
-                .id(orderId)
-                .user(userDTO)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(orderItemDTO1, orderItemDTO2)))
-                .build();
+        OrderDTO mockOrderDTO = OrderMapper.toOrderDTO(mockOrder);
 
         OrderGetResponse expectedResponse = OrderMapper.toGetResponse(mockOrderDTO);
         CustomResponse<OrderGetResponse> expectedCustomResponse = CustomResponse.ok(expectedResponse);
@@ -214,13 +141,16 @@ class OrderControllerTest extends BaseControllerTest {
 
         // then
         mockMvc.perform(get("/api/v1/orders/{orderId}", orderId)
-                        .header(HttpHeaders.AUTHORIZATION, mockUserToken)
+                        .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.id").value(orderId))
                 .andExpect(jsonPath("$.response.user.id").value(userId))
-                .andExpect(jsonPath("$.response.orderItems[0].book.id").value(mockBookId1))
-                .andExpect(jsonPath("$.response.orderItems[1].book.id").value(mockBookId2));
+                .andExpect(jsonPath("$.response.orderItems[0].book.id").value(mockBook1.getId()))
+                .andExpect(jsonPath("$.response.orderItems[1].book.id").value(mockBook2.getId()))
+                .andExpect(jsonPath("$.isSuccess").value(expectedCustomResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(expectedCustomResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
     }
 
     @Test
@@ -230,69 +160,28 @@ class OrderControllerTest extends BaseControllerTest {
         Long orderId = 1L;
         Long userId = 1L;
 
-        User mockUser = User.builder()
-                .id(userId)
-                .email("mock@bookdelivery.com")
-                .fullName("User FullName")
+        User mockUser = new UserBuilder()
+                .customer()
+                .withId(userId)
                 .build();
 
-        String mockBookId1 = RandomUtil.generateUUID();
-        String mockBookId2 = RandomUtil.generateUUID();
+        Book mockBook1 = new BookBuilder().withValidFields().build();
+        Book mockBook2 = new BookBuilder().withValidFields().build();
 
-        Book mockBook1 = Book.builder()
-                .id(mockBookId1)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
+        OrderItem mockOrderItem1 = OrderItem.builder()
+                .book(mockBook1)
+                .build();
+        OrderItem mockOrderItem2 = OrderItem.builder()
+                .book(mockBook2)
                 .build();
 
-        Book mockBook2 = Book.builder()
-                .id(mockBookId2)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
-
-        BookDTO bookDTO1 = BookDTO.builder()
-                .id(mockBookId1)
-                .name(mockBook1.getName())
-                .authorFullName(mockBook1.getAuthorFullName())
-                .price(mockBook1.getPrice())
-                .isbn(mockBook1.getIsbn())
-                .build();
-
-        BookDTO bookDTO2 = BookDTO.builder()
-                .id(mockBookId2)
-                .name(mockBook2.getName())
-                .authorFullName(mockBook2.getAuthorFullName())
-                .price(mockBook2.getPrice())
-                .isbn(mockBook2.getIsbn())
-                .build();
-
-        UserDTO userDTO = UserDTO.builder()
-                .id(mockUser.getId())
-                .fullName(mockUser.getFullName())
-                .build();
-
-        OrderItemDTO orderItemDTO1 = OrderItemDTO.builder()
-                .book(bookDTO1)
-                .build();
-
-        OrderItemDTO orderItemDTO2 = OrderItemDTO.builder()
-                .book(bookDTO2)
-                .build();
-
-        OrderDTO mockOrderDTO = OrderDTO.builder()
+        Order mockOrder = Order.builder()
                 .id(orderId)
-                .user(userDTO)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(orderItemDTO1, orderItemDTO2)))
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .user(mockUser)
                 .build();
+
+        OrderDTO mockOrderDTO = OrderMapper.toOrderDTO(mockOrder);
 
         Page<OrderDTO> mockPageOfOrderDTOs = new PageImpl<>(Collections.singletonList(mockOrderDTO));
 
@@ -312,8 +201,11 @@ class OrderControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.content[0].id").value(orderId))
                 .andExpect(jsonPath("$.response.content[0].user.id").value(userId))
-                .andExpect(jsonPath("$.response.content[0].orderItems[0].book.id").value(mockBookId1))
-                .andExpect(jsonPath("$.response.content[0].orderItems[1].book.id").value(mockBookId2));
+                .andExpect(jsonPath("$.response.content[0].orderItems[0].book.id").value(mockBook1.getId()))
+                .andExpect(jsonPath("$.response.content[0].orderItems[1].book.id").value(mockBook2.getId()))
+                .andExpect(jsonPath("$.isSuccess").value(expectedCustomResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(expectedCustomResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
 
     }
 
@@ -324,69 +216,28 @@ class OrderControllerTest extends BaseControllerTest {
         Long orderId = 1L;
         Long userId = 1L;
 
-        User mockUser = User.builder()
-                .id(userId)
-                .email("mock@bookdelivery.com")
-                .fullName("User FullName")
+        User mockUser = new UserBuilder()
+                .customer()
+                .withId(userId)
                 .build();
 
-        String mockBookId1 = RandomUtil.generateUUID();
-        String mockBookId2 = RandomUtil.generateUUID();
+        Book mockBook1 = new BookBuilder().withValidFields().build();
+        Book mockBook2 = new BookBuilder().withValidFields().build();
 
-        Book mockBook1 = Book.builder()
-                .id(mockBookId1)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
+        OrderItem mockOrderItem1 = OrderItem.builder()
+                .book(mockBook1)
+                .build();
+        OrderItem mockOrderItem2 = OrderItem.builder()
+                .book(mockBook2)
                 .build();
 
-        Book mockBook2 = Book.builder()
-                .id(mockBookId2)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
-
-        BookDTO bookDTO1 = BookDTO.builder()
-                .id(mockBookId1)
-                .name(mockBook1.getName())
-                .authorFullName(mockBook1.getAuthorFullName())
-                .price(mockBook1.getPrice())
-                .isbn(mockBook1.getIsbn())
-                .build();
-
-        BookDTO bookDTO2 = BookDTO.builder()
-                .id(mockBookId2)
-                .name(mockBook2.getName())
-                .authorFullName(mockBook2.getAuthorFullName())
-                .price(mockBook2.getPrice())
-                .isbn(mockBook2.getIsbn())
-                .build();
-
-        UserDTO userDTO = UserDTO.builder()
-                .id(mockUser.getId())
-                .fullName(mockUser.getFullName())
-                .build();
-
-        OrderItemDTO orderItemDTO1 = OrderItemDTO.builder()
-                .book(bookDTO1)
-                .build();
-
-        OrderItemDTO orderItemDTO2 = OrderItemDTO.builder()
-                .book(bookDTO2)
-                .build();
-
-        OrderDTO mockOrderDTO = OrderDTO.builder()
+        Order mockOrder = Order.builder()
                 .id(orderId)
-                .user(userDTO)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(orderItemDTO1, orderItemDTO2)))
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .user(mockUser)
                 .build();
+
+        OrderDTO mockOrderDTO = OrderMapper.toOrderDTO(mockOrder);
 
         Page<OrderDTO> mockPageOfOrderDTOs = new PageImpl<>(Collections.singletonList(mockOrderDTO));
 
@@ -406,8 +257,11 @@ class OrderControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.content[0].id").value(orderId))
                 .andExpect(jsonPath("$.response.content[0].user.id").value(userId))
-                .andExpect(jsonPath("$.response.content[0].orderItems[0].book.id").value(mockBookId1))
-                .andExpect(jsonPath("$.response.content[0].orderItems[1].book.id").value(mockBookId2));
+                .andExpect(jsonPath("$.response.content[0].orderItems[0].book.id").value(mockBook1.getId()))
+                .andExpect(jsonPath("$.response.content[0].orderItems[1].book.id").value(mockBook2.getId()))
+                .andExpect(jsonPath("$.isSuccess").value(expectedCustomResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(expectedCustomResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
 
     }
 
@@ -417,12 +271,6 @@ class OrderControllerTest extends BaseControllerTest {
         // given
         Long orderId = 1L;
         Long userId = 1L;
-
-        User mockUser = User.builder()
-                .id(userId)
-                .email("mock@bookdelivery.com")
-                .fullName("User FullName")
-                .build();
 
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(Calendar.YEAR, 2000);
@@ -442,63 +290,28 @@ class OrderControllerTest extends BaseControllerTest {
                 .paginationRequest(new PaginationRequest(1, 10))
                 .build();
 
-        String mockBookId1 = RandomUtil.generateUUID();
-        String mockBookId2 = RandomUtil.generateUUID();
-
-        Book mockBook1 = Book.builder()
-                .id(mockBookId1)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
+        User mockUser = new UserBuilder()
+                .customer()
+                .withId(userId)
                 .build();
 
-        Book mockBook2 = Book.builder()
-                .id(mockBookId2)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(321)
-                .price(BigDecimal.TEN)
-                .version(0L)
+        Book mockBook1 = new BookBuilder().withValidFields().build();
+        Book mockBook2 = new BookBuilder().withValidFields().build();
+
+        OrderItem mockOrderItem1 = OrderItem.builder()
+                .book(mockBook1)
+                .build();
+        OrderItem mockOrderItem2 = OrderItem.builder()
+                .book(mockBook2)
                 .build();
 
-        BookDTO bookDTO1 = BookDTO.builder()
-                .id(mockBookId1)
-                .name(mockBook1.getName())
-                .authorFullName(mockBook1.getAuthorFullName())
-                .price(mockBook1.getPrice())
-                .isbn(mockBook1.getIsbn())
-                .build();
-
-        BookDTO bookDTO2 = BookDTO.builder()
-                .id(mockBookId2)
-                .name(mockBook2.getName())
-                .authorFullName(mockBook2.getAuthorFullName())
-                .price(mockBook2.getPrice())
-                .isbn(mockBook2.getIsbn())
-                .build();
-
-        UserDTO userDTO = UserDTO.builder()
-                .id(mockUser.getId())
-                .fullName(mockUser.getFullName())
-                .build();
-
-        OrderItemDTO orderItemDTO1 = OrderItemDTO.builder()
-                .book(bookDTO1)
-                .build();
-
-        OrderItemDTO orderItemDTO2 = OrderItemDTO.builder()
-                .book(bookDTO2)
-                .build();
-
-        OrderDTO mockOrderDTO = OrderDTO.builder()
+        Order mockOrder = Order.builder()
                 .id(orderId)
-                .user(userDTO)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(orderItemDTO1, orderItemDTO2)))
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .user(mockUser)
                 .build();
+
+        OrderDTO mockOrderDTO = OrderMapper.toOrderDTO(mockOrder);
 
         Page<OrderDTO> mockPageOfOrderDTOs = new PageImpl<>(Collections.singletonList(mockOrderDTO));
 
@@ -516,8 +329,11 @@ class OrderControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.content[0].id").value(orderId))
                 .andExpect(jsonPath("$.response.content[0].user.id").value(userId))
-                .andExpect(jsonPath("$.response.content[0].orderItems[0].book.id").value(mockBookId1))
-                .andExpect(jsonPath("$.response.content[0].orderItems[1].book.id").value(mockBookId2));
+                .andExpect(jsonPath("$.response.content[0].orderItems[0].book.id").value(mockBook1.getId()))
+                .andExpect(jsonPath("$.response.content[0].orderItems[1].book.id").value(mockBook2.getId()))
+                .andExpect(jsonPath("$.isSuccess").value(expectedCustomResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(expectedCustomResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
     }
 
 }
