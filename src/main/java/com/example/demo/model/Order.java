@@ -10,7 +10,6 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
-@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ORDERS")
