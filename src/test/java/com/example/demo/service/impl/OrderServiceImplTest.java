@@ -82,11 +82,11 @@ class OrderServiceImplTest extends BaseServiceTest {
                 .build();
 
         BookDTO bookDTO2 = BookDTO.builder()
-                .id(mockBookId1)
-                .name(mockBook1.getName())
-                .authorFullName(mockBook1.getAuthorFullName())
-                .price(mockBook1.getPrice())
-                .isbn(mockBook1.getIsbn())
+                .id(mockBookId2)
+                .name(mockBook2.getName())
+                .authorFullName(mockBook2.getAuthorFullName())
+                .price(mockBook2.getPrice())
+                .isbn(mockBook2.getIsbn())
                 .build();
 
         OrderItem orderItem1 = OrderItem.builder()
