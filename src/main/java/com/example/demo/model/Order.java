@@ -2,6 +2,7 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
 
@@ -9,6 +10,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "ORDERS")

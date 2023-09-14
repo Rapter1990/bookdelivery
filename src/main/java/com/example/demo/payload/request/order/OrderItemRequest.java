@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class OrderItemRequest {
 
     @NotBlank
-    private Long bookId;
+    private String bookId;
 
     @Min(1)
     private int amount;
