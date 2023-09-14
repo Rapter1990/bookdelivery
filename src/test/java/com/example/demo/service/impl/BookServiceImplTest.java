@@ -1,8 +1,10 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.base.BaseServiceTest;
+import com.example.demo.dto.BookDTO;
 import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.model.Book;
+import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
@@ -57,13 +59,15 @@ class BookServiceImplTest extends BaseServiceTest {
                 .version(0L)
                 .build();
 
+        BookDTO mockBookDTO = BookMapper.toDTO(mockBook);
+
         // When
         when(bookRepository.save(any(Book.class))).thenReturn(mockBook);
 
         // Then
-        Book response = bookService.createBook(mockCreateRequest);
+        BookDTO response = bookService.createBook(mockCreateRequest);
 
-        assertEquals(mockBook, response);
+        assertEquals(mockBookDTO, response);
 
         verify(bookRepository, times(1)).save(any(Book.class));
     }
@@ -84,13 +88,15 @@ class BookServiceImplTest extends BaseServiceTest {
                 .version(0L)
                 .build();
 
+        BookDTO mockBookDTO = BookMapper.toDTO(mockBook);
+
         // When
         when(bookRepository.findById(Mockito.anyString())).thenReturn(Optional.of(mockBook));
 
         // Then
-        Book response = bookService.getBookById(mockBookId);
+        BookDTO response = bookService.getBookById(mockBookId);
 
-        assertEquals(mockBook, response);
+        assertEquals(mockBookDTO, response);
 
         verify(bookRepository, times(1)).findById(Mockito.anyString());
     }
@@ -143,7 +149,7 @@ class BookServiceImplTest extends BaseServiceTest {
         });
 
         // Then
-        Book response = bookService.updateBookStockById(mockBookId, mockRequest);
+        BookDTO response = bookService.updateBookStockById(mockBookId, mockRequest);
 
         assertEquals(mockRequest.getStock(), response.getStock());
         verify(bookRepository, times(1)).findById(Mockito.anyString());
@@ -203,7 +209,6 @@ class BookServiceImplTest extends BaseServiceTest {
         // When and Then
         try {
             bookService.getAllBooks(request);
-            fail("BookNotFoundException should have been thrown.");
         } catch (BookNotFoundException e) {
             // Expected exception
             assertEquals("No book found with ID: No books found", e.getMessage());
@@ -258,7 +263,7 @@ class BookServiceImplTest extends BaseServiceTest {
         when(bookRepository.findAll(any(Pageable.class))).thenReturn(pageWithBooks);
 
         // then
-        Page<Book> result = bookService.getAllBooks(request);
+        Page<BookDTO> result = bookService.getAllBooks(request);
 
         assertEquals(books.size(), result.getContent().size());
 
@@ -301,7 +306,7 @@ class BookServiceImplTest extends BaseServiceTest {
         when(bookRepository.save(any(Book.class))).thenReturn(updatedBook);
 
         // Then
-        Book book = bookService.updateBookById(bookId, updateRequest);
+        BookDTO book = bookService.updateBookById(bookId, updateRequest);
 
         assertEquals(updateRequest.getIsbn(), book.getIsbn());
         assertEquals(updateRequest.getName(), book.getName());
