@@ -38,10 +38,6 @@ class OrderServiceImplTest extends BaseServiceTest {
     @Mock
     private OrderRepository orderRepository;
 
-    @Test
-    void createOrder() {
-
-    }
 
     @Test
     void givenOrderId_WhenOrderFound_ReturnOrderDTO() {
