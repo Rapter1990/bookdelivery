@@ -2,6 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.BookDTO;
 import com.example.demo.exception.book.BookNotFoundException;
+import com.example.demo.exception.book.NoAvailableStockException;
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.payload.request.book.BookCreateRequest;
@@ -90,5 +91,14 @@ public class BookServiceImpl implements BookService {
         BookMapper.mapForUpdating(bookEntityToBeUpdate, request);
 
         return BookMapper.toDTO(bookRepository.save(bookEntityToBeUpdate));
+    }
+
+    @Override
+    public boolean isStockAvailable(BookDTO bookDTO, int amount) {
+        if(bookDTO.getStock() < amount) {
+            throw new NoAvailableStockException(bookDTO.getId());
+        } else {
+            return true;
+        }
     }
 }

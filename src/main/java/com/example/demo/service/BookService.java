@@ -19,4 +19,5 @@ public interface BookService {
 
     BookDTO updateBookById(String bookId, BookUpdateRequest request);
 
+    boolean isStockAvailable(BookDTO bookDTO, int amount);
 }
