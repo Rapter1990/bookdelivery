@@ -11,12 +11,16 @@ import com.example.demo.payload.response.order.OrderCreatedResponse;
 import com.example.demo.payload.response.order.OrderGetBetweenDatesResponse;
 import com.example.demo.payload.response.order.OrderGetByCustomerResponse;
 import com.example.demo.payload.response.order.OrderGetResponse;
+import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.OrderSaveService;
 import com.example.demo.service.OrderService;
+import com.example.demo.util.Identity;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,6 +31,8 @@ public class OrderController {
 
     private final OrderService orderService;
     private final OrderSaveService orderSaveService;
+
+    private final Identity identity;
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
@@ -42,10 +48,21 @@ public class OrderController {
     public CustomResponse<OrderGetResponse> getOrderById(
             @PathVariable Long orderId
     ) {
-        final OrderDTO orderDTO = orderService.findOrderById(orderId);
-        final OrderGetResponse response = OrderMapper.toGetResponse(orderDTO);
 
-        return CustomResponse.ok(response);
+        CustomUserDetails customUserDetails = identity.getCustomerUserDetails();
+
+        final OrderDTO orderDTO = orderService.findOrderById(orderId);
+
+        if( (customUserDetails.getId().equals(orderDTO.getUser().getId()) &&
+                customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER")
+            ) || (customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")))
+        )){
+            final OrderGetResponse response = OrderMapper.toGetResponse(orderDTO);
+
+            return CustomResponse.ok(response);
+        }
+
+        throw new AccessDeniedException("You cannot access other customer order");
     }
 
     @GetMapping("/customer/{customerId}")
@@ -54,12 +71,22 @@ public class OrderController {
             @PathVariable Long customerId,
             @RequestBody PaginationRequest paginationRequest
     ) {
-        final Page<OrderDTO> pageOfOrderDTOs = orderService
-                .findAllOrdersByCustomerId(customerId, paginationRequest);
-        final CustomPageResponse<OrderGetByCustomerResponse> response = OrderMapper
-                .toGetByCustomerResponse(pageOfOrderDTOs);
 
-        return CustomResponse.ok(response);
+        CustomUserDetails customUserDetails = identity.getCustomerUserDetails();
+
+        if( (customUserDetails.getId().equals(customerId) &&
+           customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))
+            ) || (customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))
+        )){
+            final Page<OrderDTO> pageOfOrderDTOs = orderService
+                    .findAllOrdersByCustomerId(customerId, paginationRequest);
+            final CustomPageResponse<OrderGetByCustomerResponse> response = OrderMapper
+                    .toGetByCustomerResponse(pageOfOrderDTOs);
+
+            return CustomResponse.ok(response);
+        }
+
+        throw new AccessDeniedException("You cannot access other customer orders list");
     }
 
     @PostMapping("/between-dates")
