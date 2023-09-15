@@ -35,6 +35,7 @@ public class OrderItemServiceImpl implements OrderItemService {
                     .price(bookDTO.getPrice().multiply(BigDecimal.valueOf(orderDetailRequest.getAmount())))
                     .authorFullName(bookDTO.getAuthorFullName())
                     .id(bookDTO.getId())
+                    .version(bookDTO.getVersion())
                     .build();
 
             BookUpdateStockRequest bookUpdateStockRequest = BookUpdateStockRequest.builder()
