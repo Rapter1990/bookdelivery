@@ -19,8 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +43,11 @@ public class OrderSaveServiceImpl implements OrderSaveService {
 
         UserDTO userDTO = UserMapper.toDTO(user);
 
-        Set<OrderItemDTO> orderDetailDTOSet = new HashSet<>();
-        createOrderRequest.getOrderDetailSet().forEach(
-                orderItem -> orderDetailDTOSet.add(orderItemService.createOrderItem(orderItem))
-        );
+        Set<OrderItemDTO> orderDetailDTOSet = createOrderRequest
+                .getOrderDetailSet()
+                .stream()
+                .map(orderItemService::createOrderItem)
+                .collect(Collectors.toSet());
 
         OrderDTO orderDTO = OrderDTO.builder()
                 .user(userDTO)
