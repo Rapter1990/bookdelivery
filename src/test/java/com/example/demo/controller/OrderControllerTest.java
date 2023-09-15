@@ -232,6 +232,8 @@ class OrderControllerTest extends BaseControllerTest {
                 .withId(userId)
                 .build();
 
+        CustomUserDetails customUserDetails = new CustomUserDetails(mockUser);
+
         Book mockBook1 = new BookBuilder().withValidFields().build();
         Book mockBook2 = new BookBuilder().withValidFields().build();
 
@@ -258,6 +260,7 @@ class OrderControllerTest extends BaseControllerTest {
         PaginationRequest paginationRequest = new PaginationRequest(0, 10);
 
         // when
+        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
         when(orderService.findAllOrdersByCustomerId(userId, paginationRequest)).thenReturn(mockPageOfOrderDTOs);
 
         // then
@@ -288,6 +291,8 @@ class OrderControllerTest extends BaseControllerTest {
                 .withId(userId)
                 .build();
 
+        CustomUserDetails customUserDetails = new CustomUserDetails(mockUser);
+
         Book mockBook1 = new BookBuilder().withValidFields().build();
         Book mockBook2 = new BookBuilder().withValidFields().build();
 
@@ -314,6 +319,7 @@ class OrderControllerTest extends BaseControllerTest {
         PaginationRequest paginationRequest = new PaginationRequest(0, 10);
 
         // when
+        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
         when(orderService.findAllOrdersByCustomerId(userId, paginationRequest)).thenReturn(mockPageOfOrderDTOs);
 
         // then

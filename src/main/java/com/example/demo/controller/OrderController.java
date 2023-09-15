@@ -77,10 +77,20 @@ public class OrderController {
         CustomUserDetails customUserDetails = identity.getCustomerUserDetails();
 
         final Page<OrderDTO> pageOfOrderDTOs = orderService
-                    .findAllOrdersByCustomerId(customerId, paginationRequest);
-        final CustomPageResponse<OrderGetByCustomerResponse> response = OrderMapper
+                .findAllOrdersByCustomerId(customerId, paginationRequest);
+
+        if( (customUserDetails.getId().equals(customerId) &&
+                customUserDetails.getUser().getRole().equals(Role.ROLE_CUSTOMER))
+                ||  customUserDetails.getUser().getRole().equals(Role.ROLE_ADMIN)
+        )
+        {
+            final CustomPageResponse<OrderGetByCustomerResponse> response = OrderMapper
                     .toGetByCustomerResponse(pageOfOrderDTOs);
-        return CustomResponse.ok(response);
+            return CustomResponse.ok(response);
+        }
+
+        throw new AccessDeniedException("You cannot access customer orders by customer Id");
+
     }
 
     @PostMapping("/between-dates")
