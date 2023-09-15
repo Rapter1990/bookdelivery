@@ -10,6 +10,7 @@ import com.example.demo.model.mapper.order.OrderMapper;
 import com.example.demo.model.mapper.user.UserMapper;
 import com.example.demo.payload.request.order.CreateOrderRequest;
 import com.example.demo.repository.OrderRepository;
+import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.OrderItemService;
 import com.example.demo.service.OrderSaveService;
 import com.example.demo.service.UserService;
@@ -38,8 +39,10 @@ public class OrderSaveServiceImpl implements OrderSaveService {
     @Override
     public OrderDTO createOrder(CreateOrderRequest createOrderRequest) {
 
-        User user = userService.findByEmail(identity.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(String.valueOf(identity.getId())));
+        CustomUserDetails customUserDetails = identity.getCustomUserDetails();
+
+        User user = userService.findByEmail(customUserDetails.getEmail())
+                .orElseThrow(() -> new UserNotFoundException(String.valueOf(customUserDetails.getId())));
 
         UserDTO userDTO = UserMapper.toDTO(user);
 

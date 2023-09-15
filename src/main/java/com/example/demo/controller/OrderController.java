@@ -36,7 +36,7 @@ public class OrderController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
-    public CustomResponse<OrderCreatedResponse> createOrder(CreateOrderRequest createOrderRequest) {
+    public CustomResponse<OrderCreatedResponse> createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
 
 
 
