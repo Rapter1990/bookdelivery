@@ -3,43 +3,44 @@ package com.example.demo.controller;
 import com.example.demo.base.BaseControllerTest;
 import com.example.demo.builder.BookBuilder;
 import com.example.demo.builder.UserBuilder;
-import com.example.demo.dto.BookDTO;
 import com.example.demo.dto.OrderDTO;
-import com.example.demo.dto.OrderItemDTO;
-import com.example.demo.dto.UserDTO;
 import com.example.demo.model.Book;
 import com.example.demo.model.Order;
 import com.example.demo.model.OrderItem;
 import com.example.demo.model.User;
-import com.example.demo.model.mapper.book.BookMapper;
+import com.example.demo.model.mapper.order.OrderItemMapper;
 import com.example.demo.model.mapper.order.OrderMapper;
 import com.example.demo.model.mapper.user.UserMapper;
+import com.example.demo.payload.request.order.CreateOrderRequest;
+import com.example.demo.payload.request.order.OrderItemRequest;
 import com.example.demo.payload.request.pagination.DateIntervalRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.CustomResponse;
+import com.example.demo.payload.response.order.OrderCreatedResponse;
 import com.example.demo.payload.response.order.OrderGetBetweenDatesResponse;
 import com.example.demo.payload.response.order.OrderGetByCustomerResponse;
 import com.example.demo.payload.response.order.OrderGetResponse;
 import com.example.demo.service.OrderSaveService;
 import com.example.demo.service.OrderService;
-import com.example.demo.util.RandomUtil;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class OrderControllerTest extends BaseControllerTest {
 
@@ -50,7 +51,62 @@ class OrderControllerTest extends BaseControllerTest {
     private OrderSaveService orderSaveService;
 
     @Test
-    void createOrder() {
+    void givenCreateOrderRequest_whenCustomerRole_returnOrderCreatedResponse() throws Exception {
+
+        // Given
+        final Long orderId = 1L;
+
+        final User user = new UserBuilder().customer().build();
+
+        final Book book1 = new BookBuilder().withValidFields().build();
+        final Book book2 = new BookBuilder().withValidFields().build();
+
+        final OrderItemRequest orderItemRequest1 = OrderItemRequest.builder()
+                .amount(5)
+                .bookId(book1.getId())
+                .build();
+        final OrderItemRequest orderItemRequest2 = OrderItemRequest.builder()
+                .amount(10)
+                .bookId(book2.getId())
+                .build();
+
+        final CreateOrderRequest createOrderRequest = CreateOrderRequest.builder()
+                .orderDetailSet(new LinkedHashSet<>(List.of(orderItemRequest1, orderItemRequest2)))
+                .build();
+
+        final OrderItem orderItem1 = OrderItem.builder()
+                .book(book1)
+                .build();
+        final OrderItem orderItem2 = OrderItem.builder()
+                .book(book2)
+                .build();
+
+        final OrderDTO orderDTO = OrderDTO.builder()
+                .id(orderId)
+                .orderItems(OrderItemMapper.toDTO(new LinkedHashSet<>(List.of(orderItem1, orderItem2))))
+                .user(UserMapper.toDTO(user))
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        final OrderCreatedResponse orderCreatedResponse = OrderMapper.toCreatedResponse(orderDTO);
+        final CustomResponse<OrderCreatedResponse> expectedCustomResponse = CustomResponse.ok(orderCreatedResponse);
+
+        // When
+        when(orderSaveService.createOrder(Mockito.any(CreateOrderRequest.class))).thenReturn(orderDTO);
+
+        mockMvc.perform(post("/api/v1/orders")
+                        .header(HttpHeaders.AUTHORIZATION, mockUserToken)
+                        .content(objectMapper.writeValueAsString(createOrderRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.id").value(orderId))
+                .andExpect(jsonPath("$.response.user.id").value(user.getId()))
+                .andExpect(jsonPath("$.response.orderItems[0].book.id").value(book1.getId()))
+                .andExpect(jsonPath("$.response.orderItems[1].book.id").value(book2.getId()))
+                .andExpect(jsonPath("$.response.createdAt").isNotEmpty())
+                .andExpect(jsonPath("$.isSuccess").value(expectedCustomResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(expectedCustomResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
     }
 
     @Test
@@ -77,7 +133,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(orderId)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
                 .user(mockUser)
                 .build();
 
@@ -106,7 +162,7 @@ class OrderControllerTest extends BaseControllerTest {
     @Test
     void givenOrderId_WhenCustomerRoleAndOrderFound_ReturnOrderGetResponse() throws Exception {
 
-// given
+        // given
         Long orderId = 1L;
         Long userId = 1L;
 
@@ -127,7 +183,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(1L)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
                 .user(mockUser)
                 .build();
 
@@ -177,7 +233,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(orderId)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
                 .user(mockUser)
                 .build();
 
@@ -233,7 +289,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(orderId)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
                 .user(mockUser)
                 .build();
 
@@ -307,7 +363,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(orderId)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1,mockOrderItem2)))
+                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
                 .user(mockUser)
                 .build();
 
