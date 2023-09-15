@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -50,7 +49,7 @@ public class OrderController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<OrderGetResponse> getOrderById(@PathVariable Long orderId) {
 
-        CustomUserDetails customUserDetails = identity.getCustomerUserDetails();
+        CustomUserDetails customUserDetails = identity.getCustomUserDetails();
 
         final OrderDTO orderDTO = orderService.findOrderById(orderId);
 
@@ -74,7 +73,7 @@ public class OrderController {
             @RequestBody PaginationRequest paginationRequest
     ) {
 
-        CustomUserDetails customUserDetails = identity.getCustomerUserDetails();
+        CustomUserDetails customUserDetails = identity.getCustomUserDetails();
 
         final Page<OrderDTO> pageOfOrderDTOs = orderService
                 .findAllOrdersByCustomerId(customerId, paginationRequest);

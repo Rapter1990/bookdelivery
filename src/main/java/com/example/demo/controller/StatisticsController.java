@@ -32,7 +32,7 @@ public class StatisticsController {
             @RequestBody PaginationRequest paginationRequest
     ) {
 
-        CustomUserDetails customUserDetails = identity.getCustomerUserDetails();
+        CustomUserDetails customUserDetails = identity.getCustomUserDetails();
 
         if( (customUserDetails.getId().equals(customerId) &&
                 customUserDetails.getUser().getRole().equals(Role.ROLE_CUSTOMER)

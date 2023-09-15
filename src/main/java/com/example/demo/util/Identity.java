@@ -42,7 +42,7 @@ public class Identity {
         return this.getJwt().getClaim(TokenClaims.USER_FULL_NAME.getValue());
     }
 
-    public CustomUserDetails getCustomerUserDetails() {
+    public CustomUserDetails getCustomUserDetails() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return (CustomUserDetails) userDetails;

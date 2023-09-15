@@ -12,7 +12,6 @@ import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.StatisticsService;
 import com.example.demo.util.Identity;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
@@ -26,7 +25,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -95,7 +93,7 @@ class StatisticsControllerTest extends BaseControllerTest {
         BigDecimal totalPrice = orderPage.stream()
                 .flatMap(order -> order.getOrderItems().stream())
                 .map(orderItem -> orderItem.getBook().getPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);;
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         OrderReportDTO expected = OrderReportDTO.builder()
                 .month(month)
@@ -106,7 +104,7 @@ class StatisticsControllerTest extends BaseControllerTest {
                 .build();
 
         // when
-        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
+        when(identity.getCustomUserDetails()).thenReturn(customUserDetails);
         when(statisticsService.getOrderStatisticsByCustomer(userId, paginationRequest)).thenReturn(expected);
 
         // then
@@ -174,7 +172,7 @@ class StatisticsControllerTest extends BaseControllerTest {
         BigDecimal totalPrice = orderPage.stream()
                 .flatMap(order -> order.getOrderItems().stream())
                 .map(orderItem -> orderItem.getBook().getPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);;
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         OrderReportDTO expected = OrderReportDTO.builder()
                 .month(month)
@@ -185,7 +183,7 @@ class StatisticsControllerTest extends BaseControllerTest {
                 .build();
 
         // when
-        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
+        when(identity.getCustomUserDetails()).thenReturn(customUserDetails);
         when(statisticsService.getOrderStatisticsByCustomer(userId, paginationRequest)).thenReturn(expected);
 
         // then
@@ -251,7 +249,7 @@ class StatisticsControllerTest extends BaseControllerTest {
         BigDecimal totalPrice = orderPage.stream()
                 .flatMap(order -> order.getOrderItems().stream())
                 .map(orderItem -> orderItem.getBook().getPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);;
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         OrderReportDTO expected = OrderReportDTO.builder()
                 .month(month)
