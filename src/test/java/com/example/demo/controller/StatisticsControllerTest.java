@@ -107,7 +107,7 @@ class StatisticsControllerTest extends BaseControllerTest {
         Page<OrderReportDTO> expectedPage = new PageImpl<>(reportDTOs, orderPage.getPageable(), orderPage.getTotalElements());
 
         // when
-        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
+        when(identity.getCustomUserDetails()).thenReturn(customUserDetails);
         when(statisticsService.getOrderStatisticsByCustomer(userId, paginationRequest)).thenReturn(expectedPage);
 
         // then
@@ -188,7 +188,7 @@ class StatisticsControllerTest extends BaseControllerTest {
         Page<OrderReportDTO> expectedPage = new PageImpl<>(reportDTOs, orderPage.getPageable(), orderPage.getTotalElements());
 
         // when
-        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
+        when(identity.getCustomUserDetails()).thenReturn(customUserDetails);
         when(statisticsService.getOrderStatisticsByCustomer(userId, paginationRequest)).thenReturn(expectedPage);
 
         // then
