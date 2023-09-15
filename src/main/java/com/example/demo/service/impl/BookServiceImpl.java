@@ -95,7 +95,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public boolean isStockAvailable(BookDTO bookDTO, int amount) {
-        if(bookDTO.getStock() < amount) {
+        if (bookDTO.getStock() < amount) {
             throw new NoAvailableStockException(bookDTO.getId());
         } else {
             return true;

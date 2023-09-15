@@ -43,9 +43,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 
         boolean stockAvailable = bookService.isStockAvailable(bookDTO, orderDetailRequest.getAmount());
 
-        if(stockAvailable){
+        if (stockAvailable) {
 
-            OrderItemDTO.OrderItemBook orderItemBook= OrderItemDTO.OrderItemBook.builder()
+            OrderItemDTO.OrderItemBook orderItemBook = OrderItemDTO.OrderItemBook.builder()
                     .isbn(bookDTO.getIsbn())
                     .price(bookDTO.getPrice().multiply(BigDecimal.valueOf(orderDetailRequest.getAmount())))
                     .authorFullName(bookDTO.getAuthorFullName())
