@@ -64,9 +64,9 @@ public class OrderMapper {
                 .id(orderDTO.getId())
                 .user(UserMapper.toUser(orderDTO.getUser()))
                 .orderItems(OrderItemMapper.toOrderItemSetList(orderDTO.getOrderItems()))
+                .createdAt(orderDTO.getCreatedAt())
                 .build();
 
-        // TODO : ADD createdAt to Order
     }
 
     public static OrderCreatedResponse toCreatedResponse(OrderDTO orderDTO) {
