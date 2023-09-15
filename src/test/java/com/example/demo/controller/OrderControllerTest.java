@@ -150,7 +150,7 @@ class OrderControllerTest extends BaseControllerTest {
         CustomResponse<OrderGetResponse> expectedCustomResponse = CustomResponse.ok(expectedResponse);
 
         // when
-        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
+        when(identity.getCustomUserDetails()).thenReturn(customUserDetails);
         when(orderService.findOrderById(orderId)).thenReturn(mockOrderDTO);
 
         // then
@@ -203,7 +203,7 @@ class OrderControllerTest extends BaseControllerTest {
         CustomResponse<OrderGetResponse> expectedCustomResponse = CustomResponse.ok(expectedResponse);
 
         // when
-        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
+        when(identity.getCustomUserDetails()).thenReturn(customUserDetails);
         when(orderService.findOrderById(orderId)).thenReturn(mockOrderDTO);
 
         // then
@@ -260,7 +260,7 @@ class OrderControllerTest extends BaseControllerTest {
         PaginationRequest paginationRequest = new PaginationRequest(0, 10);
 
         // when
-        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
+        when(identity.getCustomUserDetails()).thenReturn(customUserDetails);
         when(orderService.findAllOrdersByCustomerId(userId, paginationRequest)).thenReturn(mockPageOfOrderDTOs);
 
         // then
@@ -319,7 +319,7 @@ class OrderControllerTest extends BaseControllerTest {
         PaginationRequest paginationRequest = new PaginationRequest(0, 10);
 
         // when
-        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
+        when(identity.getCustomUserDetails()).thenReturn(customUserDetails);
         when(orderService.findAllOrdersByCustomerId(userId, paginationRequest)).thenReturn(mockPageOfOrderDTOs);
 
         // then
