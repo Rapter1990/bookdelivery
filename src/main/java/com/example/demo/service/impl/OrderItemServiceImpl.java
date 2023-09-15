@@ -20,24 +20,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     private final BookService bookService;
 
-    // Optimistic Lock @Retry or @Retryable
     @Retryable(retryFor = StockModifiedException.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Override
     public OrderItemDTO createOrderItem(OrderItemRequest orderDetailRequest) {
-
-        // create OrderItemDTO
-
-        // assign values from orderDetailRequest to OrderDTO
-
-        // get BookDTO from bookId of orderDetailRequest
-
-        // check if the stock of book is available
-
-        // calculate price (amount)
-
-        // update stock value of the book from BookService -> BookService
-
-        // return OrderItemDTO
 
         BookDTO bookDTO = bookService.getBookById(orderDetailRequest.getBookId());
 
@@ -63,7 +48,6 @@ public class OrderItemServiceImpl implements OrderItemService {
                     .build();
         }
 
-        // TODO: THROW EXCEPTION
-        return null;
+        throw new StockModifiedException();
     }
 }
