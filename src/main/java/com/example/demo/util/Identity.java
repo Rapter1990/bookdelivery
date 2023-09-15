@@ -2,10 +2,13 @@ package com.example.demo.util;
 
 import com.example.demo.model.enums.BeanScope;
 import com.example.demo.model.enums.TokenClaims;
+import com.example.demo.security.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
@@ -37,6 +40,12 @@ public class Identity {
 
     public String getFullName() {
         return this.getJwt().getClaim(TokenClaims.USER_FULL_NAME.getValue());
+    }
+
+    public CustomUserDetails getCustomerUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return (CustomUserDetails) userDetails;
     }
 
 }

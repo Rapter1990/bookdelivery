@@ -14,10 +14,8 @@ import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.OrderItemService;
 import com.example.demo.service.OrderSaveService;
 import com.example.demo.service.UserService;
+import com.example.demo.util.Identity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,13 +33,13 @@ public class OrderSaveServiceImpl implements OrderSaveService {
 
     private final OrderRepository orderRepository;
 
+    private final Identity identity;
+
     @Transactional
     @Override
     public OrderDTO createOrder(CreateOrderRequest createOrderRequest) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        CustomUserDetails customUserDetails = (CustomUserDetails) userDetails;
+        CustomUserDetails customUserDetails = identity.getCustomerUserDetails();
 
         User user = userService.findByEmail(customUserDetails.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(String.valueOf(customUserDetails.getId())));
@@ -49,7 +47,7 @@ public class OrderSaveServiceImpl implements OrderSaveService {
         UserDTO userDTO = UserMapper.toDTO(user);
 
         Set<OrderItemDTO> orderDetailDTOSet = new HashSet<>();
-        createOrderRequest.getOrderDetailSet().stream().forEach(
+        createOrderRequest.getOrderDetailSet().forEach(
                 orderItem -> orderDetailDTOSet.add(orderItemService.createOrderItem(orderItem))
         );
 
@@ -60,7 +58,6 @@ public class OrderSaveServiceImpl implements OrderSaveService {
                 .build();
 
         Order order = OrderMapper.toOrder(orderDTO);
-        order.setCreatedAt(LocalDateTime.now()); // TODO : ADD createdAt to Order
 
         Order orderCompleted = orderRepository.save(order);
 
