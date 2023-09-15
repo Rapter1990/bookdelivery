@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.OrderDTO;
+import com.example.demo.model.enums.Role;
 import com.example.demo.model.mapper.order.OrderMapper;
 import com.example.demo.payload.request.order.CreateOrderRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
@@ -38,6 +39,8 @@ public class OrderController {
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
     public CustomResponse<OrderCreatedResponse> createOrder(CreateOrderRequest createOrderRequest) {
 
+
+
         final OrderDTO orderDTO = orderSaveService.createOrder(createOrderRequest);
         final OrderCreatedResponse response = OrderMapper.toCreatedResponse(orderDTO);
         return CustomResponse.ok(response);
@@ -45,24 +48,23 @@ public class OrderController {
 
     @GetMapping("/{orderId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
-    public CustomResponse<OrderGetResponse> getOrderById(
-            @PathVariable Long orderId
-    ) {
+    public CustomResponse<OrderGetResponse> getOrderById(@PathVariable Long orderId) {
 
         CustomUserDetails customUserDetails = identity.getCustomerUserDetails();
 
         final OrderDTO orderDTO = orderService.findOrderById(orderId);
 
         if( (customUserDetails.getId().equals(orderDTO.getUser().getId()) &&
-                customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER")
-            ) || (customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN")))
-        )){
+             customUserDetails.getUser().getRole().equals(Role.ROLE_CUSTOMER))
+            ||  customUserDetails.getUser().getRole().equals(Role.ROLE_ADMIN)
+          )
+        {
             final OrderGetResponse response = OrderMapper.toGetResponse(orderDTO);
-
             return CustomResponse.ok(response);
         }
 
-        throw new AccessDeniedException("You cannot access other customer order");
+        throw new AccessDeniedException("You cannot access customer order by Id");
+
     }
 
     @GetMapping("/customer/{customerId}")
@@ -74,26 +76,17 @@ public class OrderController {
 
         CustomUserDetails customUserDetails = identity.getCustomerUserDetails();
 
-        if( (customUserDetails.getId().equals(customerId) &&
-           customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_CUSTOMER"))
-            ) || (customUserDetails.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))
-        )){
-            final Page<OrderDTO> pageOfOrderDTOs = orderService
+        final Page<OrderDTO> pageOfOrderDTOs = orderService
                     .findAllOrdersByCustomerId(customerId, paginationRequest);
-            final CustomPageResponse<OrderGetByCustomerResponse> response = OrderMapper
+        final CustomPageResponse<OrderGetByCustomerResponse> response = OrderMapper
                     .toGetByCustomerResponse(pageOfOrderDTOs);
-
-            return CustomResponse.ok(response);
-        }
-
-        throw new AccessDeniedException("You cannot access other customer orders list");
+        return CustomResponse.ok(response);
     }
 
     @PostMapping("/between-dates")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CustomResponse<CustomPageResponse<OrderGetBetweenDatesResponse>> getOrdersBetweenTwoDates(
-            @RequestBody
-            PaginatedFindAllRequest paginatedFindAllRequest
+            @RequestBody PaginatedFindAllRequest paginatedFindAllRequest
     ) {
         final Page<OrderDTO> pageOfOrderDTOs = orderService
                 .findAllOrdersBetweenTwoDatesAndPagination(paginatedFindAllRequest);

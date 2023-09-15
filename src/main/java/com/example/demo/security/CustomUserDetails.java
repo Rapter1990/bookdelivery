@@ -61,4 +61,8 @@ public class CustomUserDetails implements UserDetails {
     public Map<String, Object> getClaims() {
         return user.getClaims();
     }
+
+    public User getUser(){
+        return user;
+    }
 }

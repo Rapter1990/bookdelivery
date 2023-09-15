@@ -22,8 +22,10 @@ import com.example.demo.payload.response.order.OrderCreatedResponse;
 import com.example.demo.payload.response.order.OrderGetBetweenDatesResponse;
 import com.example.demo.payload.response.order.OrderGetByCustomerResponse;
 import com.example.demo.payload.response.order.OrderGetResponse;
+import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.OrderSaveService;
 import com.example.demo.service.OrderService;
+import com.example.demo.util.Identity;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -49,6 +51,9 @@ class OrderControllerTest extends BaseControllerTest {
 
     @MockBean
     private OrderSaveService orderSaveService;
+
+    @MockBean
+    private Identity identity;
 
     @Test
     void givenCreateOrderRequest_whenCustomerRole_returnOrderCreatedResponse() throws Exception {
@@ -117,9 +122,11 @@ class OrderControllerTest extends BaseControllerTest {
         Long userId = 1L;
 
         User mockUser = new UserBuilder()
-                .customer()
+                .admin()
                 .withId(userId)
                 .build();
+
+        CustomUserDetails customUserDetails = new CustomUserDetails(mockUser);
 
         Book mockBook1 = new BookBuilder().withValidFields().build();
         Book mockBook2 = new BookBuilder().withValidFields().build();
@@ -143,6 +150,7 @@ class OrderControllerTest extends BaseControllerTest {
         CustomResponse<OrderGetResponse> expectedCustomResponse = CustomResponse.ok(expectedResponse);
 
         // when
+        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
         when(orderService.findOrderById(orderId)).thenReturn(mockOrderDTO);
 
         // then
@@ -171,6 +179,8 @@ class OrderControllerTest extends BaseControllerTest {
                 .withId(userId)
                 .build();
 
+        CustomUserDetails customUserDetails = new CustomUserDetails(mockUser);
+
         Book mockBook1 = new BookBuilder().withValidFields().build();
         Book mockBook2 = new BookBuilder().withValidFields().build();
 
@@ -193,11 +203,12 @@ class OrderControllerTest extends BaseControllerTest {
         CustomResponse<OrderGetResponse> expectedCustomResponse = CustomResponse.ok(expectedResponse);
 
         // when
+        when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
         when(orderService.findOrderById(orderId)).thenReturn(mockOrderDTO);
 
         // then
         mockMvc.perform(get("/api/v1/orders/{orderId}", orderId)
-                        .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
+                        .header(HttpHeaders.AUTHORIZATION, mockUserToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.id").value(orderId))
@@ -217,7 +228,7 @@ class OrderControllerTest extends BaseControllerTest {
         Long userId = 1L;
 
         User mockUser = new UserBuilder()
-                .customer()
+                .admin()
                 .withId(userId)
                 .build();
 
