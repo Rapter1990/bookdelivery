@@ -19,9 +19,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,47 +77,59 @@ class StatisticsServiceImplTest extends BaseServiceTest {
 
         Page<Order> orderPage = new PageImpl<>(Collections.singletonList(mockOrder));
 
-        Integer year = orderPage.getContent().get(0).getCreatedAt().getYear();
-        String month = orderPage.getContent().get(0).getCreatedAt().getMonth().toString();
-        Integer totalOrderCount = orderPage.getSize();
+        Map<String, Integer> totalOrderCountByMonth = orderPage.stream()
+                .collect(Collectors.groupingBy(
+                        order -> order.getCreatedAt().getYear() + "-" + order.getCreatedAt().getMonth(),
+                        Collectors.mapping(Order::getId, Collectors.collectingAndThen(Collectors.toSet(), Set::size))
+                ));
 
-        Integer totalBookCount = orderPage.stream()
-                .map(order -> order.getOrderItems().size())
-                .reduce(0, Integer::sum);
+        List<OrderReportDTO> reportDTOs = orderPage.get().map(order -> {
+            String month = order.getCreatedAt().getMonth().toString();
+            Integer year = order.getCreatedAt().getYear();
 
-        BigDecimal totalPrice = orderPage.stream()
-                .flatMap(order -> order.getOrderItems().stream())
-                .map(orderItem -> orderItem.getBook().getPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);;
+            String monthYearKey = year + "-" + month;
+            Integer totalOrderCount = totalOrderCountByMonth.getOrDefault(monthYearKey, 0);
 
-        OrderReportDTO expected = OrderReportDTO.builder()
-                .month(month)
-                .year(year)
-                .totalBookCount(totalBookCount)
-                .totalPrice(totalPrice)
-                .totalOrderCount(totalOrderCount)
-                .build();
+            Integer totalBookCount = order.getOrderItems().size();
+            BigDecimal totalPrice = order.getOrderItems().stream()
+                    .map(orderItem -> orderItem.getBook().getPrice())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            return new OrderReportDTO(month, year, totalOrderCount, totalBookCount, totalPrice);
+        }).toList();
+
+        Page<OrderReportDTO> expectedPage = new PageImpl<>(reportDTOs, orderPage.getPageable(), orderPage.getTotalElements());
 
         // when
         when(orderRepository.findAllByUserId(anyLong(), any(Pageable.class))).thenReturn(orderPage);
-        when(orderRepository.countDistinctOrdersByUserId(mockUser.getId())).thenReturn(totalOrderCount);
 
         // then
-        OrderReportDTO result = statisticsService.getOrderStatisticsByCustomer(mockUser.getId(), paginationRequest);
+        Page<OrderReportDTO> result = statisticsService.getOrderStatisticsByCustomer(mockUser.getId(), paginationRequest);
 
-        assertEquals(expected.getYear(), result.getYear());
-        assertEquals(expected.getMonth(), result.getMonth());
-        assertEquals(expected.getTotalBookCount(), result.getTotalBookCount());
-        assertEquals(expected.getTotalOrderCount(), result.getTotalOrderCount());
-        assertEquals(expected.getTotalPrice(), result.getTotalPrice());
+        assertEquals(expectedPage.getTotalElements(), result.getTotalElements());
+        assertEquals(expectedPage.getTotalPages(), result.getTotalPages());
+        assertEquals(expectedPage.getSize(), result.getSize());
+        assertEquals(expectedPage.getNumber(), result.getNumber());
+
+        List<OrderReportDTO> expectedContent = expectedPage.getContent();
+        List<OrderReportDTO> resultContent = result.getContent();
+        assertEquals(expectedContent.size(), resultContent.size());
+        for (int i = 0; i < expectedContent.size(); i++) {
+            OrderReportDTO expectedDTO = expectedContent.get(i);
+            OrderReportDTO resultDTO = resultContent.get(i);
+            assertEquals(expectedDTO.getYear(), resultDTO.getYear());
+            assertEquals(expectedDTO.getMonth(), resultDTO.getMonth());
+            assertEquals(expectedDTO.getTotalBookCount(), resultDTO.getTotalBookCount());
+            assertEquals(expectedDTO.getTotalOrderCount(), resultDTO.getTotalOrderCount());
+            assertEquals(expectedDTO.getTotalPrice(), resultDTO.getTotalPrice());
+        }
 
         verify(orderRepository, times(1)).findAllByUserId(anyLong(), any(Pageable.class));
-        verify(orderRepository, times(1)).countDistinctOrdersByUserId(anyLong());
 
     }
 
     @Test
-    void givenPaginationRequest_When_ReturnOrderReportDTO() {
+    void givenPaginationRequest_WhenAdminRole_ReturnOrderReportDTO() {
 
         // given
         Long orderId = 1L;
@@ -159,42 +170,54 @@ class StatisticsServiceImplTest extends BaseServiceTest {
 
         Page<Order> orderPage = new PageImpl<>(Collections.singletonList(mockOrder));
 
-        Integer year = orderPage.getContent().get(0).getCreatedAt().getYear();
-        String month = orderPage.getContent().get(0).getCreatedAt().getMonth().toString();
-        Integer totalOrderCount = orderPage.getSize();
+        Map<String, Integer> totalOrderCountByMonth = orderPage.stream()
+                .collect(Collectors.groupingBy(
+                        order -> order.getCreatedAt().getYear() + "-" + order.getCreatedAt().getMonth(),
+                        Collectors.mapping(Order::getId, Collectors.collectingAndThen(Collectors.toSet(), Set::size))
+                ));
 
-        Integer totalBookCount = orderPage.stream()
-                .map(order -> order.getOrderItems().size())
-                .reduce(0, Integer::sum);
+        List<OrderReportDTO> reportDTOs = orderPage.get().map(order -> {
+            String month = order.getCreatedAt().getMonth().toString();
+            Integer year = order.getCreatedAt().getYear();
 
-        BigDecimal totalPrice = orderPage.stream()
-                .flatMap(order -> order.getOrderItems().stream())
-                .map(orderItem -> orderItem.getBook().getPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);;
+            String monthYearKey = year + "-" + month;
+            Integer totalOrderCount = totalOrderCountByMonth.getOrDefault(monthYearKey, 0);
 
-        OrderReportDTO expected = OrderReportDTO.builder()
-                .month(month)
-                .year(year)
-                .totalBookCount(totalBookCount)
-                .totalPrice(totalPrice)
-                .totalOrderCount(totalOrderCount)
-                .build();
+            Integer totalBookCount = order.getOrderItems().size();
+            BigDecimal totalPrice = order.getOrderItems().stream()
+                    .map(orderItem -> orderItem.getBook().getPrice())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            return new OrderReportDTO(month, year, totalOrderCount, totalBookCount, totalPrice);
+        }).toList();
+
+        Page<OrderReportDTO> expectedPage = new PageImpl<>(reportDTOs, orderPage.getPageable(), orderPage.getTotalElements());
 
         // when
         when(orderRepository.findAll(any(Pageable.class))).thenReturn(orderPage);
-        when(orderRepository.countDistinctOrders()).thenReturn(totalOrderCount);
 
         // then
-        OrderReportDTO result = statisticsService.getOrderStatistics(paginationRequest);
+        Page<OrderReportDTO> result = statisticsService.getOrderStatistics(paginationRequest);
 
-        assertEquals(expected.getYear(), result.getYear());
-        assertEquals(expected.getMonth(), result.getMonth());
-        assertEquals(expected.getTotalBookCount(), result.getTotalBookCount());
-        assertEquals(expected.getTotalOrderCount(), result.getTotalOrderCount());
-        assertEquals(expected.getTotalPrice(), result.getTotalPrice());
+        assertEquals(expectedPage.getTotalElements(), result.getTotalElements());
+        assertEquals(expectedPage.getTotalPages(), result.getTotalPages());
+        assertEquals(expectedPage.getSize(), result.getSize());
+        assertEquals(expectedPage.getNumber(), result.getNumber());
+
+        List<OrderReportDTO> expectedContent = expectedPage.getContent();
+        List<OrderReportDTO> resultContent = result.getContent();
+        assertEquals(expectedContent.size(), resultContent.size());
+        for (int i = 0; i < expectedContent.size(); i++) {
+            OrderReportDTO expectedDTO = expectedContent.get(i);
+            OrderReportDTO resultDTO = resultContent.get(i);
+            assertEquals(expectedDTO.getYear(), resultDTO.getYear());
+            assertEquals(expectedDTO.getMonth(), resultDTO.getMonth());
+            assertEquals(expectedDTO.getTotalBookCount(), resultDTO.getTotalBookCount());
+            assertEquals(expectedDTO.getTotalOrderCount(), resultDTO.getTotalOrderCount());
+            assertEquals(expectedDTO.getTotalPrice(), resultDTO.getTotalPrice());
+        }
 
         verify(orderRepository, times(1)).findAll(any(Pageable.class));
-        verify(orderRepository, times(1)).countDistinctOrders();
 
     }
 }

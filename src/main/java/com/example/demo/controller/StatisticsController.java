@@ -4,6 +4,7 @@ import com.example.demo.dto.OrderReportDTO;
 import com.example.demo.model.enums.Role;
 import com.example.demo.model.mapper.order.OrderReportMapper;
 import com.example.demo.payload.request.pagination.PaginationRequest;
+import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.order.OrderReportResponse;
 import com.example.demo.security.CustomUserDetails;
@@ -11,6 +12,7 @@ import com.example.demo.service.StatisticsService;
 import com.example.demo.util.Identity;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +29,7 @@ public class StatisticsController {
 
     @GetMapping("/{customerId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
-    public CustomResponse<OrderReportResponse> getOrderStatisticsByCustomer(
+    public CustomResponse<CustomPageResponse<OrderReportResponse>> getOrderStatisticsByCustomer(
             @PathVariable Long customerId,
             @RequestBody PaginationRequest paginationRequest
     ) {
@@ -38,8 +40,8 @@ public class StatisticsController {
                 customUserDetails.getUser().getRole().equals(Role.ROLE_CUSTOMER)
                 ) || customUserDetails.getUser().getRole().equals(Role.ROLE_ADMIN)
         ){
-            OrderReportDTO orderReportDtosByCustomer = statisticsService.getOrderStatisticsByCustomer(customerId,paginationRequest);
-            OrderReportResponse orderReportResponse = OrderReportMapper.toOrderReportResponse(orderReportDtosByCustomer);
+            Page<OrderReportDTO> orderReportDtosByCustomer = statisticsService.getOrderStatisticsByCustomer(customerId,paginationRequest);
+            CustomPageResponse<OrderReportResponse> orderReportResponse = OrderReportMapper.toOrderReportResponseList(orderReportDtosByCustomer);
             return CustomResponse.ok(orderReportResponse);
         }
 
@@ -48,10 +50,10 @@ public class StatisticsController {
 
     @GetMapping("/allstatistics")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public CustomResponse<OrderReportResponse> getOrderStatistics(@RequestBody PaginationRequest paginationRequest) {
+    public CustomResponse<CustomPageResponse<OrderReportResponse>> getOrderStatistics(@RequestBody PaginationRequest paginationRequest) {
 
-        OrderReportDTO orderReportAllDtos = statisticsService.getOrderStatistics(paginationRequest);
-        OrderReportResponse orderReportResponse = OrderReportMapper.toOrderReportResponse(orderReportAllDtos);
+        Page<OrderReportDTO> orderReportAllDtos = statisticsService.getOrderStatistics(paginationRequest);
+        CustomPageResponse<OrderReportResponse> orderReportResponse = OrderReportMapper.toOrderReportResponseList(orderReportAllDtos);
         return CustomResponse.ok(orderReportResponse);
 
     }

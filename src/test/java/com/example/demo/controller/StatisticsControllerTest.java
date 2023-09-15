@@ -22,9 +22,8 @@ import org.springframework.http.MediaType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -84,30 +83,32 @@ class StatisticsControllerTest extends BaseControllerTest {
 
         Page<Order> orderPage = new PageImpl<>(Collections.singletonList(mockOrder));
 
-        Integer year = orderPage.getContent().get(0).getCreatedAt().getYear();
-        String month = orderPage.getContent().get(0).getCreatedAt().getMonth().toString();
-        Integer totalOrderCount = orderPage.getSize();
+        Map<String, Integer> totalOrderCountByMonth = orderPage.stream()
+                .collect(Collectors.groupingBy(
+                        order -> order.getCreatedAt().getYear() + "-" + order.getCreatedAt().getMonth(),
+                        Collectors.mapping(Order::getId, Collectors.collectingAndThen(Collectors.toSet(), Set::size))
+                ));
 
-        Integer totalBookCount = orderPage.stream()
-                .map(order -> order.getOrderItems().size())
-                .reduce(0, Integer::sum);
+        List<OrderReportDTO> reportDTOs = orderPage.get().map(order -> {
+            String month = order.getCreatedAt().getMonth().toString();
+            Integer year = order.getCreatedAt().getYear();
 
-        BigDecimal totalPrice = orderPage.stream()
-                .flatMap(order -> order.getOrderItems().stream())
-                .map(orderItem -> orderItem.getBook().getPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);;
+            String monthYearKey = year + "-" + month;
+            Integer totalOrderCount = totalOrderCountByMonth.getOrDefault(monthYearKey, 0);
 
-        OrderReportDTO expected = OrderReportDTO.builder()
-                .month(month)
-                .year(year)
-                .totalBookCount(totalBookCount)
-                .totalPrice(totalPrice)
-                .totalOrderCount(totalOrderCount)
-                .build();
+            Integer totalBookCount = order.getOrderItems().size();
+            BigDecimal totalPrice = order.getOrderItems().stream()
+                    .map(orderItem -> orderItem.getBook().getPrice())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            return new OrderReportDTO(month, year, totalOrderCount, totalBookCount, totalPrice);
+        }).toList();
+
+        Page<OrderReportDTO> expectedPage = new PageImpl<>(reportDTOs, orderPage.getPageable(), orderPage.getTotalElements());
 
         // when
         when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
-        when(statisticsService.getOrderStatisticsByCustomer(userId, paginationRequest)).thenReturn(expected);
+        when(statisticsService.getOrderStatisticsByCustomer(userId, paginationRequest)).thenReturn(expectedPage);
 
         // then
         mockMvc.perform(get("/api/v1/statistics/{customerId}", userId)
@@ -163,30 +164,32 @@ class StatisticsControllerTest extends BaseControllerTest {
 
         Page<Order> orderPage = new PageImpl<>(Collections.singletonList(mockOrder));
 
-        Integer year = orderPage.getContent().get(0).getCreatedAt().getYear();
-        String month = orderPage.getContent().get(0).getCreatedAt().getMonth().toString();
-        Integer totalOrderCount = orderPage.getSize();
+        Map<String, Integer> totalOrderCountByMonth = orderPage.stream()
+                .collect(Collectors.groupingBy(
+                        order -> order.getCreatedAt().getYear() + "-" + order.getCreatedAt().getMonth(),
+                        Collectors.mapping(Order::getId, Collectors.collectingAndThen(Collectors.toSet(), Set::size))
+                ));
 
-        Integer totalBookCount = orderPage.stream()
-                .map(order -> order.getOrderItems().size())
-                .reduce(0, Integer::sum);
+        List<OrderReportDTO> reportDTOs = orderPage.get().map(order -> {
+            String month = order.getCreatedAt().getMonth().toString();
+            Integer year = order.getCreatedAt().getYear();
 
-        BigDecimal totalPrice = orderPage.stream()
-                .flatMap(order -> order.getOrderItems().stream())
-                .map(orderItem -> orderItem.getBook().getPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);;
+            String monthYearKey = year + "-" + month;
+            Integer totalOrderCount = totalOrderCountByMonth.getOrDefault(monthYearKey, 0);
 
-        OrderReportDTO expected = OrderReportDTO.builder()
-                .month(month)
-                .year(year)
-                .totalBookCount(totalBookCount)
-                .totalPrice(totalPrice)
-                .totalOrderCount(totalOrderCount)
-                .build();
+            Integer totalBookCount = order.getOrderItems().size();
+            BigDecimal totalPrice = order.getOrderItems().stream()
+                    .map(orderItem -> orderItem.getBook().getPrice())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            return new OrderReportDTO(month, year, totalOrderCount, totalBookCount, totalPrice);
+        }).toList();
+
+        Page<OrderReportDTO> expectedPage = new PageImpl<>(reportDTOs, orderPage.getPageable(), orderPage.getTotalElements());
 
         // when
         when(identity.getCustomerUserDetails()).thenReturn(customUserDetails);
-        when(statisticsService.getOrderStatisticsByCustomer(userId, paginationRequest)).thenReturn(expected);
+        when(statisticsService.getOrderStatisticsByCustomer(userId, paginationRequest)).thenReturn(expectedPage);
 
         // then
         mockMvc.perform(get("/api/v1/statistics/{customerId}", userId)
@@ -240,29 +243,31 @@ class StatisticsControllerTest extends BaseControllerTest {
 
         Page<Order> orderPage = new PageImpl<>(Collections.singletonList(mockOrder));
 
-        Integer year = orderPage.getContent().get(0).getCreatedAt().getYear();
-        String month = orderPage.getContent().get(0).getCreatedAt().getMonth().toString();
-        Integer totalOrderCount = orderPage.getSize();
+        Map<String, Integer> totalOrderCountByMonth = orderPage.stream()
+                .collect(Collectors.groupingBy(
+                        order -> order.getCreatedAt().getYear() + "-" + order.getCreatedAt().getMonth(),
+                        Collectors.mapping(Order::getId, Collectors.collectingAndThen(Collectors.toSet(), Set::size))
+                ));
 
-        Integer totalBookCount = orderPage.stream()
-                .map(order -> order.getOrderItems().size())
-                .reduce(0, Integer::sum);
+        List<OrderReportDTO> reportDTOs = orderPage.get().map(order -> {
+            String month = order.getCreatedAt().getMonth().toString();
+            Integer year = order.getCreatedAt().getYear();
 
-        BigDecimal totalPrice = orderPage.stream()
-                .flatMap(order -> order.getOrderItems().stream())
-                .map(orderItem -> orderItem.getBook().getPrice())
-                .reduce(BigDecimal.ZERO, BigDecimal::add);;
+            String monthYearKey = year + "-" + month;
+            Integer totalOrderCount = totalOrderCountByMonth.getOrDefault(monthYearKey, 0);
 
-        OrderReportDTO expected = OrderReportDTO.builder()
-                .month(month)
-                .year(year)
-                .totalBookCount(totalBookCount)
-                .totalPrice(totalPrice)
-                .totalOrderCount(totalOrderCount)
-                .build();
+            Integer totalBookCount = order.getOrderItems().size();
+            BigDecimal totalPrice = order.getOrderItems().stream()
+                    .map(orderItem -> orderItem.getBook().getPrice())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            return new OrderReportDTO(month, year, totalOrderCount, totalBookCount, totalPrice);
+        }).toList();
+
+        Page<OrderReportDTO> expectedPage = new PageImpl<>(reportDTOs, orderPage.getPageable(), orderPage.getTotalElements());
 
         // when
-        when(statisticsService.getOrderStatistics(paginationRequest)).thenReturn(expected);
+        when(statisticsService.getOrderStatistics(paginationRequest)).thenReturn(expectedPage);
 
         // then
         mockMvc.perform(get("/api/v1/statistics/allstatistics")

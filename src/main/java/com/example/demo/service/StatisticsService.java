@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 
 public interface StatisticsService {
 
-    OrderReportDTO getOrderStatisticsByCustomer(Long customerId, PaginationRequest paginationRequest);
-    OrderReportDTO getOrderStatistics(PaginationRequest paginationRequest);
+    Page<OrderReportDTO> getOrderStatisticsByCustomer(Long customerId, PaginationRequest paginationRequest);
+    Page<OrderReportDTO> getOrderStatistics(PaginationRequest paginationRequest);
 
 }
