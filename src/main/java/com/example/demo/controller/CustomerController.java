@@ -6,6 +6,7 @@ import com.example.demo.payload.request.customer.CustomerCreateRequest;
 import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.customer.CustomerCreatedResponse;
 import com.example.demo.service.CustomerService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class CustomerController {
 
     private final CustomerService customerService;

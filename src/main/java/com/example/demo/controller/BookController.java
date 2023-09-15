@@ -13,6 +13,7 @@ import com.example.demo.payload.response.book.BookCreatedResponse;
 import com.example.demo.payload.response.book.BookGetResponse;
 import com.example.demo.payload.response.book.BookUpdatedResponse;
 import com.example.demo.service.BookService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class BookController {
 
     private final BookService bookService;
