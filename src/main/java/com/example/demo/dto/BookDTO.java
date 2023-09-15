@@ -17,4 +17,5 @@ public class BookDTO {
     private String authorFullName;
     private BigDecimal price;
     private Integer stock;
+    private Long version;
 }

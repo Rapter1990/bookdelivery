@@ -25,6 +25,7 @@ public class OrderItemDTO {
         private String name;
         private String authorFullName;
         private BigDecimal price;
+        private Long version;
     }
 
 }
