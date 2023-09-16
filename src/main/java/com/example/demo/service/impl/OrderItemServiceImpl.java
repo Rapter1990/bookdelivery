@@ -25,7 +25,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     private final BookService bookService;
 
-    @Retryable(retryFor = StockModifiedException.class, maxAttempts = 2, backoff = @Backoff(delay = 100))
     @Override
     public OrderItemDTO createOrderItem(OrderItemRequest orderDetailRequest) {
 
