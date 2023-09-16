@@ -2,13 +2,11 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.dto.OrderItemDTO;
-import com.example.demo.dto.UserDTO;
 import com.example.demo.exception.book.UserNotFoundException;
 import com.example.demo.model.Order;
 import com.example.demo.model.User;
 import com.example.demo.model.mapper.order.OrderItemMapper;
 import com.example.demo.model.mapper.order.OrderMapper;
-import com.example.demo.model.mapper.user.UserMapper;
 import com.example.demo.payload.request.order.CreateOrderRequest;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.security.CustomUserDetails;
@@ -21,8 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

@@ -21,6 +21,6 @@ public class OrderItem extends BaseEntity {
     private Book book;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "orderId",referencedColumnName = "id")
+    @JoinColumn(name = "orderId", referencedColumnName = "id")
     private Order order;
 }

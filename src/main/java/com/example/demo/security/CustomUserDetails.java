@@ -62,7 +62,7 @@ public class CustomUserDetails implements UserDetails {
         return user.getClaims();
     }
 
-    public User getUser(){
+    public User getUser() {
         return user;
     }
 }

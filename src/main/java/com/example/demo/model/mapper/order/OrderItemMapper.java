@@ -7,8 +7,6 @@ import lombok.experimental.UtilityClass;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @UtilityClass
 public class OrderItemMapper {

@@ -36,11 +36,11 @@ public class StatisticsController {
 
         CustomUserDetails customUserDetails = identity.getCustomUserDetails();
 
-        if( (customUserDetails.getId().equals(customerId) &&
+        if ((customUserDetails.getId().equals(customerId) &&
                 customUserDetails.getUser().getRole().equals(Role.ROLE_CUSTOMER)
-                ) || customUserDetails.getUser().getRole().equals(Role.ROLE_ADMIN)
-        ){
-            Page<OrderReportDTO> orderReportDtosByCustomer = statisticsService.getOrderStatisticsByCustomer(customerId,paginationRequest);
+        ) || customUserDetails.getUser().getRole().equals(Role.ROLE_ADMIN)
+        ) {
+            Page<OrderReportDTO> orderReportDtosByCustomer = statisticsService.getOrderStatisticsByCustomer(customerId, paginationRequest);
             CustomPageResponse<OrderReportResponse> orderReportResponse = OrderReportMapper.toOrderReportResponseList(orderReportDtosByCustomer);
             return CustomResponse.ok(orderReportResponse);
         }
