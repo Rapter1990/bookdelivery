@@ -77,26 +77,34 @@ class StatisticsServiceImplTest extends BaseServiceTest {
 
         Page<Order> orderPage = new PageImpl<>(Collections.singletonList(mockOrder));
 
-        Map<String, Integer> totalOrderCountByMonth = orderPage.stream()
+        Map<String, List<Order>> ordersByMonthYear = orderPage.stream()
                 .collect(Collectors.groupingBy(
-                        order -> order.getCreatedAt().getYear() + "-" + order.getCreatedAt().getMonth(),
-                        Collectors.mapping(Order::getId, Collectors.collectingAndThen(Collectors.toSet(), Set::size))
+                        order -> order.getCreatedAt().getYear() + "-" + order.getCreatedAt().getMonth()
                 ));
 
-        List<OrderReportDTO> reportDTOs = orderPage.get().map(order -> {
-            String month = order.getCreatedAt().getMonth().toString();
-            Integer year = order.getCreatedAt().getYear();
+        List<OrderReportDTO> reportDTOs = ordersByMonthYear.entrySet().stream()
+                .map(entry -> {
+                    String monthYearKey = entry.getKey();
+                    List<Order> ordersForMonthYear = entry.getValue();
+                    int totalOrderCount = ordersForMonthYear.size();
 
-            String monthYearKey = year + "-" + month;
-            Integer totalOrderCount = totalOrderCountByMonth.getOrDefault(monthYearKey, 0);
+                    int totalBookCount = ordersForMonthYear.stream()
+                            .mapToInt(order -> order.getOrderItems().size())
+                            .sum();
 
-            Integer totalBookCount = order.getOrderItems().size();
-            BigDecimal totalPrice = order.getOrderItems().stream()
-                    .map(orderItem -> orderItem.getBook().getPrice())
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                    BigDecimal totalPrice = ordersForMonthYear.stream()
+                            .flatMap(order -> order.getOrderItems().stream())
+                            .map(orderItem -> orderItem.getBook().getPrice())
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            return new OrderReportDTO(month, year, totalOrderCount, totalBookCount, totalPrice);
-        }).toList();
+                    // Splitting the monthYearKey to extract month and year
+                    String[] parts = monthYearKey.split("-");
+                    String month = parts[1];
+                    int year = Integer.parseInt(parts[0]);
+
+                    return new OrderReportDTO(month, year, totalOrderCount, totalBookCount, totalPrice);
+                })
+                .toList();
 
         Page<OrderReportDTO> expectedPage = new PageImpl<>(reportDTOs, orderPage.getPageable(), orderPage.getTotalElements());
 
@@ -170,26 +178,34 @@ class StatisticsServiceImplTest extends BaseServiceTest {
 
         Page<Order> orderPage = new PageImpl<>(Collections.singletonList(mockOrder));
 
-        Map<String, Integer> totalOrderCountByMonth = orderPage.stream()
+        Map<String, List<Order>> ordersByMonthYear = orderPage.stream()
                 .collect(Collectors.groupingBy(
-                        order -> order.getCreatedAt().getYear() + "-" + order.getCreatedAt().getMonth(),
-                        Collectors.mapping(Order::getId, Collectors.collectingAndThen(Collectors.toSet(), Set::size))
+                        order -> order.getCreatedAt().getYear() + "-" + order.getCreatedAt().getMonth()
                 ));
 
-        List<OrderReportDTO> reportDTOs = orderPage.get().map(order -> {
-            String month = order.getCreatedAt().getMonth().toString();
-            Integer year = order.getCreatedAt().getYear();
+        List<OrderReportDTO> reportDTOs = ordersByMonthYear.entrySet().stream()
+                .map(entry -> {
+                    String monthYearKey = entry.getKey();
+                    List<Order> ordersForMonthYear = entry.getValue();
+                    int totalOrderCount = ordersForMonthYear.size();
 
-            String monthYearKey = year + "-" + month;
-            Integer totalOrderCount = totalOrderCountByMonth.getOrDefault(monthYearKey, 0);
+                    int totalBookCount = ordersForMonthYear.stream()
+                            .mapToInt(order -> order.getOrderItems().size())
+                            .sum();
 
-            Integer totalBookCount = order.getOrderItems().size();
-            BigDecimal totalPrice = order.getOrderItems().stream()
-                    .map(orderItem -> orderItem.getBook().getPrice())
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                    BigDecimal totalPrice = ordersForMonthYear.stream()
+                            .flatMap(order -> order.getOrderItems().stream())
+                            .map(orderItem -> orderItem.getBook().getPrice())
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-            return new OrderReportDTO(month, year, totalOrderCount, totalBookCount, totalPrice);
-        }).toList();
+                    // Splitting the monthYearKey to extract month and year
+                    String[] parts = monthYearKey.split("-");
+                    String month = parts[1];
+                    int year = Integer.parseInt(parts[0]);
+
+                    return new OrderReportDTO(month, year, totalOrderCount, totalBookCount, totalPrice);
+                })
+                .toList();
 
         Page<OrderReportDTO> expectedPage = new PageImpl<>(reportDTOs, orderPage.getPageable(), orderPage.getTotalElements());
 
