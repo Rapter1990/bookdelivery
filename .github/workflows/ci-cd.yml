@@ -9,63 +9,62 @@
 name: CI/CD Pipeline
 
 ## The following codes trigger the pipeline when the code is pushed on the main branch.
+
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  ## First Job: Test
   test:
     name: Unit Test
-    ## Run on Ubuntu using the Latest Version
     runs-on: ubuntu-latest
-    ## Job's steps
     steps:
-      - uses: actions/checkout@v3
-      ## Set up JDK 17
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up JDK 17
-      	uses: actions/setup-java@v3
-      	with:
+        uses: actions/setup-java@v3
+        with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
-      ## Set up Maven Cache
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
       - name: Cache Maven packages
         uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
-      ## Run Maven Tests
+
       - name: Run Tests
         run: mvn -B test
 
-  ## Second Job: Build and Push
   build-and-push:
     name: Build and Push
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Set up JDK 17
-      uses: actions/setup-java@v3
+        uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: maven
+          cache: 'maven'
+
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
       - name: Dockerize & Push Docker Image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-          ## Docker Hub Account Number / Repository Name
           image: noyandocker/bookdelivery
           tags: latest
           registry: docker.io
-          ## Dockerfile Path
           dockerfile: Dockerfile
-          ## Keep these secrets on GitHub for the privacy of our information
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
