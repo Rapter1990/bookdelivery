@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +25,12 @@ public class Order extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
-    private Set<OrderItem> orderItems;
+    private List<OrderItem> orderItems;
+
+
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+        orderItems.forEach(orderItem -> orderItem.setOrder(this));
+    }
 
 }

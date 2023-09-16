@@ -22,10 +22,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -63,7 +60,7 @@ class OrderServiceImplTest extends BaseServiceTest {
         Order mockOrder = Order.builder()
                 .id(orderId)
                 .user(mockUser)
-                .orderItems(Set.of(orderItem1, orderItem2))
+                .orderItems(List.of(orderItem1, orderItem2))
                 .build();
 
         OrderDTO expected = OrderMapper.toOrderDTO(mockOrder);
@@ -109,7 +106,7 @@ class OrderServiceImplTest extends BaseServiceTest {
         Order mockOrder = Order.builder()
                 .id(orderId)
                 .user(mockUser)
-                .orderItems(Set.of(orderItem1, orderItem2))
+                .orderItems(List.of(orderItem1, orderItem2))
                 .build();
 
         // When
@@ -165,7 +162,7 @@ class OrderServiceImplTest extends BaseServiceTest {
         Order mockOrder = Order.builder()
                 .id(orderId)
                 .user(mockUser)
-                .orderItems(Set.of(orderItem1, orderItem2))
+                .orderItems(List.of(orderItem1, orderItem2))
                 .build();
 
         // When

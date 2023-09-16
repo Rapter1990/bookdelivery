@@ -13,6 +13,7 @@ import com.example.demo.model.mapper.order.OrderMapper;
 import com.example.demo.payload.request.order.CreateOrderRequest;
 import com.example.demo.payload.request.order.OrderItemRequest;
 import com.example.demo.repository.OrderRepository;
+import com.example.demo.security.CustomUserDetails;
 import com.example.demo.service.OrderItemService;
 import com.example.demo.service.UserService;
 import com.example.demo.util.Identity;
@@ -52,6 +53,7 @@ class OrderSaveServiceImplTest extends BaseServiceTest {
         String bookId2 = RandomUtil.generateUUID();
 
         User user = new UserBuilder().customer().build();
+        CustomUserDetails userDetails = new CustomUserDetails(user);
 
         OrderItemRequest mockOrderItemRequest1 = OrderItemRequest.builder()
                 .bookId(bookId1)
@@ -82,13 +84,13 @@ class OrderSaveServiceImplTest extends BaseServiceTest {
         Order order = Order.builder()
                 .id(1L)
                 .user(user)
-                .orderItems(new LinkedHashSet<>(List.of(orderItem1, orderItem2)))
+                .orderItems(List.of(orderItem1, orderItem2))
                 .build();
 
         OrderDTO expected = OrderMapper.toOrderDTO(order);
 
         // When
-        Mockito.when(identity.getEmail()).thenReturn(user.getEmail());
+        Mockito.when(identity.getCustomUserDetails()).thenReturn(userDetails);
         Mockito.when(userService.findByEmail(Mockito.anyString())).thenReturn(Optional.of(user));
         Mockito.when(orderItemService.createOrderItem(mockOrderItemRequest1)).thenReturn(orderItemDTO1);
         Mockito.when(orderItemService.createOrderItem(mockOrderItemRequest2)).thenReturn(orderItemDTO2);
@@ -98,8 +100,7 @@ class OrderSaveServiceImplTest extends BaseServiceTest {
         OrderDTO response = orderSaveService.createOrder(mockCreateOrderRequest);
 
         Assertions.assertEquals(expected, response);
-        Mockito.verify(identity, Mockito.times(1)).getEmail();
-        Mockito.verify(identity, Mockito.never()).getId();
+        Mockito.verify(identity, Mockito.times(1)).getCustomUserDetails();
         Mockito.verify(orderItemService, Mockito.times(2)).createOrderItem(Mockito.any(OrderItemRequest.class));
         Mockito.verify(orderRepository, Mockito.times(1)).save(Mockito.any(Order.class));
     }

@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -15,6 +16,6 @@ public class OrderDTO {
     private Long id;
     private UserDTO user;
     private LocalDateTime createdAt;
-    private Set<OrderItemDTO> orderItems;
+    private List<OrderItemDTO> orderItems;
 
 }

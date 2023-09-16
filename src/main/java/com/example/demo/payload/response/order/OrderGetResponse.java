@@ -5,6 +5,7 @@ import com.example.demo.dto.UserDTO;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -17,6 +18,6 @@ public class OrderGetResponse {
     private Long id;
     private UserDTO user;
     private LocalDateTime createdAt;
-    private Set<OrderItemDTO> orderItems;
+    private List<OrderItemDTO> orderItems;
 
 }

@@ -71,7 +71,7 @@ class StatisticsServiceImplTest extends BaseServiceTest {
         Order mockOrder = Order.builder()
                 .id(orderId)
                 .user(mockUser)
-                .orderItems(Set.of(orderItem1, orderItem2))
+                .orderItems(List.of(orderItem1, orderItem2))
                 .createdAt(createdDate)
                 .build();
 
@@ -164,7 +164,7 @@ class StatisticsServiceImplTest extends BaseServiceTest {
         Order mockOrder = Order.builder()
                 .id(orderId)
                 .user(mockUser)
-                .orderItems(Set.of(orderItem1, orderItem2))
+                .orderItems(List.of(orderItem1, orderItem2))
                 .createdAt(createdDate)
                 .build();
 

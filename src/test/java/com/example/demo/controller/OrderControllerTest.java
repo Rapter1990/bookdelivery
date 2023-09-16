@@ -88,7 +88,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         final OrderDTO orderDTO = OrderDTO.builder()
                 .id(orderId)
-                .orderItems(OrderItemMapper.toDTO(new LinkedHashSet<>(List.of(orderItem1, orderItem2))))
+                .orderItems(OrderItemMapper.toDTO(List.of(orderItem1, orderItem2)))
                 .user(UserMapper.toDTO(user))
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -140,7 +140,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(orderId)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
+                .orderItems(Arrays.asList(mockOrderItem1, mockOrderItem2))
                 .user(mockUser)
                 .build();
 
@@ -193,7 +193,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(1L)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
+                .orderItems(Arrays.asList(mockOrderItem1, mockOrderItem2))
                 .user(mockUser)
                 .build();
 
@@ -246,7 +246,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(orderId)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
+                .orderItems(List.of(mockOrderItem1, mockOrderItem2))
                 .user(mockUser)
                 .build();
 
@@ -305,7 +305,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(orderId)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
+                .orderItems(Arrays.asList(mockOrderItem1, mockOrderItem2))
                 .user(mockUser)
                 .build();
 
@@ -380,7 +380,7 @@ class OrderControllerTest extends BaseControllerTest {
 
         Order mockOrder = Order.builder()
                 .id(orderId)
-                .orderItems(new LinkedHashSet<>(Arrays.asList(mockOrderItem1, mockOrderItem2)))
+                .orderItems(Arrays.asList(mockOrderItem1, mockOrderItem2))
                 .user(mockUser)
                 .build();
 

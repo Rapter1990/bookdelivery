@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,16 +45,17 @@ public class OrderSaveServiceImpl implements OrderSaveService {
         User user = userService.findByEmail(customUserDetails.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(String.valueOf(customUserDetails.getId())));
 
-        Set<OrderItemDTO> orderItemDTOs = createOrderRequest
+        List<OrderItemDTO> orderItemDTOs = createOrderRequest
                 .getOrderDetailSet()
                 .stream()
                 .map(orderItemService::createOrderItem)
-                .collect(Collectors.toSet());
+                .toList();
 
         Order order = Order.builder()
                 .user(user)
-                .orderItems(OrderItemMapper.toOrderItem(orderItemDTOs))
                 .build();
+
+        order.setOrderItems(OrderItemMapper.toOrderItem(orderItemDTOs));
 
         return OrderMapper.toOrderDTO(orderRepository.save(order));
     }
