@@ -5,9 +5,11 @@ import com.example.demo.model.Book;
 import com.example.demo.model.OrderItem;
 import lombok.experimental.UtilityClass;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @UtilityClass
 public class OrderItemMapper {
@@ -16,7 +18,7 @@ public class OrderItemMapper {
     public OrderItemDTO toDTO(OrderItem orderItem) {
         return OrderItemDTO.builder()
                 .id(orderItem.getId())
-                .book(toOrderItemBook(orderItem.getBook()))
+                .book(toBook(orderItem.getBook()))
                 .build();
     }
 
@@ -29,7 +31,7 @@ public class OrderItemMapper {
         return new LinkedHashSet<>(orderItemDtos);
     }
 
-    private OrderItemDTO.OrderItemBook toOrderItemBook(Book source) {
+    private OrderItemDTO.OrderItemBook toBook(Book source) {
         return OrderItemDTO.OrderItemBook.builder()
                 .id(source.getId())
                 .name(source.getName())
@@ -44,11 +46,15 @@ public class OrderItemMapper {
 
         return OrderItem.builder()
                 .id(orderItemDTO.getId())
-                .book(toOrderItemBook(orderItemDTO.getBook()))
+                .book(toBook(orderItemDTO.getBook()))
                 .build();
     }
+    public Set<OrderItem> toOrderItem(Collection<OrderItemDTO> orderItemDTOs) {
 
-    private static Book toOrderItemBook(OrderItemDTO.OrderItemBook orderItemBook) {
+        return orderItemDTOs.stream().map(OrderItemMapper::toOrderItem).collect(Collectors.toSet());
+    }
+
+    private static Book toBook(OrderItemDTO.OrderItemBook orderItemBook) {
 
         return Book.builder()
                 .id(orderItemBook.getId())

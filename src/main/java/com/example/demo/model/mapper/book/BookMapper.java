@@ -111,6 +111,7 @@ public class BookMapper {
                 .isbn(bookDTO.getIsbn())
                 .price(bookDTO.getPrice())
                 .stock(bookDTO.getStock())
+                .version(bookDTO.getVersion())
                 .build();
     }
 

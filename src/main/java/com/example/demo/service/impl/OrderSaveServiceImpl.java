@@ -6,6 +6,7 @@ import com.example.demo.dto.UserDTO;
 import com.example.demo.exception.book.UserNotFoundException;
 import com.example.demo.model.Order;
 import com.example.demo.model.User;
+import com.example.demo.model.mapper.order.OrderItemMapper;
 import com.example.demo.model.mapper.order.OrderMapper;
 import com.example.demo.model.mapper.user.UserMapper;
 import com.example.demo.payload.request.order.CreateOrderRequest;
@@ -19,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,24 +44,17 @@ public class OrderSaveServiceImpl implements OrderSaveService {
         User user = userService.findByEmail(customUserDetails.getEmail())
                 .orElseThrow(() -> new UserNotFoundException(String.valueOf(customUserDetails.getId())));
 
-        UserDTO userDTO = UserMapper.toDTO(user);
-
-        Set<OrderItemDTO> orderDetailDTOSet = createOrderRequest
+        Set<OrderItemDTO> orderItemDTOs = createOrderRequest
                 .getOrderDetailSet()
                 .stream()
                 .map(orderItemService::createOrderItem)
                 .collect(Collectors.toSet());
 
-        OrderDTO orderDTO = OrderDTO.builder()
-                .user(userDTO)
-                .orderItems(orderDetailDTOSet)
-                .createdAt(LocalDateTime.now())
+        Order order = Order.builder()
+                .user(user)
+                .orderItems(OrderItemMapper.toOrderItem(orderItemDTOs))
                 .build();
-        
-        Order order = OrderMapper.toOrder(orderDTO);
 
-        Order orderCompleted = orderRepository.save(order);
-
-        return OrderMapper.toOrderDTO(orderCompleted);
+        return OrderMapper.toOrderDTO(orderRepository.save(order));
     }
 }
