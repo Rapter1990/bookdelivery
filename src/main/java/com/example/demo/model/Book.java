@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Data
@@ -36,5 +37,8 @@ public class Book extends BaseEntity {
 
     @Version // Optimistic Locking
     private Long version;
+
+    @OneToMany(mappedBy = "book")
+    private List<OrderItem> orderItems;
 
 }

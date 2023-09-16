@@ -16,7 +16,7 @@ public class OrderItem extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "bookId")
     private Book book;
 
