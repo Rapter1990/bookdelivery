@@ -10,10 +10,10 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +33,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @return A ResponseEntity containing an error response.
      */
     @Override
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
                                                                      HttpHeaders headers,
                                                                      HttpStatusCode status,
@@ -50,7 +51,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorDetails(details)
                 .message("Invalid JSON")
-                .timestamp(LocalDateTime.now())
                 .statusCode(status.value())
                 .status(HttpStatus.valueOf(status.value()))
                 .build();
@@ -68,6 +68,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @return A ResponseEntity containing an error response.
      */
     @Override
+    @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
@@ -79,7 +80,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorDetails(details)
                 .message("Malformed JSON request")
-                .timestamp(LocalDateTime.now())
                 .statusCode(status.value())
                 .status(HttpStatus.valueOf(status.value()))
                 .build();
@@ -97,6 +97,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @return A ResponseEntity containing an error response.
      */
     @Override
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
@@ -111,7 +112,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorDetails(details)
                 .message("Validation Errors")
-                .timestamp(LocalDateTime.now())
                 .statusCode(status.value())
                 .status(HttpStatus.valueOf(status.value()))
                 .build();
@@ -130,6 +130,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @return A ResponseEntity containing an error response.
      */
     @Override
+    @ExceptionHandler(MissingServletRequestParameterException.class)
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
         List<String> details = new ArrayList<>();
@@ -138,7 +139,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorDetails(details)
                 .message("Validation Errors")
-                .timestamp(LocalDateTime.now())
                 .statusCode(status.value())
                 .status(HttpStatus.valueOf(status.value()))
                 .build();
