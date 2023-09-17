@@ -8,6 +8,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a request object for creating a new customer.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

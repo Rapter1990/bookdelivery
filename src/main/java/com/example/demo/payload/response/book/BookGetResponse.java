@@ -6,7 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 /**
- * Represents {@link Book} entity in response.
+ * Represents a response object for retrieving book details.
  */
 @Getter
 @Setter

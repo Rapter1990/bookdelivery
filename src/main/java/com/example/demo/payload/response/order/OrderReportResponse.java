@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * Represents a response object for generating order reports, containing report data.
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

@@ -7,6 +7,9 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Represents a response object for order creation, containing order details.
+ */
 @Getter
 @Setter
 @Builder

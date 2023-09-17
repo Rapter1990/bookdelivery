@@ -9,6 +9,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a request object for specifying a date interval.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

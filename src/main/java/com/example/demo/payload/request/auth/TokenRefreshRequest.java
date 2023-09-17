@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a request object for token refresh.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

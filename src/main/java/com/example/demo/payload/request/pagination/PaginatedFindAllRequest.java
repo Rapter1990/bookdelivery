@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a request object for paginated find-all queries.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

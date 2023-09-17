@@ -10,7 +10,7 @@ import lombok.*;
 import java.math.BigDecimal;
 
 /**
- * Used for update {@link Book} entity.
+ * Represents a request object for updating an existing book.
  */
 @Getter
 @Setter

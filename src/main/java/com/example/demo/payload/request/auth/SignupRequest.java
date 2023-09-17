@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a request object for user signup or registration.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

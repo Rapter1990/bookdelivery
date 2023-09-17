@@ -4,6 +4,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+/**
+ * Represents a request object for updating the stock of an existing book.
+ */
 @Getter
 @Setter
 @Builder

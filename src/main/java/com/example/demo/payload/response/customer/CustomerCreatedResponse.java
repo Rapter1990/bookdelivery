@@ -2,6 +2,9 @@ package com.example.demo.payload.response.customer;
 
 import lombok.*;
 
+/**
+ * Represents a response object for customer creation, containing customer details.
+ */
 @Getter
 @Setter
 @Builder

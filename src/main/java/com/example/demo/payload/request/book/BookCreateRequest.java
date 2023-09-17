@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 
 /**
- * Used for create new {@link Book}
+ * Represents a request object for creating a new book.
  */
 @Getter
 @Setter

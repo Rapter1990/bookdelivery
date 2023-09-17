@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a request object for user logout.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

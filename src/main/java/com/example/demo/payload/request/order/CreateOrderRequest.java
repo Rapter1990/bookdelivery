@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
+/**
+ * Represents a request object for creating an order.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a request object for specifying order item details.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

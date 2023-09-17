@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.time.LocalDateTime;
 
+/**
+ * Represents a custom response object with optional data and HTTP status.
+ * @param <T> The type of the response data.
+ */
 @Getter
 @Setter
 @Builder

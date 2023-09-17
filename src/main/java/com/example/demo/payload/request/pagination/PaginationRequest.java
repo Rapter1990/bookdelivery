@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+/**
+ * Represents a request object for pagination settings.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
