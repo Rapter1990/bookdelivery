@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.user.EmailAlreadyExistsException;
 import com.example.demo.model.RefreshToken;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.auth.LoginRequest;
@@ -48,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
     public String register(SignupRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email is already registered");
+            throw new EmailAlreadyExistsException(request.getEmail());
         }
 
         User user = User.builder()
