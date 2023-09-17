@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
+/**
+ * Repository interface for accessing and managing Book entities in the database.
+ * This interface extends JpaRepository to provide basic CRUD operations.
+ */
 public interface BookRepository extends JpaRepository<Book, String> {
 
     /**
