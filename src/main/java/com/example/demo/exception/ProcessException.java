@@ -25,7 +25,7 @@ public abstract class ProcessException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -4150198597761563298L;
 
-    public static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+    public static final HttpStatus STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
 
     /**
      * Constructs a {@code ProcessException} with the specified detail message.

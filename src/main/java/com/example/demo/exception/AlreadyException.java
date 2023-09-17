@@ -27,7 +27,7 @@ public abstract class AlreadyException extends RuntimeException {
     @Serial
     private static final long serialVersionUID = -7986483342718835320L;
 
-    public static final HttpStatus STATUS = HttpStatus.BAD_REQUEST;
+    public static final HttpStatus STATUS = HttpStatus.CONFLICT;
 
     /**
      * Constructs an {@code AlreadyException} with the specified detail message.
