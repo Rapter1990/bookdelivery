@@ -145,4 +145,40 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(status).body(errorResponse);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity<Object> handleNotFoundException(NotFoundException exception) {
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(exception.getMessage())
+                .statusCode(NotFoundException.STATUS.value())
+                .status(NotFoundException.STATUS)
+                .build();
+
+        return ResponseEntity.status(NotFoundException.STATUS).body(errorResponse);
+    }
+
+    @ExceptionHandler(AlreadyException.class)
+    protected ResponseEntity<Object> handleAlreadyException(AlreadyException exception) {
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(exception.getMessage())
+                .statusCode(AlreadyException.STATUS.value())
+                .status(AlreadyException.STATUS)
+                .build();
+
+        return ResponseEntity.status(AlreadyException.STATUS).body(errorResponse);
+    }
+
+    @ExceptionHandler(ProcessException.class)
+    protected ResponseEntity<Object> handleProcessException(ProcessException exception) {
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(exception.getMessage())
+                .statusCode(ProcessException.STATUS.value())
+                .status(ProcessException.STATUS)
+                .build();
+
+        return ResponseEntity.status(ProcessException.STATUS).body(errorResponse);
+    }
 }
