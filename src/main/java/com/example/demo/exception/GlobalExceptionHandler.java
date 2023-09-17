@@ -33,7 +33,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @return A ResponseEntity containing an error response.
      */
     @Override
-    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
                                                                      HttpHeaders headers,
                                                                      HttpStatusCode status,
@@ -68,7 +67,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @return A ResponseEntity containing an error response.
      */
     @Override
-    @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
@@ -97,7 +95,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @return A ResponseEntity containing an error response.
      */
     @Override
-    @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
@@ -130,7 +127,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      * @return A ResponseEntity containing an error response.
      */
     @Override
-    @ExceptionHandler(MissingServletRequestParameterException.class)
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
         List<String> details = new ArrayList<>();
