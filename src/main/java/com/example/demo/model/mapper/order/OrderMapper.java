@@ -2,9 +2,7 @@ package com.example.demo.model.mapper.order;
 
 
 import com.example.demo.dto.OrderDTO;
-import com.example.demo.dto.OrderItemDTO;
 import com.example.demo.model.Order;
-import com.example.demo.model.OrderItem;
 import com.example.demo.model.mapper.user.UserMapper;
 import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.order.OrderCreatedResponse;

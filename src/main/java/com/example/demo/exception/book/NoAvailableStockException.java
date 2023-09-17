@@ -1,7 +1,5 @@
 package com.example.demo.exception.book;
 
-import com.example.demo.model.Book;
-
 import java.io.Serial;
 
 /**

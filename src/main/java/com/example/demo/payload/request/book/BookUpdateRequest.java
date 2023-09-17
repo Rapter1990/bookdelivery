@@ -1,6 +1,5 @@
 package com.example.demo.payload.request.book;
 
-import com.example.demo.model.Book;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

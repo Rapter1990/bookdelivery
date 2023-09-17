@@ -1,6 +1,5 @@
 package com.example.demo.payload.response.book;
 
-import com.example.demo.model.Book;
 import lombok.*;
 
 import java.math.BigDecimal;

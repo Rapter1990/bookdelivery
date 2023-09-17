@@ -1,8 +1,6 @@
 package com.example.demo.model.mapper.order;
 
-import com.example.demo.dto.OrderDTO;
 import com.example.demo.dto.OrderReportDTO;
-import com.example.demo.model.Order;
 import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.order.OrderReportResponse;
 import lombok.experimental.UtilityClass;
