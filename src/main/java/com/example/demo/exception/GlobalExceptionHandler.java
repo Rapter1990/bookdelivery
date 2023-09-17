@@ -146,6 +146,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(status).body(errorResponse);
     }
 
+    /**
+     * Handles NotFoundException, returning an ErrorResponse with appropriate status and message.
+     *
+     * @param exception The exception that was thrown.
+     * @return A ResponseEntity containing an error response.
+     */
     @ExceptionHandler(NotFoundException.class)
     protected ResponseEntity<Object> handleNotFoundException(NotFoundException exception) {
 
@@ -158,6 +164,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(NotFoundException.STATUS).body(errorResponse);
     }
 
+    /**
+     * Handles AlreadyException, returning an ErrorResponse with appropriate status and message.
+     *
+     * @param exception The exception that was thrown.
+     * @return A ResponseEntity containing an error response.
+     */
     @ExceptionHandler(AlreadyException.class)
     protected ResponseEntity<Object> handleAlreadyException(AlreadyException exception) {
 
@@ -170,6 +182,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(AlreadyException.STATUS).body(errorResponse);
     }
 
+    /**
+     * Handles ProcessException, returning an ErrorResponse with appropriate status and message.
+     *
+     * @param exception The exception that was thrown.
+     * @return A ResponseEntity containing an error response.
+     */
     @ExceptionHandler(ProcessException.class)
     protected ResponseEntity<Object> handleProcessException(ProcessException exception) {
 
