@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.book.UserNotFoundException;
+import com.example.demo.exception.token.RefreshTokenNotFoundException;
 import com.example.demo.exception.user.EmailAlreadyExistsException;
 import com.example.demo.model.RefreshToken;
 import com.example.demo.model.User;
@@ -101,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
     public TokenRefreshResponse refreshToken(TokenRefreshRequest request) {
 
         RefreshToken refreshToken = refreshTokenService.findByToken(request.getRefreshToken())
-                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+                .orElseThrow(RefreshTokenNotFoundException::new);
 
 
         if (!refreshTokenService.isRefreshExpired(refreshToken)) {
