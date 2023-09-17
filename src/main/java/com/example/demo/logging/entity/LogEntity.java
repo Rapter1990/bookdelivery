@@ -6,6 +6,9 @@ import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity class representing a {@link LogEntity} entry in the database.
+ */
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -19,6 +22,7 @@ public class LogEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(columnDefinition = "TEXT")
     private String message;
 
     private String endpoint;
@@ -32,6 +36,7 @@ public class LogEntity {
 
     private String errorType;
 
+    @Column(columnDefinition = "TEXT")
     private String response;
 
     private String operation;
