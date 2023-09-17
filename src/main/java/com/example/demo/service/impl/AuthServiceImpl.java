@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.book.UserNotFoundException;
 import com.example.demo.exception.user.EmailAlreadyExistsException;
 import com.example.demo.model.RefreshToken;
 import com.example.demo.model.User;
@@ -81,7 +82,7 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtUtils.generateJwtToken(auth);
 
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User Not Found"));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(UserNotFoundException::new);
 
         return JWTResponse.builder()
                 .email(request.getEmail())
