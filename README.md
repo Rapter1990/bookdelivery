@@ -1,6 +1,7 @@
 # book delivery
 
 ![tests](https://github.com/sombriks/bookdelivery/actions/workflows/test.yml/badge.svg)
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/sombriks/bookdelivery?logo=docker&color=lightblue)](https://hub.docker.com/repository/docker/bookdelivery/general)
 
 sample springboot application
 
