@@ -7,6 +7,9 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Data Transfer Object (DTO) representing order information.
+ */
 @Getter
 @Builder
 @EqualsAndHashCode

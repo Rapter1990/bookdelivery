@@ -4,6 +4,9 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+/**
+ * Data Transfer Object (DTO) representing user information.
+ */
 @Getter
 @Builder
 @EqualsAndHashCode

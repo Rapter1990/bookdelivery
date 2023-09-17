@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * Data Transfer Object (DTO) representing order report information.
+ */
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

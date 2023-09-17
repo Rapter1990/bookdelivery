@@ -6,6 +6,9 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
+/**
+ * Data Transfer Object (DTO) representing book information.
+ */
 @Getter
 @Builder
 @EqualsAndHashCode
