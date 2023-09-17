@@ -6,7 +6,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   datasource:
-    url: jdbc:mysql://localhost:3306/bookdelivery
+    url: jdbc:mysql://${BOOK_DELIVERY_DB_IP:localhost}:${BOOK_DELIVERY_DB_PORT:3306}/bookdelivery
     username: ${DATABASE_USERNAME:root}
     password: ${DATABASE_PASSWORD:password}
   jpa:
