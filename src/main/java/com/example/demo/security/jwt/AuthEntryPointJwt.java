@@ -15,11 +15,24 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Custom implementation of Spring Security's AuthenticationEntryPoint interface
+ * for handling unauthorized access and returning appropriate error responses.
+ */
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthEntryPointJwt.class);
 
+    /**
+     * Commences the authentication process when an unauthorized request is made.
+     *
+     * @param request        The HttpServletRequest representing the incoming request.
+     * @param response       The HttpServletResponse for sending the error response.
+     * @param authException  The AuthenticationException indicating the unauthorized access.
+     * @throws IOException      If there's an I/O error while writing the error response.
+     * @throws ServletException If there's a servlet-related exception.
+     */
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
