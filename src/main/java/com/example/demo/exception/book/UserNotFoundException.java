@@ -4,6 +4,9 @@ import com.example.demo.exception.NotFoundException;
 
 import java.io.Serial;
 
+/**
+ * Custom exception class for cases where a user is not found.
+ */
 public class UserNotFoundException extends NotFoundException {
 
 
@@ -16,6 +19,11 @@ public class UserNotFoundException extends NotFoundException {
     private static final String MESSAGE_TEMPLATE =
             "User Not Found with ID: ";
 
+    /**
+     * Constructs a UserNotFoundException with a specific user ID.
+     *
+     * @param id The ID of the user that was not found.
+     */
     public UserNotFoundException(String id) {
         super(MESSAGE_TEMPLATE.concat(id));
     }

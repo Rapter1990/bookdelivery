@@ -1,7 +1,12 @@
 package com.example.demo.exception.book;
 
+import com.example.demo.model.Book;
+
 import java.io.Serial;
 
+/**
+ * Custom exception class for cases where there is no available stock.
+ */
 public class NoAvailableStockException extends RuntimeException {
 
     @Serial
@@ -13,6 +18,11 @@ public class NoAvailableStockException extends RuntimeException {
     private static final String MESSAGE_TEMPLATE =
             "No available stock for the given amount : ";
 
+    /**
+     * Constructs a NoAvailableStockException with a specific amount.
+     *
+     * @param amount The amount for which no stock is available.
+     */
     public NoAvailableStockException(int amount) {
         super(MESSAGE_TEMPLATE.concat(String.valueOf(amount)));
     }

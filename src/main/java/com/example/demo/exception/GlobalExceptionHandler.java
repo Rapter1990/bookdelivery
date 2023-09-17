@@ -17,11 +17,21 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Global exception handler for handling various HTTP request exceptions.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    // handleHttpMediaTypeNotSupported : triggers when the JSON is invalid
-
+    /**
+     * Handles the HTTP media type not supported exception, which triggers when the JSON content type is invalid.
+     *
+     * @param ex      The exception that was thrown.
+     * @param headers The HTTP headers for the response.
+     * @param status  The HTTP status code for the response.
+     * @param request The web request.
+     * @return A ResponseEntity containing an error response.
+     */
     @Override
     protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(HttpMediaTypeNotSupportedException ex,
                                                                      HttpHeaders headers,
@@ -48,7 +58,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(status).body(errorResponse);
     }
 
-    // handleHttpMessageNotReadable : triggers when the JSON is malformed
+    /**
+     * Handles the HTTP message not readable exception, which triggers when the JSON request is malformed.
+     *
+     * @param ex      The exception that was thrown.
+     * @param headers The HTTP headers for the response.
+     * @param status  The HTTP status code for the response.
+     * @param request The web request.
+     * @return A ResponseEntity containing an error response.
+     */
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers,
@@ -69,7 +87,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(status).body(errorResponse);
     }
 
-    // handleMethodArgumentNotValid : triggers when @Valid fails
+    /**
+     * Handles the method argument not valid exception, which triggers when the @Valid annotation fails during input validation.
+     *
+     * @param ex      The exception that was thrown.
+     * @param headers The HTTP headers for the response.
+     * @param status  The HTTP status code for the response.
+     * @param request The web request.
+     * @return A ResponseEntity containing an error response.
+     */
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers,
@@ -94,7 +120,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
-    // handleMissingServletRequestParameter : triggers when there are missing parameters
+    /**
+     * Handles the missing servlet request parameter exception, which triggers when there are missing parameters in the request.
+     *
+     * @param ex      The exception that was thrown.
+     * @param headers The HTTP headers for the response.
+     * @param status  The HTTP status code for the response.
+     * @param request The web request.
+     * @return A ResponseEntity containing an error response.
+     */
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 

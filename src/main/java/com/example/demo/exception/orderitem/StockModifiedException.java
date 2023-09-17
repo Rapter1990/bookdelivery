@@ -2,6 +2,9 @@ package com.example.demo.exception.orderitem;
 
 import java.io.Serial;
 
+/**
+ * Custom exception class for cases where stock has been modified.
+ */
 public class StockModifiedException extends RuntimeException {
 
     @Serial
