@@ -13,15 +13,24 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the {@link StatisticsService} interface for retrieving order statistics.
+ */
 @Service
 @RequiredArgsConstructor
 public class StatisticsServiceImpl implements StatisticsService {
 
     private final OrderRepository orderRepository;
 
+    /**
+     * Retrieves order statistics for a specific customer.
+     *
+     * @param customerId The unique identifier of the customer.
+     * @param paginationRequest The request containing pagination information.
+     * @return A {@link Page} of {@link OrderReportDTO} objects representing order statistics for the customer.
+     */
     @Override
     public Page<OrderReportDTO> getOrderStatisticsByCustomer(Long customerId, PaginationRequest paginationRequest) {
 
@@ -31,7 +40,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     }
 
-
+    /**
+     * Retrieves overall order statistics.
+     *
+     * @param paginationRequest The request containing pagination information.
+     * @return A {@link Page} of {@link OrderReportDTO} objects representing overall order statistics.
+     */
     @Override
     public Page<OrderReportDTO> getOrderStatistics(PaginationRequest paginationRequest) {
 
@@ -41,6 +55,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     }
 
+    /**
+     * Calculate total order count, total book count, and total price for each month-year combination.
+     *
+     * @param customerOrders The Page of Order objects to process.
+     * @return A {@link Page} of {@link OrderReportDTO} objects representing order statistics.
+     */
     private Page<OrderReportDTO> calculateTotalOrderCountByMonth(Page<Order> customerOrders) {
 
         Map<String, List<Order>> ordersByMonthYear = customerOrders.stream()

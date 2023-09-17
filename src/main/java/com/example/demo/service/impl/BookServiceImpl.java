@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * Implementation of the {@link BookService} interface for creating and managing books.
+ */
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
@@ -23,11 +25,10 @@ public class BookServiceImpl implements BookService {
     private final BookRepository bookRepository;
 
     /**
-     * Creates a {@link Book} entitiy from {@link BookCreateRequest}
-     * and return.
+     * Creates a new book based on the provided request.
      *
-     * @param request
-     * @return
+     * @param request The request containing book information.
+     * @return A {@link BookDTO} representing the newly created book.
      */
     public BookDTO createBook(BookCreateRequest request) {
 
@@ -37,10 +38,10 @@ public class BookServiceImpl implements BookService {
     }
 
     /**
-     * Returns {@link Book} by given bookId.
+     * Retrieves a book by its unique identifier.
      *
-     * @param bookId
-     * @return
+     * @param bookId The unique identifier of the book.
+     * @return A {@link BookDTO} representing the requested book.
      */
     public BookDTO getBookById(final String bookId) {
 
@@ -52,6 +53,13 @@ public class BookServiceImpl implements BookService {
         return BookMapper.toDTO(book);
     }
 
+    /**
+     * Updates the stock quantity of a book by its unique identifier.
+     *
+     * @param bookId The unique identifier of the book.
+     * @param request The request containing the updated stock information.
+     * @return A {@link BookDTO} representing the book after the stock update.
+     */
     @Override
     public BookDTO updateBookStockById(String bookId, BookUpdateStockRequest request) {
 
@@ -63,9 +71,10 @@ public class BookServiceImpl implements BookService {
     }
 
     /**
-     * Returns all {@link Book} entities.
+     * Retrieves a paginated list of all books based on the provided request.
      *
-     * @return Book entities in a list.
+     * @param paginatedFindAllRequest The request containing pagination information.
+     * @return A {@link Page} of {@link BookDTO} objects representing the list of books.
      */
     @Override
     public Page<BookDTO> getAllBooks(PaginatedFindAllRequest paginatedFindAllRequest) {
@@ -76,11 +85,11 @@ public class BookServiceImpl implements BookService {
     }
 
     /**
-     * The method that updates the {@link Book} entity.
+     * Updates a book by its unique identifier.
      *
-     * @param bookId  Represents the id of the {@link Book} entity to be updated.
-     * @param request {@link BookUpdateRequest} represents the request body of the Book entity to be updated.
-     * @return {@link Book} entity that is updated.
+     * @param bookId The unique identifier of the book.
+     * @param request The request containing the updated book information.
+     * @return A {@link BookDTO} representing the book after the update.
      */
     @Override
     public BookDTO updateBookById(final String bookId, final BookUpdateRequest request) {
@@ -93,6 +102,13 @@ public class BookServiceImpl implements BookService {
         return BookMapper.toDTO(bookRepository.save(bookEntityToBeUpdate));
     }
 
+    /**
+     * Checks if a given amount of a book is available in stock.
+     *
+     * @param bookDTO The {@link BookDTO} representing the book to check.
+     * @param amount The amount of the book to check for availability.
+     * @return {@code true} if the specified amount is available in stock, {@code false} otherwise.
+     */
     @Override
     public boolean isStockAvailable(BookDTO bookDTO, int amount) {
         if (bookDTO.getStock() < amount) {
@@ -100,5 +116,7 @@ public class BookServiceImpl implements BookService {
         } else {
             return true;
         }
+
     }
+
 }

@@ -20,6 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * Implementation of the {@link OrderSaveService} interface for creating and managing orders.
+ */
 @Service
 @RequiredArgsConstructor
 public class OrderSaveServiceImpl implements OrderSaveService {
@@ -32,6 +35,12 @@ public class OrderSaveServiceImpl implements OrderSaveService {
 
     private final Identity identity;
 
+    /**
+     * Creates a new order based on the provided create order request.
+     *
+     * @param createOrderRequest The request containing order information to be used for creation.
+     * @return An {@link OrderDTO} representing the newly created order.
+     */
     @Transactional
     @Override
     public OrderDTO createOrder(CreateOrderRequest createOrderRequest) {
@@ -54,5 +63,7 @@ public class OrderSaveServiceImpl implements OrderSaveService {
         order.setOrderItems(OrderItemMapper.toOrderItem(orderItemDTOs));
 
         return OrderMapper.toOrderDTO(orderRepository.save(order));
+
     }
+
 }

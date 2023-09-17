@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation of the {@link CustomerService} interface for creating and managing customer accounts.
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomerServiceImpl implements CustomerService {
@@ -18,10 +21,10 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     /**
-     * Creates a new {@link User} in Customer Role
+     * Creates a new customer based on the provided customer creation request.
      *
-     * @param request {@link CustomerCreateRequest}
-     * @return The created User.
+     * @param request The request containing customer information to be used for creation.
+     * @return A {@link User} representing the newly created customer.
      */
     @Override
     public User createCustomer(CustomerCreateRequest request) {
@@ -39,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .build();
 
         return userRepository.save(user);
-    }
 
+    }
 
 }

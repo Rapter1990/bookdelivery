@@ -20,6 +20,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service implementation for handling authentication-related operations.
+ */
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -35,6 +38,12 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtils jwtUtils;
 
 
+    /**
+     * Registers a new user based on the provided signup request.
+     *
+     * @param request The signup request containing user registration information.
+     * @return A string representing the result of the registration process.
+     */
     @Override
     public String register(SignupRequest request) {
 
@@ -55,6 +64,12 @@ public class AuthServiceImpl implements AuthService {
         return "success";
     }
 
+    /**
+     * Logs a user in using the provided login credentials.
+     *
+     * @param request The login request containing user login credentials.
+     * @return A {@link JWTResponse} containing a JWT token and related information upon successful login.
+     */
     @Override
     public JWTResponse login(LoginRequest request) {
 
@@ -74,6 +89,12 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
+    /**
+     * Refreshes a user's authentication token.
+     *
+     * @param request The token refresh request containing the old token.
+     * @return A {@link TokenRefreshResponse} containing a new JWT token upon successful token refresh.
+     */
     @Override
     public TokenRefreshResponse refreshToken(TokenRefreshRequest request) {
 
@@ -94,6 +115,12 @@ public class AuthServiceImpl implements AuthService {
         return null;
     }
 
+    /**
+     * Logs a user out by invalidating their token.
+     *
+     * @param token The user's authentication token to be invalidated.
+     * @return A string representing the result of the logout process.
+     */
     @Override
     public String logout(String token) {
 

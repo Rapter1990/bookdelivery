@@ -14,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Implementation of the {@link OrderItemService} interface for creating and managing order items.
+ */
 @Service
 @RequiredArgsConstructor
 public class OrderItemServiceImpl implements OrderItemService {
@@ -60,5 +63,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         bookService.updateBookStockById(bookDTO.getId(), bookUpdateStockRequest);
 
         return OrderItemMapper.toDTO(orderItem);
+
     }
+
 }

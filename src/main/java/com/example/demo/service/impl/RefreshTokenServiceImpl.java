@@ -16,6 +16,9 @@ import java.time.ZoneOffset;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Implementation of the {@link RefreshTokenService} interface for managing refresh tokens.
+ */
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenServiceImpl implements RefreshTokenService {
@@ -27,7 +30,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     private final UserService userService;
 
-
+    /**
+     * Creates a new refresh token for the specified user.
+     *
+     * @param user The user for whom the refresh token is created.
+     * @return A string representing the newly created refresh token.
+     */
     @Override
     public String createRefreshToken(User user) {
 
@@ -45,21 +53,45 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return token.getToken();
     }
 
+    /**
+     * Checks if a refresh token has expired.
+     *
+     * @param token The refresh token to check for expiration.
+     * @return {@code true} if the token has expired, {@code false} otherwise.
+     */
     @Override
     public boolean isRefreshExpired(RefreshToken token) {
         return token.getExpiryDate().isBefore(LocalDate.now());
     }
 
+    /**
+     * Retrieves the refresh token associated with a user by their unique identifier.
+     *
+     * @param userId The unique identifier of the user.
+     * @return A {@link RefreshToken} representing the refresh token associated with the user.
+     */
     @Override
     public RefreshToken getByUser(Long userId) {
         return refreshTokenRepository.findByUserId(userId);
     }
 
+    /**
+     * Finds a refresh token by its token string.
+     *
+     * @param token The token string to search for.
+     * @return An {@link Optional} containing the {@link RefreshToken} if found, or an empty {@link Optional} if not found.
+     */
     @Override
     public Optional<RefreshToken> findByToken(String token) {
         return refreshTokenRepository.findByToken(token);
     }
 
+    /**
+     * Deletes a refresh token associated with a user by their unique identifier.
+     *
+     * @param userId The unique identifier of the user.
+     * @return The number of refresh tokens deleted (typically 0 or 1).
+     */
     @Override
     @Transactional
     public int deleteByUserId(Long userId) {
