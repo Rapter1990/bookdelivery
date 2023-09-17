@@ -9,7 +9,7 @@ COPY .mvn .mvn
 COPY src src
 
 # Build the project and create the executable JAR
-RUN mvn package
+RUN mvn clean install -DskipTests
 
 # Stage 2: Run stage
 FROM openjdk:17-jdk-slim
