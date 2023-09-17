@@ -57,4 +57,6 @@ the action can login on docker hub with success.
 ## Further information
 
 - how to create secrets on github
+- how to use github releases page
+- why use only the `latest` tag when tagging images is a very bad practice 
 - 

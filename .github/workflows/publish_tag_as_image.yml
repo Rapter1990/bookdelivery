@@ -42,5 +42,5 @@ jobs:
         with:
           context: .
           file: ${{ env.DOCKERFILE }}
-          tags: ${{ env.DOCKER_USERNAME }}/${{ env.SERVICE_NAME }}:${{ env.GIT_TAG }}
+          tags: ${{ env.DOCKER_USERNAME }}/${{ env.SERVICE_NAME }}:${{ env.GIT_TAG }} , ${{ env.DOCKER_USERNAME }}/${{ env.SERVICE_NAME }}:latest
           push: true
