@@ -1,6 +1,7 @@
 package com.example.demo.exception;
 
 import com.example.demo.exception.response.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -21,6 +22,7 @@ import java.util.List;
  * Global exception handler for handling various HTTP request exceptions.
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
@@ -37,6 +39,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                      HttpHeaders headers,
                                                                      HttpStatusCode status,
                                                                      WebRequest request) {
+        log.error(ex.getMessage(), ex);
 
         List<String> details = new ArrayList<>();
 
@@ -71,6 +74,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
+        log.error(ex.getMessage(), ex);
+
 
         List<String> details = new ArrayList<>();
         details.add(ex.getMessage());
@@ -99,6 +104,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
+        log.error(ex.getMessage(), ex);
 
         List<String> details = ex.getBindingResult()
                 .getFieldErrors()
@@ -129,6 +135,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
+        log.error(ex.getMessage(), ex);
+
         List<String> details = new ArrayList<>();
         details.add(ex.getParameterName() + " parameter is missing");
 
@@ -151,6 +159,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     protected ResponseEntity<Object> handleNotFoundException(NotFoundException exception) {
 
+        log.error(exception.getMessage(), exception);
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message(exception.getMessage())
                 .statusCode(NotFoundException.STATUS.value())
@@ -169,6 +179,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AlreadyException.class)
     protected ResponseEntity<Object> handleAlreadyException(AlreadyException exception) {
 
+        log.error(exception.getMessage(), exception);
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message(exception.getMessage())
                 .statusCode(AlreadyException.STATUS.value())
@@ -186,6 +198,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
     @ExceptionHandler(ProcessException.class)
     protected ResponseEntity<Object> handleProcessException(ProcessException exception) {
+
+        log.error(exception.getMessage(), exception);
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .message(exception.getMessage())
