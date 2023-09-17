@@ -3,6 +3,9 @@ package com.example.demo.model.enums;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Enum representing standard JWT claims.
+ */
 @Getter
 @RequiredArgsConstructor
 public enum TokenClaims {
