@@ -6,7 +6,7 @@ on:
       - '*'
 
 env:
-  SERVICE_NAME: ${{ github.event.repository.name }}
+  SERVICE_NAME: bookdelivery
   DOCKERFILE: ./src/infrastructure/Dockerfile
   GIT_TAG: ${{ github.ref_name }}
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -46,6 +46,9 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          build-args: |
+            SERVICE=${{ env.SERVICE_NAME }}
+            VERSION=${{ env.GIT_TAG }}
           file: ${{ env.DOCKERFILE }}
           tags: ${{ env.DOCKER_USERNAME }}/${{ env.SERVICE_NAME }}:${{ env.GIT_TAG }} , ${{ env.DOCKER_USERNAME }}/${{ env.SERVICE_NAME }}:latest
           push: true
