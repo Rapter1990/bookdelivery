@@ -5,8 +5,6 @@ services:
     container_name: database
     image: mysql:8.0.33
     restart: always
-    env_file:
-      - .env  # Use the .env file for environment variables
     environment:
       MYSQL_DATABASE: bookdelivery
       MYSQL_PASSWORD: ${DATABASE_PASSWORD}
@@ -21,13 +19,9 @@ services:
       - bookDeliveryNetwork
 
   bookdelivery:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: sombriks/bookdelivery:0.1.0
     container_name: bookdelivery
     restart: on-failure
-    env_file:
-      - .env  # Use the .env file for environment variables
     ports:
       - "1221:1221"
     environment:

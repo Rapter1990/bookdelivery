@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  database:
+    container_name: database
+    image: mysql:8.0.33
+    restart: always
+    environment:
+      MYSQL_DATABASE: bookdelivery
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_PORT: ${BOOK_DELIVERY_DB_PORT}
+    volumes:
+      - ./db:/var/lib/mysql
+    ports:
+      - "3306:3306"

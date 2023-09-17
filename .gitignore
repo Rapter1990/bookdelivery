@@ -34,3 +34,5 @@ build/
 
 ### Environment file
 .env
+
+src/infrastructure/db

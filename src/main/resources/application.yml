@@ -1,5 +1,5 @@
 server:
-  port: 1221
+  port: ${PORT:1221}
 
 # MYSQL
 spring:

@@ -1,12 +1,14 @@
 package com.example.demo.base;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
+@ActiveProfiles("test")
 public abstract class AbstractTestContainerConfiguration {
 
     static MySQLContainer<?> MYSQL_CONTAINER = new MySQLContainer<>("mysql:8.0.33");
@@ -25,3 +27,4 @@ public abstract class AbstractTestContainerConfiguration {
     }
 
 }
+

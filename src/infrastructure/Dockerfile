@@ -1,0 +1,11 @@
+FROM eclipse-temurin:17-jre-alpine
+
+ARG SERVICE=bookdelivery
+ARG VERSION=0.0.1-SNAPSHOT
+
+ENV SERVICE=$SERVICE
+ENV VERSION=$VERSION
+
+ADD ./target/$SERVICE-$VERSION.jar /$SERVICE-$VERSION.jar
+
+ENTRYPOINT java -jar /$SERVICE-$VERSION.jar
