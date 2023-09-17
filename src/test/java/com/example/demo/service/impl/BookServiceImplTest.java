@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.base.BaseServiceTest;
 import com.example.demo.dto.BookDTO;
 import com.example.demo.exception.book.BookNotFoundException;
+import com.example.demo.exception.book.NoAvailableStockException;
 import com.example.demo.model.Book;
 import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.payload.request.book.BookCreateRequest;
@@ -13,6 +14,7 @@ import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.util.RandomUtil;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,7 +27,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -342,6 +345,33 @@ class BookServiceImplTest extends BaseServiceTest {
         verify(bookRepository, times(1)).findById(bookId);
         verify(bookRepository, never()).save(any());
 
+    }
+
+    @Test
+    void givenBookDtoAndAmount_whenBookDtoStockGreaterThanAmount_thenReturnTrue() {
+
+        // Given
+        int amount = 50;
+        BookDTO mockBookDTO = BookDTO.builder().stock(amount + 1).build();
+
+        // Then
+        boolean response = bookService.isStockAvailable(mockBookDTO, amount);
+
+        Assertions.assertTrue(response);
+    }
+
+    @Test
+    void givenBookDtoAndAmount_whenBookDtoStockLessThanAmount_thenThrowNoAvailableStockException() {
+
+        // Given
+        int amount = 100;
+        BookDTO mockBookDTO = BookDTO.builder().stock(amount - 1).build();
+
+        // Then
+        Assertions.assertThrows(
+                NoAvailableStockException.class,
+                () -> bookService.isStockAvailable(mockBookDTO, amount)
+        );
     }
 
 }
