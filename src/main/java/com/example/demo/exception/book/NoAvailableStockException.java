@@ -11,10 +11,10 @@ public class NoAvailableStockException extends RuntimeException {
             "No available stock!";
 
     private static final String MESSAGE_TEMPLATE =
-            "No book found with No available stock for given amount : ";
+            "No available stock for the given amount : ";
 
-    public NoAvailableStockException(String id) {
-        super(MESSAGE_TEMPLATE.concat(id));
+    public NoAvailableStockException(int amount) {
+        super(MESSAGE_TEMPLATE.concat(String.valueOf(amount)));
     }
 
     public NoAvailableStockException() {
