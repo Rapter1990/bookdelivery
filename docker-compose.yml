@@ -21,6 +21,7 @@ services:
       - bookDeliveryNetwork
 
   bookdelivery:
+    image: 'bookdelivery:latest'
     build:
       context: .
       dockerfile: Dockerfile
@@ -39,6 +40,34 @@ services:
       - spring.datasource.url=jdbc:mysql://host.docker.internal:3307/bookdelivery
     depends_on:
       - database
+    networks:
+      - bookDeliveryNetwork
+
+  prometheus:
+    image: prom/prometheus:v2.35.0
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./data/prometheus/config:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    networks:
+      - bookDeliveryNetwork
+
+  grafana:
+    image: grafana/grafana-oss:8.5.2
+    pull_policy: always
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SERVER_DOMAIN=localhost
     networks:
       - bookDeliveryNetwork
 
