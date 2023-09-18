@@ -22,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -169,25 +170,9 @@ class BookServiceImplTest extends BaseServiceTest {
 
     @Test
     void givenPaginatedFindAllRequest_WhenNoBooksFound_throwBookNotFoundException() {
+
         // Given
-
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR, 2000);
-        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        calendar1.set(Calendar.DAY_OF_MONTH, 10);
-
-        Calendar calendar2 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR, 2000);
-        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        calendar1.set(Calendar.DAY_OF_MONTH, 13);
-
-        LocalDateTime startDate = calendar1.getTime().toInstant().atZone(calendar1.getTimeZone().toZoneId()).toLocalDateTime();
-        LocalDateTime endDate = calendar2.getTime().toInstant().atZone(calendar2.getTimeZone().toZoneId()).toLocalDateTime();
-
-        PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
-                .dateIntervalRequest(new DateIntervalRequest(startDate, endDate))
-                .paginationRequest(new PaginationRequest(1, 10))
-                .build();
+        PaginationRequest request = new PaginationRequest(1, 10);
 
         Page<Book> emptyPage = new PageImpl<>(Collections.emptyList());
 
@@ -208,23 +193,8 @@ class BookServiceImplTest extends BaseServiceTest {
     @Test
     void givenPaginatedFindAllRequest_WhenBooksFound_ReturnPageBookList() {
 
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR, 2000);
-        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        calendar1.set(Calendar.DAY_OF_MONTH, 10);
-
-        Calendar calendar2 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR, 2000);
-        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        calendar1.set(Calendar.DAY_OF_MONTH, 13);
-
-        LocalDateTime startDate = calendar1.getTime().toInstant().atZone(calendar1.getTimeZone().toZoneId()).toLocalDateTime();
-        LocalDateTime endDate = calendar2.getTime().toInstant().atZone(calendar2.getTimeZone().toZoneId()).toLocalDateTime();
-
-        PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
-                .dateIntervalRequest(new DateIntervalRequest(startDate, endDate))
-                .paginationRequest(new PaginationRequest(1, 10))
-                .build();
+        // given
+        PaginationRequest request = new PaginationRequest(1, 10);
 
         List<Book> books = Arrays.asList(
                 Book.builder()

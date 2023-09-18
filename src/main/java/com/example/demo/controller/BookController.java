@@ -7,6 +7,7 @@ import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
+import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.book.BookCreatedResponse;
@@ -104,8 +105,8 @@ public class BookController {
      */
     @PostMapping("/all")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
-    public CustomResponse<CustomPageResponse<BookGetResponse>> getBooks(@RequestBody @Valid PaginatedFindAllRequest paginatedFindAllRequest) {
-        final Page<BookDTO> bookEntitiesFromDb = bookService.getAllBooks(paginatedFindAllRequest);
+    public CustomResponse<CustomPageResponse<BookGetResponse>> getBooks(@RequestBody @Valid PaginationRequest paginationRequest) {
+        final Page<BookDTO> bookEntitiesFromDb = bookService.getAllBooks(paginationRequest);
         final CustomPageResponse<BookGetResponse> responses = BookMapper
                 .toGetResponse(bookEntitiesFromDb);
 

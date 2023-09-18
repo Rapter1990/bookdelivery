@@ -5,6 +5,7 @@ import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
+import com.example.demo.payload.request.pagination.PaginationRequest;
 import org.springframework.data.domain.Page;
 
 /**
@@ -40,10 +41,10 @@ public interface BookService {
     /**
      * Retrieves a paginated list of all books based on the provided request.
      *
-     * @param paginatedFindAllRequest The request containing pagination information.
+     * @param paginationRequest The request containing pagination information.
      * @return A {@link Page} of {@link BookDTO} objects representing the list of books.
      */
-    Page<BookDTO> getAllBooks(PaginatedFindAllRequest paginatedFindAllRequest);
+    Page<BookDTO> getAllBooks(PaginationRequest paginationRequest);
 
     /**
      * Updates a book by its unique identifier.

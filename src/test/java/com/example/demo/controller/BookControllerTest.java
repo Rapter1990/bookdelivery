@@ -157,30 +157,14 @@ class BookControllerTest extends BaseControllerTest {
         BookDTO bookDTO1 = BookMapper.toDTO(book1);
         BookDTO bookDTO2 = BookMapper.toDTO(book2);
 
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR, 2000);
-        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        calendar1.set(Calendar.DAY_OF_MONTH, 10);
-
-        Calendar calendar2 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR, 2000);
-        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        calendar1.set(Calendar.DAY_OF_MONTH, 13);
-
-        LocalDateTime startDate = calendar1.getTime().toInstant().atZone(calendar1.getTimeZone().toZoneId()).toLocalDateTime();
-        LocalDateTime endDate = calendar2.getTime().toInstant().atZone(calendar2.getTimeZone().toZoneId()).toLocalDateTime();
-
-        PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
-                .dateIntervalRequest(new DateIntervalRequest(startDate, endDate))
-                .paginationRequest(new PaginationRequest(1, 10))
-                .build();
+        PaginationRequest request = new PaginationRequest(1, 10);
 
         Page<BookDTO> mockPageOfOrderDTOs = new PageImpl<>(List.of(bookDTO1, bookDTO2));
 
         CustomPageResponse<BookGetResponse> customPageResponseOfBookGetResponse = BookMapper.toGetResponse(mockPageOfOrderDTOs);
 
         // when
-        Mockito.when(bookService.getAllBooks(any(PaginatedFindAllRequest.class))).thenReturn(mockPageOfOrderDTOs);
+        Mockito.when(bookService.getAllBooks(any(PaginationRequest.class))).thenReturn(mockPageOfOrderDTOs);
 
         // then
         CustomResponse<CustomPageResponse<BookGetResponse>> response = CustomResponse.ok(customPageResponseOfBookGetResponse);
@@ -211,30 +195,14 @@ class BookControllerTest extends BaseControllerTest {
         BookDTO bookDTO1 = BookMapper.toDTO(book1);
         BookDTO bookDTO2 = BookMapper.toDTO(book2);
 
-        Calendar calendar1 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR, 2000);
-        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        calendar1.set(Calendar.DAY_OF_MONTH, 10);
-
-        Calendar calendar2 = Calendar.getInstance();
-        calendar1.set(Calendar.YEAR, 2000);
-        calendar1.set(Calendar.MONTH, Calendar.SEPTEMBER);
-        calendar1.set(Calendar.DAY_OF_MONTH, 13);
-
-        LocalDateTime startDate = calendar1.getTime().toInstant().atZone(calendar1.getTimeZone().toZoneId()).toLocalDateTime();
-        LocalDateTime endDate = calendar2.getTime().toInstant().atZone(calendar2.getTimeZone().toZoneId()).toLocalDateTime();
-
-        PaginatedFindAllRequest request = PaginatedFindAllRequest.builder()
-                .dateIntervalRequest(new DateIntervalRequest(startDate, endDate))
-                .paginationRequest(new PaginationRequest(1, 10))
-                .build();
+        PaginationRequest request = new PaginationRequest(1, 10);
 
         Page<BookDTO> mockPageOfOrderDTOs = new PageImpl<>(List.of(bookDTO1, bookDTO2));
 
         CustomPageResponse<BookGetResponse> customPageResponseOfBookGetResponse = BookMapper.toGetResponse(mockPageOfOrderDTOs);
 
         // when
-        Mockito.when(bookService.getAllBooks(any(PaginatedFindAllRequest.class))).thenReturn(mockPageOfOrderDTOs);
+        Mockito.when(bookService.getAllBooks(any(PaginationRequest.class))).thenReturn(mockPageOfOrderDTOs);
 
         // then
         CustomResponse<CustomPageResponse<BookGetResponse>> response = CustomResponse.ok(customPageResponseOfBookGetResponse);
