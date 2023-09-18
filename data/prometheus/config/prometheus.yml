@@ -18,6 +18,6 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     scrape_interval: 2s
     static_configs:
-      - targets: [ 'book-delivery-app-1:1221' ]
+      - targets: [ 'bookdelivery:1221' ]
         labels:
           application: 'Book Delivery API'
