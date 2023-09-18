@@ -1,5 +1,6 @@
 package com.example.demo.model.mapper.customer;
 
+import com.example.demo.dto.UserDTO;
 import com.example.demo.model.User;
 import com.example.demo.payload.response.customer.CustomerCreatedResponse;
 import lombok.experimental.UtilityClass;
@@ -16,7 +17,7 @@ public class CustomerMapper {
      * @param source The source {@link User} object to be converted.
      * @return A {@link CustomerCreatedResponse} containing data from the source object.
      */
-    public static CustomerCreatedResponse toCreatedResponse(User source) {
+    public static CustomerCreatedResponse toCreatedResponse(UserDTO source) {
 
         if (source == null) {
             return null;
