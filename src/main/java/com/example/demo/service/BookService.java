@@ -4,7 +4,6 @@ import com.example.demo.dto.BookDTO;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
-import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import org.springframework.data.domain.Page;
 

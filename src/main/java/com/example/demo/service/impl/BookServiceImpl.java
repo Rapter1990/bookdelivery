@@ -8,7 +8,6 @@ import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
-import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.service.BookService;
