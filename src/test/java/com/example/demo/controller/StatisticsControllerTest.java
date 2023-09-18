@@ -269,7 +269,7 @@ class StatisticsControllerTest extends BaseControllerTest {
 
         // then
         mockMvc.perform(get("/api/v1/statistics/allstatistics")
-                        .header(HttpHeaders.AUTHORIZATION, mockUserToken)
+                        .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(paginationRequest)))
                 .andExpect(status().isOk());
