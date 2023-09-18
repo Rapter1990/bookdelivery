@@ -1,6 +1,8 @@
 package com.example.demo.logging.aop;
 
+import com.example.demo.exception.AlreadyException;
 import com.example.demo.exception.NotFoundException;
+import com.example.demo.exception.ProcessException;
 import com.example.demo.logging.entity.LogEntity;
 import com.example.demo.logging.service.LogService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -81,7 +83,7 @@ public class LoggerAspectJ {
             try {
                 logService.saveLogToDatabase(logEntity);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         } else {
             log.error("Request Attributes are null!");
@@ -149,16 +151,15 @@ public class LoggerAspectJ {
      * @return The HttpStatus corresponding to the exception, or null if not recognized.
      */
     private HttpStatus getHttpStatusFromException(Exception ex) {
+
         if (ex instanceof NotFoundException) {
             return NotFoundException.STATUS;
-            //} else if (ex instanceof UnauthorizedException) {
-            //    return "401 Unauthorized";
-            //} else if (ex instanceof ForbiddenException) {
-            //    return "403 Forbidden";
-            //} else if (ex instanceof InternalServerErrorException) {
-            //    return "500 Internal Server Error";
-        } else {
-            return null; // Handle other exceptions as needed
+        } else if (ex instanceof AlreadyException) {
+            return AlreadyException.STATUS;
+        } else if (ex instanceof ProcessException) {
+            return ProcessException.STATUS;
         }
+
+        return null; // Handle other exceptions as needed
     }
 }
