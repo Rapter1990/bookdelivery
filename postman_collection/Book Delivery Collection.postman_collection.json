@@ -160,6 +160,16 @@
 						{
 							"name": "Create Book",
 							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTUwNTM5MzUsImV4cCI6MTY5NTA1NDUzNX0.R2wm9PzTtSHVDg8EKsTr0TuHkp3bSR-vD5J8xSxv67I",
+											"type": "string"
+										}
+									]
+								},
 								"method": "POST",
 								"header": [],
 								"body": {
@@ -188,14 +198,14 @@
 							"response": []
 						},
 						{
-							"name": "Update Book",
+							"name": "Update Book Stock",
 							"request": {
 								"auth": {
 									"type": "bearer",
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTQ0NjQzMjQsImV4cCI6MTY5NDQ2NDM4NH0.4U16JVrxdfoPhd2mPXYXEZe0mnJ4abUcK-gN2nih9Ss",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjQsImVtYWlsIjoidGVzdEBib29rZGVsaXZlcnkuY29tIiwidXNlcm5hbWUiOiJjdXN0b21lcl8xIiwic3ViIjoiY3VzdG9tZXJfMSIsImlhdCI6MTY5NTA1MzMwMCwiZXhwIjoxNjk1MDUzOTAwfQ.Nl6MgcMu-8mgGUgBZGJgVPuJDlOpbLpiFh9FmgbuUjY",
 											"type": "string"
 										}
 									]
@@ -212,7 +222,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:1221/api/v1/books/12951e7c-1825-4ee7-a0b2-11ae54c35124",
+									"raw": "http://localhost:1221/api/v1/books/stock-amoun/12951e7c-1825-4ee7-a0b2-11ae54c35124",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -222,7 +232,49 @@
 										"api",
 										"v1",
 										"books",
+										"stock-amoun",
 										"12951e7c-1825-4ee7-a0b2-11ae54c35124"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Book",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTUwNTQ2NzEsImV4cCI6MTY5NTA1NTI3MX0.1o7Cv7cms7IHC5OSlUsjSk2gztMi0HTwLs0HUbnVdtA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"isbn\": \"1234567890\",\n  \"name\": \"Updated Name\",\n  \"authorFullName\": \"Updated authorFullName\",\n  \"stock\": 90,\n  \"price\": 20\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/books/1096160d-e53e-4bba-9af5-45b1860f3413",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"1096160d-e53e-4bba-9af5-45b1860f3413"
 									]
 								}
 							},
@@ -236,7 +288,7 @@
 									"bearer": [
 										{
 											"key": "token",
-											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTQ0NjQ0MTgsImV4cCI6MTY5NDQ2NDQ3OH0.3I26QpiNgmxA0pT0lDY8rSF1TOqwJXEJRmDvGMnFrjo",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTUwNTIyOTEsImV4cCI6MTY5NTA1Mjg5MX0.tN6iPS8Mkv1vhxn2K6VWFMB9vOB3c06Ua03vExftv8A",
 											"type": "string"
 										}
 									]
@@ -244,7 +296,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:1221/api/v1/books/12951e7c-1825-4ee7-a0b2-11ae54c35124",
+									"raw": "http://localhost:1221/api/v1/books/1096160d-e53e-4bba-9af5-45b1860f3413",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -254,7 +306,48 @@
 										"api",
 										"v1",
 										"books",
-										"12951e7c-1825-4ee7-a0b2-11ae54c35124"
+										"1096160d-e53e-4bba-9af5-45b1860f3413"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Books",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTUwNTE1NDksImV4cCI6MTY5NTA1MjE0OX0.UbNyBDUWr5mu7vD0DqjPUawSsJ1JVm62clxCAips_6M",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"dateIntervalRequest\": {\n    \"startDate\": \"2023-09-18T15:41:00.296Z\",\n    \"endDate\": \"2023-09-18T15:41:00.296Z\"\n  },\n  \"paginationRequest\": {\n    \"page\": 0,\n    \"size\": 50\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/books/all",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"all"
 									]
 								}
 							},
@@ -300,6 +393,222 @@
 										"api",
 										"v1",
 										"customers"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "Get Orders Between Dates",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTUwNTI2NTQsImV4cCI6MTY5NTA1MzI1NH0.yv5OlKspmmrM141qhz8BDqkPkzjZAT5ipke8o-gWqwY",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"dateIntervalRequest\": {\n    \"startDate\": \"2023-08-18T15:54:54.438Z\",\n    \"endDate\": \"2023-10-18T15:54:54.438Z\"\n  },\n  \"paginationRequest\": {\n    \"page\": 0,\n    \"size\": 50\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/orders/between-dates",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										"between-dates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Order By Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjIsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTUwNTQ4NjgsImV4cCI6MTY5NTA1NTQ2OH0.G20D-5zgBWFElcgm1t7-VMaqQHHDdQJB2coOCXm5boQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:1221/api/v1/orders/800",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										"800"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Order By Customer Id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjIsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTUwNTQ4NjgsImV4cCI6MTY5NTA1NTQ2OH0.G20D-5zgBWFElcgm1t7-VMaqQHHDdQJB2coOCXm5boQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"page\": 0,\n  \"size\": 50\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/orders/customer/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										"customer",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Statistics",
+					"item": [
+						{
+							"name": "Get Statistics By Customer Id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjIsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTUwNTQ5MTQsImV4cCI6MTY5NTA1NTUxNH0.VwwIkXbpTF2286OO4l8YMyRgTuPbiWRQ1Aw57PEWlfM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"page\": 3,\n  \"size\": 100\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/statistics/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"statistics",
+										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Statistics",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTUwNTU2NjksImV4cCI6MTY5NTA1NjI2OX0.UftdlTfAkRldvzsFyfrQ7YDfVlc5ah8P8rcGAg6n8Nw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"page\": 0,\n  \"size\": 100\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/statistics/allstatistics",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"statistics",
+										"allstatistics"
 									]
 								}
 							},
@@ -466,19 +775,255 @@
 							"response": []
 						}
 					]
-				}
-			]
-		},
-		{
-			"name": "New Folder",
-			"item": [
+				},
 				{
-					"name": "New Request",
-					"request": {
-						"method": "GET",
-						"header": []
-					},
-					"response": []
+					"name": "Book",
+					"item": [
+						{
+							"name": "Get Book By Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTUwNTIyOTEsImV4cCI6MTY5NTA1Mjg5MX0.tN6iPS8Mkv1vhxn2K6VWFMB9vOB3c06Ua03vExftv8A",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:1221/api/v1/books/1096160d-e53e-4bba-9af5-45b1860f3413",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"1096160d-e53e-4bba-9af5-45b1860f3413"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Books",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInVzZXJGdWxsTmFtZSI6ImFkbWluX2Z1bGxuYW1lIiwiaWQiOjEsImVtYWlsIjoiYWRtaW5AYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiYWRtaW5fMSIsInN1YiI6ImFkbWluXzEiLCJpYXQiOjE2OTUwNTE1NDksImV4cCI6MTY5NTA1MjE0OX0.UbNyBDUWr5mu7vD0DqjPUawSsJ1JVm62clxCAips_6M",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"dateIntervalRequest\": {\n    \"startDate\": \"2023-09-18T15:41:00.296Z\",\n    \"endDate\": \"2023-09-18T15:41:00.296Z\"\n  },\n  \"paginationRequest\": {\n    \"page\": 0,\n    \"size\": 50\n  }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/books/all",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"books",
+										"all"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Order",
+					"item": [
+						{
+							"name": "Create Order",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjIsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTUwNTQ5MTQsImV4cCI6MTY5NTA1NTUxNH0.VwwIkXbpTF2286OO4l8YMyRgTuPbiWRQ1Aw57PEWlfM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"orderDetailSet\": [\n    {\n      \"bookId\": \"1096160d-e53e-4bba-9af5-45b1860f3413\",\n      \"amount\": 1\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/orders",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"orders"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Order By Id",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjIsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTUwNTQ4NjgsImV4cCI6MTY5NTA1NTQ2OH0.G20D-5zgBWFElcgm1t7-VMaqQHHDdQJB2coOCXm5boQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:1221/api/v1/orders/800",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										"800"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Order By Customer Id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjIsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTUwNTQ4NjgsImV4cCI6MTY5NTA1NTQ2OH0.G20D-5zgBWFElcgm1t7-VMaqQHHDdQJB2coOCXm5boQ",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"page\": 0,\n  \"size\": 50\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/orders/customer/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"orders",
+										"customer",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Statistics",
+					"item": [
+						{
+							"name": "Get Statistics By Customer Id",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjIsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTUwNTQ5MTQsImV4cCI6MTY5NTA1NTUxNH0.VwwIkXbpTF2286OO4l8YMyRgTuPbiWRQ1Aw57PEWlfM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"page\": 3,\n  \"size\": 100\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/statistics/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"statistics",
+										"2"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
