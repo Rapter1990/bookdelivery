@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.UserDTO;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.customer.CustomerCreateRequest;
 
@@ -14,6 +15,6 @@ public interface CustomerService {
      * @param customerCreateRequest The request containing customer information to be used for creation.
      * @return A {@link User} representing the newly created customer.
      */
-    User createCustomer(CustomerCreateRequest customerCreateRequest);
+    UserDTO createCustomer(CustomerCreateRequest customerCreateRequest);
 
 }

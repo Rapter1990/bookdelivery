@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.UserDTO;
 import com.example.demo.model.User;
 import com.example.demo.model.mapper.customer.CustomerMapper;
 import com.example.demo.payload.request.customer.CustomerCreateRequest;
@@ -9,11 +10,9 @@ import com.example.demo.service.CustomerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -32,14 +31,15 @@ public class CustomerController {
      */
     @PostMapping
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public CustomResponse<CustomerCreatedResponse> createCustomer(
             @RequestBody @Valid final CustomerCreateRequest customerCreateRequest
     ) {
 
-        final User createdUser = customerService.createCustomer(customerCreateRequest);
+        final UserDTO createdUser = customerService.createCustomer(customerCreateRequest);
         final CustomerCreatedResponse createdResponse = CustomerMapper.toCreatedResponse(createdUser);
 
-        return CustomResponse.ok(createdResponse);
+        return CustomResponse.created(createdResponse);
     }
 
 }

@@ -1,8 +1,10 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.dto.UserDTO;
 import com.example.demo.exception.user.EmailAlreadyExistsException;
 import com.example.demo.model.User;
 import com.example.demo.model.enums.Role;
+import com.example.demo.model.mapper.user.UserMapper;
 import com.example.demo.payload.request.customer.CustomerCreateRequest;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CustomerService;
@@ -28,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @return A {@link User} representing the newly created customer.
      */
     @Override
-    public User createCustomer(CustomerCreateRequest request) {
+    public UserDTO createCustomer(CustomerCreateRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
@@ -42,7 +44,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .role(Role.ROLE_CUSTOMER)
                 .build();
 
-        return userRepository.save(user);
+        return UserMapper.toDTO(userRepository.save(user));
 
     }
 
