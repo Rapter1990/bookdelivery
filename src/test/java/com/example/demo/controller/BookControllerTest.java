@@ -11,9 +11,11 @@ import com.example.demo.payload.request.book.BookUpdateStockRequest;
 import com.example.demo.payload.request.pagination.DateIntervalRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
+import com.example.demo.payload.response.CustomPageResponse;
 import com.example.demo.payload.response.CustomResponse;
 import com.example.demo.payload.response.book.BookCreatedResponse;
 import com.example.demo.payload.response.book.BookGetResponse;
+import com.example.demo.payload.response.book.BookUpdatedResponse;
 import com.example.demo.service.impl.BookServiceImpl;
 import com.example.demo.util.RandomUtil;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class BookControllerTest extends BaseControllerTest {
@@ -56,7 +59,7 @@ class BookControllerTest extends BaseControllerTest {
 
         // When
         BookCreatedResponse bookCreatedResponse = BookMapper.toCreatedResponse(bookDTO);
-        CustomResponse<BookCreatedResponse> customResponseOfBookCreatedResponse = CustomResponse.ok(bookCreatedResponse);
+        CustomResponse<BookCreatedResponse> customResponseOfBookCreatedResponse = CustomResponse.created(bookCreatedResponse);
 
         Mockito.when(bookService.createBook(mockRequest)).thenReturn(bookDTO);
 
@@ -65,7 +68,15 @@ class BookControllerTest extends BaseControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(mockRequest)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.response.id").value(bookCreatedResponse.getId()))
+                .andExpect(jsonPath("$.response.isbn").value(bookCreatedResponse.getIsbn()))
+                .andExpect(jsonPath("$.response.name").value(bookCreatedResponse.getName()))
+                .andExpect(jsonPath("$.response.authorFullName").value(bookCreatedResponse.getAuthorFullName()))
+                .andExpect(jsonPath("$.response.stock").value(bookCreatedResponse.getStock()))
+                .andExpect(jsonPath("$.isSuccess").value(customResponseOfBookCreatedResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(customResponseOfBookCreatedResponse.getHttpStatus().name()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
     }
 
     @Test
@@ -77,17 +88,26 @@ class BookControllerTest extends BaseControllerTest {
         Book book = new BookBuilder().withValidFields().build();
 
         BookDTO bookDTO = BookMapper.toDTO(book);
-        BookGetResponse response = BookMapper.toGetResponse(bookDTO);
+        BookGetResponse bookGetResponse = BookMapper.toGetResponse(bookDTO);
 
         // when
         Mockito.when(bookService.getBookById(bookId)).thenReturn(bookDTO);
 
         // then
+        CustomResponse<BookGetResponse> customResponseOfBookGetResponse = CustomResponse.ok(bookGetResponse);
         mockMvc.perform(get("/api/v1/books/{orderId}", bookId)
                         .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(response)))
-                .andExpect(status().isOk());
+                        .content(objectMapper.writeValueAsString(bookGetResponse)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.id").value(bookGetResponse.getId()))
+                .andExpect(jsonPath("$.response.isbn").value(bookGetResponse.getIsbn()))
+                .andExpect(jsonPath("$.response.name").value(bookGetResponse.getName()))
+                .andExpect(jsonPath("$.response.authorFullName").value(bookGetResponse.getAuthorFullName()))
+                .andExpect(jsonPath("$.response.stock").value(bookGetResponse.getStock()))
+                .andExpect(jsonPath("$.isSuccess").value(customResponseOfBookGetResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(customResponseOfBookGetResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
 
     }
 
@@ -100,17 +120,26 @@ class BookControllerTest extends BaseControllerTest {
         Book book = new BookBuilder().withValidFields().build();
 
         BookDTO bookDTO = BookMapper.toDTO(book);
-        BookGetResponse response = BookMapper.toGetResponse(bookDTO);
+        BookGetResponse bookGetResponse = BookMapper.toGetResponse(bookDTO);
 
         // when
         Mockito.when(bookService.getBookById(bookId)).thenReturn(bookDTO);
 
         // then
+        CustomResponse<BookGetResponse> customResponseOfBookGetResponse = CustomResponse.ok(bookGetResponse);
         mockMvc.perform(get("/api/v1/books/{orderId}", bookId)
                         .header(HttpHeaders.AUTHORIZATION, mockUserToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(response)))
-                .andExpect(status().isOk());
+                        .content(objectMapper.writeValueAsString(bookGetResponse)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.id").value(bookGetResponse.getId()))
+                .andExpect(jsonPath("$.response.isbn").value(bookGetResponse.getIsbn()))
+                .andExpect(jsonPath("$.response.name").value(bookGetResponse.getName()))
+                .andExpect(jsonPath("$.response.authorFullName").value(bookGetResponse.getAuthorFullName()))
+                .andExpect(jsonPath("$.response.stock").value(bookGetResponse.getStock()))
+                .andExpect(jsonPath("$.isSuccess").value(customResponseOfBookGetResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(customResponseOfBookGetResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
 
     }
 
@@ -146,17 +175,25 @@ class BookControllerTest extends BaseControllerTest {
                 .paginationRequest(new PaginationRequest(1, 10))
                 .build();
 
-        Page<BookDTO> mockPageOfOrderDTOs = new PageImpl<>(List.of(bookDTO1,bookDTO2));;
+        Page<BookDTO> mockPageOfOrderDTOs = new PageImpl<>(List.of(bookDTO1, bookDTO2));
+
+        CustomPageResponse<BookGetResponse> customPageResponseOfBookGetResponse = BookMapper.toGetResponse(mockPageOfOrderDTOs);
 
         // when
         Mockito.when(bookService.getAllBooks(any(PaginatedFindAllRequest.class))).thenReturn(mockPageOfOrderDTOs);
 
         // then
+        CustomResponse<CustomPageResponse<BookGetResponse>> response = CustomResponse.ok(customPageResponseOfBookGetResponse);
         mockMvc.perform(post("/api/v1/books/all")
                         .header(HttpHeaders.AUTHORIZATION, mockUserToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.content[0].id").value(bookId1))
+                .andExpect(jsonPath("$.response.content[1].id").value(bookId2))
+                .andExpect(jsonPath("$.isSuccess").value(response.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(response.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
 
     }
 
@@ -192,17 +229,25 @@ class BookControllerTest extends BaseControllerTest {
                 .paginationRequest(new PaginationRequest(1, 10))
                 .build();
 
-        Page<BookDTO> mockPageOfOrderDTOs = new PageImpl<>(List.of(bookDTO1,bookDTO2));;
+        Page<BookDTO> mockPageOfOrderDTOs = new PageImpl<>(List.of(bookDTO1, bookDTO2));
+
+        CustomPageResponse<BookGetResponse> customPageResponseOfBookGetResponse = BookMapper.toGetResponse(mockPageOfOrderDTOs);
 
         // when
         Mockito.when(bookService.getAllBooks(any(PaginatedFindAllRequest.class))).thenReturn(mockPageOfOrderDTOs);
 
         // then
+        CustomResponse<CustomPageResponse<BookGetResponse>> response = CustomResponse.ok(customPageResponseOfBookGetResponse);
         mockMvc.perform(post("/api/v1/books/all")
                         .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.content[0].id").value(bookId1))
+                .andExpect(jsonPath("$.response.content[1].id").value(bookId2))
+                .andExpect(jsonPath("$.isSuccess").value(response.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(response.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
 
     }
 
@@ -221,25 +266,37 @@ class BookControllerTest extends BaseControllerTest {
                 .stock(bookUpdateStockRequest.getStock())
                 .build();
 
+        BookUpdatedResponse bookUpdatedResponse = BookMapper.toUpdatedResponse(updatedBookEntity);
+
         // when
         Mockito.when(bookService.updateBookStockById(bookId, bookUpdateStockRequest)).thenReturn(updatedBookEntity);
 
 
         // then
+        CustomResponse<BookUpdatedResponse> customResponseOfBookUpdatedResponse = CustomResponse.ok(bookUpdatedResponse);
+
         mockMvc.perform(put("/api/v1/books/stock-amount/{bookId}", bookId)
                         .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(bookUpdateStockRequest)))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.id").value(bookUpdatedResponse.getId()))
+                .andExpect(jsonPath("$.response.isbn").value(bookUpdatedResponse.getIsbn()))
+                .andExpect(jsonPath("$.response.name").value(bookUpdatedResponse.getName()))
+                .andExpect(jsonPath("$.response.authorFullName").value(bookUpdatedResponse.getAuthorFullName()))
+                .andExpect(jsonPath("$.response.stock").value(bookUpdatedResponse.getStock()))
+                .andExpect(jsonPath("$.isSuccess").value(customResponseOfBookUpdatedResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(customResponseOfBookUpdatedResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
 
     }
 
     @Test
-    void givenBookIdAndBookUpdateRequest_whenAdminRoleAndBookFound_ReturnPageBookUpdatedResponse() throws Exception {
+    void givenBookIdAndBookUpdateRequest_whenAdminRoleAndBookFound_ReturnBookUpdatedResponse() throws Exception {
 
         // given
-        Book book = new BookBuilder().withValidFields().build();
-        String bookId = book.getId();
+        String bookId = RandomUtil.generateUUID();
+        Book book = new BookBuilder().withValidFields().withId(bookId).build();
 
         BookUpdateRequest updateRequest = BookUpdateRequest.builder()
                 .name("Update Book Name")
@@ -248,24 +305,28 @@ class BookControllerTest extends BaseControllerTest {
                 .price(BigDecimal.valueOf(69.99))
                 .build();
 
-        BookDTO updatedBookEntity = BookDTO.builder()
-                .id(bookId)
-                .name(updateRequest.getName())
-                .isbn(updateRequest.getIsbn())
-                .authorFullName(updateRequest.getAuthorFullName())
-                .price(updateRequest.getPrice())
-                .build();
+        BookDTO updatedBook = BookMapper.toDTO(book);
+        BookUpdatedResponse bookUpdatedResponse = BookMapper.toUpdatedResponse(updatedBook);
 
         // when
-        Mockito.when(bookService.updateBookById(bookId, updateRequest)).thenReturn(updatedBookEntity);
+        Mockito.when(bookService.updateBookById(bookId, updateRequest)).thenReturn(updatedBook);
 
         // then
+        CustomResponse<BookUpdatedResponse> customResponseOfBookUpdatedResponse = CustomResponse.ok(bookUpdatedResponse);
+
         mockMvc.perform(put("/api/v1/books/{bookId}", bookId)
                         .header(HttpHeaders.AUTHORIZATION, mockAdminToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(updateRequest)))
-                .andExpect(status().isOk());
-
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.id").value(bookUpdatedResponse.getId()))
+                .andExpect(jsonPath("$.response.isbn").value(bookUpdatedResponse.getIsbn()))
+                .andExpect(jsonPath("$.response.name").value(bookUpdatedResponse.getName()))
+                .andExpect(jsonPath("$.response.authorFullName").value(bookUpdatedResponse.getAuthorFullName()))
+                .andExpect(jsonPath("$.response.stock").value(bookUpdatedResponse.getStock()))
+                .andExpect(jsonPath("$.isSuccess").value(customResponseOfBookUpdatedResponse.getIsSuccess()))
+                .andExpect(jsonPath("$.httpStatus").value(customResponseOfBookUpdatedResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.time").isNotEmpty());
     }
 
 }

@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,13 +30,14 @@ public class BookController {
     private final BookService bookService;
 
     /**
-     * Creates a new {@link Book}.
+     * Creates a new Book entity.
      *
-     * @param request
-     * @return
+     * @param request The request body containing information for creating the Book.
+     * @return Response containing information about the created Book.
      */
     @PostMapping()
     @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ResponseStatus(HttpStatus.CREATED)
     public CustomResponse<BookCreatedResponse> createBook(
             @RequestBody @Valid final BookCreateRequest request
     ) {
@@ -81,10 +83,10 @@ public class BookController {
     }
 
     /**
-     * Returns {@link Book} by using specified bookId
+     * Retrieves a Book by its ID.
      *
-     * @param bookId
-     * @return
+     * @param bookId The ID of the Book to retrieve.
+     * @return Response containing information about the requested Book.
      */
     @GetMapping("/{bookId}")
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")

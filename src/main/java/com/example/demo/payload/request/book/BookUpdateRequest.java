@@ -11,8 +11,7 @@ import java.math.BigDecimal;
 /**
  * Represents a request object for updating an existing book.
  */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
