@@ -30,7 +30,7 @@ public class CustomerController {
      * @return Response entity of {@link CustomerCreatedResponse}
      */
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public CustomResponse<CustomerCreatedResponse> createCustomer(
             @RequestBody @Valid final CustomerCreateRequest customerCreateRequest

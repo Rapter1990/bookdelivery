@@ -36,7 +36,7 @@ public class BookController {
      * @return Response containing information about the created Book.
      */
     @PostMapping()
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ResponseStatus(HttpStatus.CREATED)
     public CustomResponse<BookCreatedResponse> createBook(
             @RequestBody @Valid final BookCreateRequest request
@@ -55,7 +55,7 @@ public class BookController {
      * @return Response entity of {@link BookUpdatedResponse}
      */
     @PutMapping("/stock-amount/{bookId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public CustomResponse<BookUpdatedResponse> updateStock(@PathVariable String bookId, @RequestBody @Valid final BookUpdateStockRequest request) {
         final BookDTO updatedBookEntity = bookService.updateBookStockById(bookId, request);
         final BookUpdatedResponse response = BookMapper.toUpdatedResponse(updatedBookEntity);
@@ -71,7 +71,7 @@ public class BookController {
      * @return BookUpdatedResponse -> Represents the response body of the Book entity to be updated.
      */
     @PutMapping("/{bookId}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public CustomResponse<BookUpdatedResponse> updateBookByBookId(@PathVariable("bookId") final String bookId,
                                                                   @RequestBody @Valid final BookUpdateRequest request) {
         final BookDTO updatedBookEntity = bookService
@@ -89,7 +89,7 @@ public class BookController {
      * @return Response containing information about the requested Book.
      */
     @GetMapping("/{bookId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<BookGetResponse> getBookById(@PathVariable("bookId") final String bookId) {
         final BookDTO bookEntityFromDb = bookService.getBookById(bookId);
         final BookGetResponse response = BookMapper.toGetResponse(bookEntityFromDb);
@@ -103,7 +103,7 @@ public class BookController {
      * @return list of Book entities
      */
     @PostMapping("/all")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<CustomPageResponse<BookGetResponse>> getBooks(@RequestBody @Valid PaginatedFindAllRequest paginatedFindAllRequest) {
         final Page<BookDTO> bookEntitiesFromDb = bookService.getAllBooks(paginatedFindAllRequest);
         final CustomPageResponse<BookGetResponse> responses = BookMapper

@@ -1,11 +1,13 @@
 package com.example.demo.security;
 
 import com.example.demo.model.User;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
@@ -13,8 +15,12 @@ import java.util.Map;
 /**
  * Custom implementation of Spring Security's UserDetails interface for handling user authentication and authorization.
  */
+@Getter
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
+
+    @Serial
+    private static final long serialVersionUID = 4514751530271704280L;
 
     private final User user;
 
@@ -25,7 +31,7 @@ public class CustomUserDetails implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
+        return Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     /**
@@ -113,15 +119,6 @@ public class CustomUserDetails implements UserDetails {
      */
     public Map<String, Object> getClaims() {
         return user.getClaims();
-    }
-
-    /**
-     * Returns the underlying User object.
-     *
-     * @return The User object.
-     */
-    public User getUser() {
-        return user;
     }
 
 }

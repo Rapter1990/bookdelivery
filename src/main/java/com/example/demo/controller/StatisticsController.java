@@ -28,7 +28,7 @@ public class StatisticsController {
     private final Identity identity;
 
     @GetMapping("/{customerId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<CustomPageResponse<OrderReportResponse>> getOrderStatisticsByCustomer(
             @PathVariable Long customerId,
             @RequestBody PaginationRequest paginationRequest
@@ -49,7 +49,7 @@ public class StatisticsController {
     }
 
     @GetMapping("/allstatistics")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public CustomResponse<CustomPageResponse<OrderReportResponse>> getOrderStatistics(@RequestBody PaginationRequest paginationRequest) {
 
         Page<OrderReportDTO> orderReportAllDtos = statisticsService.getOrderStatistics(paginationRequest);

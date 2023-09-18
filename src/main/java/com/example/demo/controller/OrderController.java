@@ -36,7 +36,7 @@ public class OrderController {
     private final Identity identity;
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @ResponseStatus(HttpStatus.CREATED)
     public CustomResponse<OrderCreatedResponse> createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
 
@@ -46,7 +46,7 @@ public class OrderController {
     }
 
     @GetMapping("/{orderId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<OrderGetResponse> getOrderById(@PathVariable Long orderId) {
 
         CustomUserDetails customUserDetails = identity.getCustomUserDetails();
@@ -66,7 +66,7 @@ public class OrderController {
     }
 
     @GetMapping("/customer/{customerId}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_CUSTOMER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<CustomPageResponse<OrderGetByCustomerResponse>> getOrdersByCustomerId(
             @PathVariable Long customerId,
             @RequestBody PaginationRequest paginationRequest
@@ -91,7 +91,7 @@ public class OrderController {
     }
 
     @PostMapping("/between-dates")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public CustomResponse<CustomPageResponse<OrderGetBetweenDatesResponse>> getOrdersBetweenTwoDates(
             @RequestBody PaginatedFindAllRequest paginatedFindAllRequest
     ) {
