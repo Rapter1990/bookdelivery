@@ -1,5 +1,8 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.token.RefreshTokenNotFoundException;
+import com.example.demo.exception.user.EmailAlreadyExistsException;
+import com.example.demo.exception.user.UserNotFoundException;
 import com.example.demo.model.RefreshToken;
 import com.example.demo.model.User;
 import com.example.demo.payload.request.auth.LoginRequest;
@@ -48,7 +51,7 @@ public class AuthServiceImpl implements AuthService {
     public String register(SignupRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email is already registered");
+            throw new EmailAlreadyExistsException(request.getEmail());
         }
 
         User user = User.builder()
@@ -80,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.getContext().setAuthentication(auth);
         String jwtToken = jwtUtils.generateJwtToken(auth);
 
-        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new RuntimeException("User Not Found"));
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(UserNotFoundException::new);
 
         return JWTResponse.builder()
                 .email(request.getEmail())
@@ -99,7 +102,7 @@ public class AuthServiceImpl implements AuthService {
     public TokenRefreshResponse refreshToken(TokenRefreshRequest request) {
 
         RefreshToken refreshToken = refreshTokenService.findByToken(request.getRefreshToken())
-                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+                .orElseThrow(RefreshTokenNotFoundException::new);
 
 
         if (!refreshTokenService.isRefreshExpired(refreshToken)) {

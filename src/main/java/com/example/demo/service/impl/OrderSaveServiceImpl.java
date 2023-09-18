@@ -2,7 +2,7 @@ package com.example.demo.service.impl;
 
 import com.example.demo.dto.OrderDTO;
 import com.example.demo.dto.OrderItemDTO;
-import com.example.demo.exception.book.UserNotFoundException;
+import com.example.demo.exception.user.UserNotFoundException;
 import com.example.demo.model.Order;
 import com.example.demo.model.User;
 import com.example.demo.model.mapper.order.OrderItemMapper;
@@ -48,7 +48,7 @@ public class OrderSaveServiceImpl implements OrderSaveService {
         CustomUserDetails customUserDetails = identity.getCustomUserDetails();
 
         User user = userService.findByEmail(customUserDetails.getEmail())
-                .orElseThrow(() -> new UserNotFoundException(String.valueOf(customUserDetails.getId())));
+                .orElseThrow(() -> new UserNotFoundException(customUserDetails.getId()));
 
         List<OrderItemDTO> orderItemDTOs = createOrderRequest
                 .getOrderDetailSet()

@@ -1,6 +1,7 @@
 package com.example.demo.exception;
 
 import com.example.demo.exception.response.ErrorResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -10,10 +11,10 @@ import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
  * Global exception handler for handling various HTTP request exceptions.
  */
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     /**
@@ -37,6 +39,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                      HttpHeaders headers,
                                                                      HttpStatusCode status,
                                                                      WebRequest request) {
+        log.error(ex.getMessage(), ex);
 
         List<String> details = new ArrayList<>();
 
@@ -50,7 +53,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorDetails(details)
                 .message("Invalid JSON")
-                .timestamp(LocalDateTime.now())
                 .statusCode(status.value())
                 .status(HttpStatus.valueOf(status.value()))
                 .build();
@@ -72,6 +74,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
+        log.error(ex.getMessage(), ex);
+
 
         List<String> details = new ArrayList<>();
         details.add(ex.getMessage());
@@ -79,7 +83,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorDetails(details)
                 .message("Malformed JSON request")
-                .timestamp(LocalDateTime.now())
                 .statusCode(status.value())
                 .status(HttpStatus.valueOf(status.value()))
                 .build();
@@ -101,6 +104,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                                                                   HttpHeaders headers,
                                                                   HttpStatusCode status,
                                                                   WebRequest request) {
+        log.error(ex.getMessage(), ex);
 
         List<String> details = ex.getBindingResult()
                 .getFieldErrors()
@@ -111,7 +115,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorDetails(details)
                 .message("Validation Errors")
-                .timestamp(LocalDateTime.now())
                 .statusCode(status.value())
                 .status(HttpStatus.valueOf(status.value()))
                 .build();
@@ -132,17 +135,78 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
+        log.error(ex.getMessage(), ex);
+
         List<String> details = new ArrayList<>();
         details.add(ex.getParameterName() + " parameter is missing");
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorDetails(details)
                 .message("Validation Errors")
-                .timestamp(LocalDateTime.now())
                 .statusCode(status.value())
                 .status(HttpStatus.valueOf(status.value()))
                 .build();
 
         return ResponseEntity.status(status).body(errorResponse);
+    }
+
+    /**
+     * Handles NotFoundException, returning an ErrorResponse with appropriate status and message.
+     *
+     * @param exception The exception that was thrown.
+     * @return A ResponseEntity containing an error response.
+     */
+    @ExceptionHandler(NotFoundException.class)
+    protected ResponseEntity<Object> handleNotFoundException(NotFoundException exception) {
+
+        log.error(exception.getMessage(), exception);
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(exception.getMessage())
+                .statusCode(NotFoundException.STATUS.value())
+                .status(NotFoundException.STATUS)
+                .build();
+
+        return ResponseEntity.status(NotFoundException.STATUS).body(errorResponse);
+    }
+
+    /**
+     * Handles AlreadyException, returning an ErrorResponse with appropriate status and message.
+     *
+     * @param exception The exception that was thrown.
+     * @return A ResponseEntity containing an error response.
+     */
+    @ExceptionHandler(AlreadyException.class)
+    protected ResponseEntity<Object> handleAlreadyException(AlreadyException exception) {
+
+        log.error(exception.getMessage(), exception);
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(exception.getMessage())
+                .statusCode(AlreadyException.STATUS.value())
+                .status(AlreadyException.STATUS)
+                .build();
+
+        return ResponseEntity.status(AlreadyException.STATUS).body(errorResponse);
+    }
+
+    /**
+     * Handles ProcessException, returning an ErrorResponse with appropriate status and message.
+     *
+     * @param exception The exception that was thrown.
+     * @return A ResponseEntity containing an error response.
+     */
+    @ExceptionHandler(ProcessException.class)
+    protected ResponseEntity<Object> handleProcessException(ProcessException exception) {
+
+        log.error(exception.getMessage(), exception);
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .message(exception.getMessage())
+                .statusCode(ProcessException.STATUS.value())
+                .status(ProcessException.STATUS)
+                .build();
+
+        return ResponseEntity.status(ProcessException.STATUS).body(errorResponse);
     }
 }

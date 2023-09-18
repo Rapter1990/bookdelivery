@@ -1,11 +1,13 @@
 package com.example.demo.exception.book;
 
+import com.example.demo.exception.ProcessException;
+
 import java.io.Serial;
 
 /**
  * Custom exception class for cases where there is no available stock.
  */
-public class NoAvailableStockException extends RuntimeException {
+public class NoAvailableStockException extends ProcessException {
 
     @Serial
     private static final long serialVersionUID = -5669253377318124296L;

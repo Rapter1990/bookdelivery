@@ -14,6 +14,7 @@ import com.example.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementation of the {@link BookService} interface for creating and managing books.
@@ -43,6 +44,7 @@ public class BookServiceImpl implements BookService {
      * @param bookId The unique identifier of the book.
      * @return A {@link BookDTO} representing the requested book.
      */
+    @Transactional
     public BookDTO getBookById(final String bookId) {
 
         Book book = bookRepository.findById(bookId)
@@ -61,6 +63,7 @@ public class BookServiceImpl implements BookService {
      * @return A {@link BookDTO} representing the book after the stock update.
      */
     @Override
+    @Transactional
     public BookDTO updateBookStockById(String bookId, BookUpdateStockRequest request) {
 
         Book book = bookRepository.findById(bookId)
@@ -92,6 +95,7 @@ public class BookServiceImpl implements BookService {
      * @return A {@link BookDTO} representing the book after the update.
      */
     @Override
+    @Transactional
     public BookDTO updateBookById(final String bookId, final BookUpdateRequest request) {
         final Book bookEntityToBeUpdate = bookRepository
                 .findById(bookId)

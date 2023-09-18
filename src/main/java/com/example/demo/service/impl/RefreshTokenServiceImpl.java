@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.user.UserNotFoundException;
 import com.example.demo.model.RefreshToken;
 import com.example.demo.model.User;
 import com.example.demo.repository.RefreshTokenRepository;
@@ -96,7 +97,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Transactional
     public int deleteByUserId(Long userId) {
 
-        User user = userService.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userService.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         return refreshTokenRepository.deleteByUser(user);
     }
 }
