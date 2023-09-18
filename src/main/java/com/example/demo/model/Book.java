@@ -35,9 +35,6 @@ public class Book extends BaseEntity {
     @Column(name = "PRICE")
     private BigDecimal price;
 
-    @Version // Optimistic Locking
-    private Long version;
-
     @OneToMany(mappedBy = "book")
     private List<OrderItem> orderItems;
 

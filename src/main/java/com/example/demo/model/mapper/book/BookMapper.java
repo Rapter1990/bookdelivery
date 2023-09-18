@@ -136,7 +136,6 @@ public class BookMapper {
                 .isbn(book.getIsbn())
                 .price(book.getPrice())
                 .stock(book.getStock())
-                .version(book.getVersion())
                 .build();
     }
 
@@ -154,7 +153,6 @@ public class BookMapper {
                 .isbn(bookDTO.getIsbn())
                 .price(bookDTO.getPrice())
                 .stock(bookDTO.getStock())
-                .version(bookDTO.getVersion())
                 .build();
 
     }

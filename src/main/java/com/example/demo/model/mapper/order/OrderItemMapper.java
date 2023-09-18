@@ -48,7 +48,6 @@ public class OrderItemMapper {
                 .authorFullName(source.getAuthorFullName())
                 .isbn(source.getIsbn())
                 .price(source.getPrice())
-                .version(source.getVersion())
                 .build();
     }
 
@@ -85,7 +84,6 @@ public class OrderItemMapper {
                 .name(orderItemBook.getName())
                 .authorFullName(orderItemBook.getAuthorFullName())
                 .price(orderItemBook.getPrice())
-                .version(orderItemBook.getVersion())
                 .build();
 
     }

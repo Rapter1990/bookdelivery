@@ -16,9 +16,8 @@ public class BookBuilder extends BaseBuilder<Book> {
                 .withIsbn(RandomUtil.generateRandomString())
                 .withName(RandomUtil.generateRandomString())
                 .withAuthorFullName(RandomUtil.generateRandomString())
-                .withStock(RandomUtil.generateRandomInteger(1,100))
-                .withPrice(RandomUtil.generateRandomBigDecimal(1.0,200.0))
-                .withVersion(0L);
+                .withStock(RandomUtil.generateRandomInteger(1, 100))
+                .withPrice(RandomUtil.generateRandomBigDecimal(1.0, 200.0));
     }
 
     public BookBuilder withId(String id) {
@@ -48,11 +47,6 @@ public class BookBuilder extends BaseBuilder<Book> {
 
     public BookBuilder withPrice(BigDecimal price) {
         data.setPrice(price);
-        return this;
-    }
-
-    public BookBuilder withVersion(Long version) {
-        data.setVersion(version);
         return this;
     }
 }

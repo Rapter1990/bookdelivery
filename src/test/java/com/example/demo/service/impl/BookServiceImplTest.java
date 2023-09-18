@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.base.BaseServiceTest;
+import com.example.demo.builder.BookBuilder;
 import com.example.demo.dto.BookDTO;
 import com.example.demo.exception.book.BookNotFoundException;
 import com.example.demo.exception.book.NoAvailableStockException;
@@ -52,15 +53,7 @@ class BookServiceImplTest extends BaseServiceTest {
                 .price(BigDecimal.TEN)
                 .build();
 
-        Book mockBook = Book.builder()
-                .id(RandomUtil.generateUUID())
-                .name(mockCreateRequest.getName())
-                .authorFullName(mockCreateRequest.getAuthorFullName())
-                .isbn(mockCreateRequest.getIsbn())
-                .stock(mockCreateRequest.getStock())
-                .price(mockCreateRequest.getPrice())
-                .version(0L)
-                .build();
+        Book mockBook = new BookBuilder().withValidFields().build();
 
         BookDTO mockBookDTO = BookMapper.toDTO(mockBook);
 
@@ -81,15 +74,7 @@ class BookServiceImplTest extends BaseServiceTest {
         // Given
         String mockBookId = RandomUtil.generateUUID();
 
-        Book mockBook = Book.builder()
-                .id(mockBookId)
-                .name("Name")
-                .authorFullName("Author Full Name")
-                .isbn("1234567890")
-                .stock(123)
-                .price(BigDecimal.TEN)
-                .version(0L)
-                .build();
+        Book mockBook = new BookBuilder().withValidFields().withId(mockBookId).build();
 
         BookDTO mockBookDTO = BookMapper.toDTO(mockBook);
 
@@ -139,7 +124,6 @@ class BookServiceImplTest extends BaseServiceTest {
                 .isbn("1234567890")
                 .stock(321)
                 .price(BigDecimal.TEN)
-                .version(0L)
                 .build();
 
 

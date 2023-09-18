@@ -50,15 +50,7 @@ class BookControllerTest extends BaseControllerTest {
                 .price(BigDecimal.TEN)
                 .build();
 
-        Book book = Book.builder()
-                .id(RandomUtil.generateUUID())
-                .version(1L)
-                .authorFullName("Author full name")
-                .name("name")
-                .isbn("1234567890")
-                .stock(123)
-                .price(BigDecimal.TEN)
-                .build();
+        Book book = new BookBuilder().withValidFields().build();
 
         BookDTO bookDTO = BookMapper.toDTO(book);
 
@@ -82,15 +74,7 @@ class BookControllerTest extends BaseControllerTest {
         // given
         String bookId = RandomUtil.generateUUID();
 
-        Book book = Book.builder()
-                .id(bookId)
-                .version(1L)
-                .authorFullName("Author full name")
-                .name("name")
-                .isbn("1234567890")
-                .stock(123)
-                .price(BigDecimal.TEN)
-                .build();
+        Book book = new BookBuilder().withValidFields().build();
 
         BookDTO bookDTO = BookMapper.toDTO(book);
         BookGetResponse response = BookMapper.toGetResponse(bookDTO);
@@ -113,15 +97,7 @@ class BookControllerTest extends BaseControllerTest {
         // given
         String bookId = RandomUtil.generateUUID();
 
-        Book book = Book.builder()
-                .id(bookId)
-                .version(1L)
-                .authorFullName("Author full name")
-                .name("name")
-                .isbn("1234567890")
-                .stock(123)
-                .price(BigDecimal.TEN)
-                .build();
+        Book book = new BookBuilder().withValidFields().build();
 
         BookDTO bookDTO = BookMapper.toDTO(book);
         BookGetResponse response = BookMapper.toGetResponse(bookDTO);
@@ -145,25 +121,9 @@ class BookControllerTest extends BaseControllerTest {
         String bookId1 = RandomUtil.generateUUID();
         String bookId2 = RandomUtil.generateUUID();
 
-        Book book1 = Book.builder()
-                .id(bookId1)
-                .version(1L)
-                .authorFullName("Author full name")
-                .name("name")
-                .isbn("1234567890")
-                .stock(123)
-                .price(BigDecimal.TEN)
-                .build();
+        Book book1 = new BookBuilder().withValidFields().withId(bookId1).build();
 
-        Book book2 = Book.builder()
-                .id(bookId2)
-                .version(1L)
-                .authorFullName("Author full name")
-                .name("name")
-                .isbn("1234567890")
-                .stock(123)
-                .price(BigDecimal.TEN)
-                .build();
+        Book book2 = new BookBuilder().withValidFields().withId(bookId2).build();
 
         BookDTO bookDTO1 = BookMapper.toDTO(book1);
         BookDTO bookDTO2 = BookMapper.toDTO(book2);
@@ -207,25 +167,9 @@ class BookControllerTest extends BaseControllerTest {
         String bookId1 = RandomUtil.generateUUID();
         String bookId2 = RandomUtil.generateUUID();
 
-        Book book1 = Book.builder()
-                .id(bookId1)
-                .version(1L)
-                .authorFullName("Author full name")
-                .name("name")
-                .isbn("1234567890")
-                .stock(123)
-                .price(BigDecimal.TEN)
-                .build();
+        Book book1 = new BookBuilder().withValidFields().withId(bookId1).build();
 
-        Book book2 = Book.builder()
-                .id(bookId2)
-                .version(1L)
-                .authorFullName("Author full name")
-                .name("name")
-                .isbn("1234567890")
-                .stock(123)
-                .price(BigDecimal.TEN)
-                .build();
+        Book book2 = new BookBuilder().withValidFields().withId(bookId2).build();
 
         BookDTO bookDTO1 = BookMapper.toDTO(book1);
         BookDTO bookDTO2 = BookMapper.toDTO(book2);
