@@ -19,6 +19,7 @@ import com.example.demo.util.Identity;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,12 +37,12 @@ public class OrderController {
 
     @PostMapping
     @PreAuthorize("hasRole('ROLE_CUSTOMER')")
+    @ResponseStatus(HttpStatus.CREATED)
     public CustomResponse<OrderCreatedResponse> createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
-
 
         final OrderDTO orderDTO = orderSaveService.createOrder(createOrderRequest);
         final OrderCreatedResponse response = OrderMapper.toCreatedResponse(orderDTO);
-        return CustomResponse.ok(response);
+        return CustomResponse.created(response);
     }
 
     @GetMapping("/{orderId}")

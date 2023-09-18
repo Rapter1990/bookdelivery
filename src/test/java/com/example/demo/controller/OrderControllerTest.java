@@ -94,7 +94,7 @@ class OrderControllerTest extends BaseControllerTest {
                 .build();
 
         final OrderCreatedResponse orderCreatedResponse = OrderMapper.toCreatedResponse(orderDTO);
-        final CustomResponse<OrderCreatedResponse> expectedCustomResponse = CustomResponse.ok(orderCreatedResponse);
+        final CustomResponse<OrderCreatedResponse> expectedCustomResponse = CustomResponse.created(orderCreatedResponse);
 
         // When
         when(orderSaveService.createOrder(Mockito.any(CreateOrderRequest.class))).thenReturn(orderDTO);
@@ -103,14 +103,14 @@ class OrderControllerTest extends BaseControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, mockUserToken)
                         .content(objectMapper.writeValueAsString(createOrderRequest))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.response.id").value(orderId))
                 .andExpect(jsonPath("$.response.user.id").value(user.getId()))
                 .andExpect(jsonPath("$.response.orderItems[0].book.id").value(book1.getId()))
                 .andExpect(jsonPath("$.response.orderItems[1].book.id").value(book2.getId()))
                 .andExpect(jsonPath("$.response.createdAt").isNotEmpty())
                 .andExpect(jsonPath("$.isSuccess").value(expectedCustomResponse.getIsSuccess()))
-                .andExpect(jsonPath("$.httpStatus").value(expectedCustomResponse.getHttpStatus().getReasonPhrase()))
+                .andExpect(jsonPath("$.httpStatus").value(expectedCustomResponse.getHttpStatus().name()))
                 .andExpect(jsonPath("$.time").isNotEmpty());
     }
 
