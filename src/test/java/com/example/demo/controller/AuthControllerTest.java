@@ -44,7 +44,28 @@ class AuthControllerTest extends BaseControllerTest {
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
+
+    }
+
+    @Test
+    void givenSignupRequest_WhenAdminRole_ReturnSuccess() throws Exception {
+
+        // given
+        SignupRequest request = SignupRequest.builder()
+                .fullName("admin_fullname")
+                .password("admin_password")
+                .username("admin_1")
+                .email("admin@bookdelivery.com")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        when(authService.register(request)).thenReturn("success");
+
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
 
     }
 
@@ -76,7 +97,7 @@ class AuthControllerTest extends BaseControllerTest {
     }
 
     @Test
-    void givenRefreshTokenRequestandAccessToken_WhenCustomerRole_Token_ReturnRefreshTokenSuccess() throws Exception {
+    void givenRefreshTokenRequestAndAccessToken_WhenCustomerRole_Token_ReturnRefreshTokenSuccess() throws Exception {
 
         // given
         User mockUser = User.builder()
@@ -146,27 +167,6 @@ class AuthControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk());
 
         verify(authService).logout(mockBearerToken);
-
-    }
-
-    @Test
-    void givenSignupRequest_WhenAdminRole_ReturnSuccess() throws Exception {
-
-        // given
-        SignupRequest request = SignupRequest.builder()
-                .fullName("admin_fullname")
-                .password("admin_password")
-                .username("admin_1")
-                .email("admin@bookdelivery.com")
-                .role(Role.ROLE_ADMIN)
-                .build();
-
-        when(authService.register(request)).thenReturn("success");
-
-        mockMvc.perform(post("/api/v1/auth/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
 
     }
 
