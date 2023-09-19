@@ -1,7 +1,7 @@
 # Case Study - Book Delivery
 
 <p align="center">
-    <img src="" alt="Main Information" width="500" height="180">
+    <img src="screenshots/book_delivey_main_image.png" alt="Main Information" width="500" height="180">
 </p>
 
 ### 📖 Information
@@ -206,7 +206,7 @@
 - Docker
 - Docker Compose
 - CI/CD (Github Actions)
-- Prometheues and Grafana
+- Prometheus and Grafana
 - Postman
 - Actuator
 - Swagger 3
