@@ -16,7 +16,7 @@ public interface StatisticsService {
      * @param paginationRequest The request containing pagination information.
      * @return A {@link Page} of {@link OrderReportDTO} objects representing order statistics for the customer.
      */
-    Page<OrderReportDTO> getOrderStatisticsByCustomer(Long customerId, PaginationRequest paginationRequest);
+    Page<OrderReportDTO> getOrderStatisticsByCustomerId(Long customerId, PaginationRequest paginationRequest);
 
     /**
      * Retrieves overall order statistics.
@@ -24,6 +24,6 @@ public interface StatisticsService {
      * @param paginationRequest The request containing pagination information.
      * @return A {@link Page} of {@link OrderReportDTO} objects representing overall order statistics.
      */
-    Page<OrderReportDTO> getOrderStatistics(PaginationRequest paginationRequest);
+    Page<OrderReportDTO> getAllOrderStatistics(PaginationRequest paginationRequest);
 
 }

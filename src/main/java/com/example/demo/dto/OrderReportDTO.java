@@ -7,8 +7,7 @@ import java.math.BigDecimal;
 /**
  * Data Transfer Object (DTO) representing order report information.
  */
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
