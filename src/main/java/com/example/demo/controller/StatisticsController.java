@@ -33,7 +33,7 @@ public class StatisticsController {
         return CustomResponse.ok(orderReportResponse);
     }
 
-    @GetMapping("/all-statistics")
+    @GetMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public CustomResponse<CustomPageResponse<OrderReportResponse>> getAllOrderStatistics(
             @RequestBody PaginationRequest paginationRequest
