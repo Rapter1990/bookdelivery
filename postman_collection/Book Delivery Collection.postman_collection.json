@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "cea5a58d-ca7a-4010-a2e5-8abca67b6563",
+		"_postman_id": "f499a4c8-ccfc-4fed-9a5a-77329c494e94",
 		"name": "Book Delivery Collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "29394300"
+		"_exporter_id": "5570426"
 	},
 	"item": [
 		{
@@ -1017,6 +1017,49 @@
 										"v1",
 										"statistics",
 										"2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Statistics",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjIsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTUxMzgxODcsImV4cCI6MTY5NTEzODc4N30.2NYrJnIg_v9r9X8VCkWp0lwWXHBFM476Zo6MfJ6ZiCw",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"page\": 0,\n  \"size\": 100\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:1221/api/v1/statistics",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "1221",
+									"path": [
+										"api",
+										"v1",
+										"statistics"
 									]
 								}
 							},
