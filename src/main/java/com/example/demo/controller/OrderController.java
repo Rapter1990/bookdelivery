@@ -49,19 +49,9 @@ public class OrderController {
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_CUSTOMER')")
     public CustomResponse<OrderGetResponse> getOrderById(@PathVariable Long orderId) {
 
-        CustomUserDetails customUserDetails = identity.getCustomUserDetails();
-
         final OrderDTO orderDTO = orderService.findOrderById(orderId);
-
-        if ((customUserDetails.getId().equals(orderDTO.getUser().getId()) &&
-                customUserDetails.getUser().getRole().equals(Role.ROLE_CUSTOMER))
-                || customUserDetails.getUser().getRole().equals(Role.ROLE_ADMIN)
-        ) {
-            final OrderGetResponse response = OrderMapper.toGetResponse(orderDTO);
-            return CustomResponse.ok(response);
-        }
-
-        throw new AccessDeniedException("You cannot access customer order by Id");
+        final OrderGetResponse response = OrderMapper.toGetResponse(orderDTO);
+        return CustomResponse.ok(response);
 
     }
 
@@ -72,21 +62,12 @@ public class OrderController {
             @RequestBody PaginationRequest paginationRequest
     ) {
 
-        CustomUserDetails customUserDetails = identity.getCustomUserDetails();
-
         final Page<OrderDTO> pageOfOrderDTOs = orderService
                 .findAllOrdersByCustomerId(customerId, paginationRequest);
 
-        if ((customUserDetails.getId().equals(customerId) &&
-                customUserDetails.getUser().getRole().equals(Role.ROLE_CUSTOMER))
-                || customUserDetails.getUser().getRole().equals(Role.ROLE_ADMIN)
-        ) {
-            final CustomPageResponse<OrderGetByCustomerResponse> response = OrderMapper
+        final CustomPageResponse<OrderGetByCustomerResponse> response = OrderMapper
                     .toGetByCustomerResponse(pageOfOrderDTOs);
-            return CustomResponse.ok(response);
-        }
-
-        throw new AccessDeniedException("You cannot access customer orders by customer Id");
+        return CustomResponse.ok(response);
 
     }
 

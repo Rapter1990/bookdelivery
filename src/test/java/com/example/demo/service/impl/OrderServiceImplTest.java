@@ -13,6 +13,8 @@ import com.example.demo.payload.request.pagination.DateIntervalRequest;
 import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
 import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.repository.OrderRepository;
+import com.example.demo.security.CustomUserDetails;
+import com.example.demo.util.Identity;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,6 +40,9 @@ class OrderServiceImplTest extends BaseServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
+
+    @Mock
+    private Identity identity;
 
 
     @Test
@@ -69,6 +74,7 @@ class OrderServiceImplTest extends BaseServiceTest {
         OrderDTO expected = OrderMapper.toOrderDTO(mockOrder);
 
         // when
+        when(identity.getCustomUserDetails()).thenReturn(new CustomUserDetails(mockUser));
         when(orderRepository.findById(orderId)).thenReturn(Optional.of(mockOrder));
 
         // then
@@ -113,6 +119,7 @@ class OrderServiceImplTest extends BaseServiceTest {
                 .build();
 
         // When
+        when(identity.getCustomUserDetails()).thenReturn(new CustomUserDetails(mockUser));
         when(orderRepository.findAllByUserId(customerId, pageRequest))
                 .thenReturn(new PageImpl<>(Collections.singletonList(mockOrder)));
 

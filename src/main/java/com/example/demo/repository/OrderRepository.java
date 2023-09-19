@@ -52,12 +52,14 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
      * @param pageable   The pagination information.
      * @return A {@link Page} of {@link OrderReportDTO} objects containing the order statistics.
      */
-    @Query("SELECT NEW com.example.demo.dto.OrderReportDTO" +
-            "(FUNCTION('MONTHNAME',o.createdAt),FUNCTION('YEAR',o.createdAt),COUNT(o.id),COUNT(b.id),SUM(b.price))" +
-            "FROM Order o INNER JOIN o.orderItems items INNER JOIN items.book b " +
-            "WHERE (o.user.id = :customerId) " +
-            "GROUP BY FUNCTION('MONTHNAME',o.createdAt),FUNCTION('YEAR',o.createdAt) " +
-            "ORDER BY FUNCTION('YEAR', o.createdAt) DESC")
+    @Query("""
+        SELECT NEW com.example.demo.dto.OrderReportDTO
+        (FUNCTION('MONTHNAME',o.createdAt),FUNCTION('YEAR',o.createdAt),COUNT(o.id),COUNT(b.id),SUM(b.price))
+        FROM Order o INNER JOIN o.orderItems items INNER JOIN items.book b 
+        WHERE (o.user.id = :customerId) 
+        GROUP BY FUNCTION('MONTHNAME',o.createdAt),FUNCTION('YEAR',o.createdAt) 
+        ORDER BY FUNCTION('YEAR', o.createdAt) DESC
+    """)
     Page<OrderReportDTO> findOrderStatisticsByCustomerId(@Param("customerId") Long customerId, Pageable pageable);
 
     /**
@@ -74,11 +76,14 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
      * @param pageable The pagination information.
      * @return A {@link Page} of {@link OrderReportDTO} objects containing the order statistics.
      */
-    @Query("SELECT NEW com.example.demo.dto.OrderReportDTO" +
-            "(FUNCTION('MONTHNAME',o.createdAt),FUNCTION('YEAR',o.createdAt),COUNT(o.id),COUNT(b.id),SUM(b.price))" +
-            "FROM Order o INNER JOIN o.orderItems items INNER JOIN items.book b " +
-            "GROUP BY FUNCTION('MONTHNAME',o.createdAt),FUNCTION('YEAR',o.createdAt) " +
-            "ORDER BY FUNCTION('YEAR', o.createdAt) DESC")
+    @Query("""
+        SELECT NEW com.example.demo.dto.OrderReportDTO
+        (FUNCTION('MONTHNAME',o.createdAt),FUNCTION('YEAR',o.createdAt),COUNT(o.id),COUNT(b.id),SUM(b.price))
+        FROM Order o INNER JOIN o.orderItems items INNER JOIN items.book b 
+        GROUP BY FUNCTION('MONTHNAME',o.createdAt),FUNCTION('YEAR',o.createdAt) 
+        ORDER BY FUNCTION('YEAR', o.createdAt) DESC
+    """
+    )
     Page<OrderReportDTO> findAllOrderStatistics(Pageable pageable);
 
 }
