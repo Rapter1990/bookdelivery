@@ -33,8 +33,6 @@ public class OrderController {
     private final OrderService orderService;
     private final OrderSaveService orderSaveService;
 
-    private final Identity identity;
-
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_CUSTOMER')")
     @ResponseStatus(HttpStatus.CREATED)
