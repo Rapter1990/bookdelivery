@@ -8,7 +8,7 @@ import com.example.demo.model.mapper.book.BookMapper;
 import com.example.demo.payload.request.book.BookCreateRequest;
 import com.example.demo.payload.request.book.BookUpdateRequest;
 import com.example.demo.payload.request.book.BookUpdateStockRequest;
-import com.example.demo.payload.request.pagination.PaginatedFindAllRequest;
+import com.example.demo.payload.request.pagination.PaginationRequest;
 import com.example.demo.repository.BookRepository;
 import com.example.demo.service.BookService;
 import lombok.RequiredArgsConstructor;
@@ -76,14 +76,14 @@ public class BookServiceImpl implements BookService {
     /**
      * Retrieves a paginated list of all books based on the provided request.
      *
-     * @param paginatedFindAllRequest The request containing pagination information.
+     * @param paginationRequest The request containing pagination information.
      * @return A {@link Page} of {@link BookDTO} objects representing the list of books.
      */
     @Override
-    public Page<BookDTO> getAllBooks(PaginatedFindAllRequest paginatedFindAllRequest) {
+    public Page<BookDTO> getAllBooks(PaginationRequest paginationRequest) {
 
         return bookRepository
-                .findAll(paginatedFindAllRequest.getPaginationRequest().toPageable())
+                .findAll(paginationRequest.toPageable())
                 .map(BookMapper::toDTO);
     }
 
