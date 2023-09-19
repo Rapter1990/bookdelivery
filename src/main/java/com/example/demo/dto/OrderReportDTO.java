@@ -1,9 +1,6 @@
 package com.example.demo.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -11,6 +8,7 @@ import java.math.BigDecimal;
  * Data Transfer Object (DTO) representing order report information.
  */
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -18,8 +16,8 @@ public class OrderReportDTO {
 
     private String month;
     private Integer year;
-    private Integer totalOrderCount;
-    private Integer totalBookCount;
+    private Long totalOrderCount;
+    private Long totalBookCount;
     private BigDecimal totalPrice;
 
 }

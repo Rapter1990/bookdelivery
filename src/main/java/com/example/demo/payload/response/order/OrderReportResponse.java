@@ -18,8 +18,8 @@ public class OrderReportResponse {
 
     private String month;
     private Integer year;
-    private Integer totalOrderCount;
-    private Integer totalBookCount;
+    private Long totalOrderCount;
+    private Long totalBookCount;
     private BigDecimal totalPrice;
 
 }
