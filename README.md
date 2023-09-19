@@ -1,7 +1,7 @@
 # Case Study - Book Delivery
 
 <p align="center">
-    <img src="screenshots/book_delivey_main_image.png" alt="Main Information" width="500" height="180">
+    <img src="screenshots/book_delivey_main_image.png" alt="Main Information" width="700" height="500">
 </p>
 
 ### 📖 Information
