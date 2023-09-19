@@ -10,7 +10,7 @@
   <li><b>Book Delivery</b> is a kind of Spring Boot with covering important and useful features</li> 
   <li>Here is the explanation of the example
        <ul>There are 2 roles named <b>Admin</b> and <b>Customer</b></ul>
-       <ul><b>Admin</b> handles with creating book, updating stock of book and updating book information, getting all books and book by id, showing statistic by customer's order and all orders while <b>customer</b> tackle with creating order, showing own orders, getting all books and book by id except for their own authentication process covering the process of register, login, refresh token and logout</ul>
+       <ul><b>Admin</b> handles with creating book, updating stock of book and updating book information, getting all books and book by id, showing statistic by customer's order and all orders while <b>Customer</b> tackle with creating order, showing own orders, getting all books and book by id except for their own authentication process covering the process of register, login, refresh token and logout</ul>
   </li>
 </ul>
 
