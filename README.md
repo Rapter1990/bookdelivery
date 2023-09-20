@@ -211,6 +211,44 @@
 - Actuator
 - Swagger 3
 
+
+### How to test Pessimistic Lock using ApacheHttpServer?
+We implemented a pessimistic lock mechanism to avoid scenarios where multiple users attempt to order books simultaneously,
+ensuring that their actions are synchronized properly to prevent data conflicts.
+So with a pessimstic lock, if multiple users attempt to order one last stock of a book, only one of them will be able to order.
+
+### Install Apache 2 on Linux & Test
+Installation
+
+```
+sudo apt-get install apache2
+```
+
+To test, you need to make requests to the create order endpoint.
+So you're going to need a valid payload json which is shown below.
+(Do not forget to change the bookId with a valid one)
+
+```json
+{
+  "orderDetailSet": [
+    {
+      "bookId": "3a0e7efc-1e32-404c-9a70-d9fb63262c6e",
+      "amount": 1
+    }
+  ]
+}
+```
+
+Now we can test the create order endpoint, and see if the locking mechanism works
+
+- <b>n</b> represents the number of requests to be made to the URL specified
+- <b>c</b> represents the number of requests to send at a time. Here, it's set to 2, so ApacheBench will send 2 requests concurrently.
+- 
+Here is the example shown below for testing
+```
+ab -n 100 -c 2 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0NVU1RPTUVSIl0sInVzZXJGdWxsTmFtZSI6ImN1c3RvbWVyX2Z1bGxuYW1lIiwiaWQiOjIsImVtYWlsIjoiY3VzdG9tZXJAYm9va2RlbGl2ZXJ5LmNvbSIsInVzZXJuYW1lIjoiY3VzdG9tZXJfMSIsInN1YiI6ImN1c3RvbWVyXzEiLCJpYXQiOjE2OTQ4ODkyNTMsImV4cCI6MTY5NDg4OTg1M30.UokFWxgZnSnYZsbAlwbfhQj1F54QrEOU5_5KzHyRmtY" -T "application/json" -p post_data.json http://localhost:1221/api/v1/orders
+```
+
 ### Prerequisites
 
 ---
