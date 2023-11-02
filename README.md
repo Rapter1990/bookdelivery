@@ -257,6 +257,13 @@ http://localhost:1221/swagger-ui/index.html
 
 ### Prerequisites
 
+#### Define Variable in .env file
+
+```
+DATABASE_USERNAME={DATABASE_USERNAME}
+DATABASE_PASSWORD={DATABASE_PASSWORD}
+```
+
 ---
 - Maven or Docker
 ---
